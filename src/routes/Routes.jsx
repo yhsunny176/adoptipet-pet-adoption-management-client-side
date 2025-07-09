@@ -1,4 +1,5 @@
 import MainLayout from "@/layouts/MainLayout";
+import ErrorPage from "@/pages/ErrorPage";
 import Home from "@/pages/Home";
 import React from "react";
 
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
         ],
+    },
+    {
+        path: "/*",
+        element: <ErrorPage />,
     },
 ]);
 

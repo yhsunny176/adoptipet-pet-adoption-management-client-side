@@ -1,11 +1,12 @@
+import Navbar from "@/components/navbar/Navbar";
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Outlet } from "react-router";
 
 const Home = () => {
     return (
-        <div>
-          
-        </div>
+      <div>
+         
+      </div>
     );
 };
 

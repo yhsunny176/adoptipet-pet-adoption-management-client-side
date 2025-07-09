@@ -16,6 +16,7 @@
   --text-base-yellow: #FAAB37;
   --text-base-rose: #E86F69;
   --text-base-orange: #F3823D;
+  --text-rose-dark: #E86F69;
 
   --color-blue-coral: #A6E0DC;
   --color-pink-peachy: #FE928C;
@@ -23,9 +24,12 @@
   --color-purple-eggplant: #87529D;
   --color-orange-base: #F3823D;
   --color-yellow-dark: #FAAB37;
+  --color-rose-dark: #E86F69;
+  --color-hover-rose-dark: #E34D46;
 
   --color-white-bg: #FFFAF2;
   --color-blue-bg: #E6EEF0;
+  --color-yellow-bg: #FFF4DF;
 }
 
 @theme inline {
@@ -142,4 +146,17 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+h1 {
+  font-family: var(--font-heading);
+}
+
+p, a {
+  font-family: var(--font-pg);
+}
+
+a.active {
+  color: var(--text-rose-dark) !important;
+  font-weight: 700;
 }
