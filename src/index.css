@@ -32,11 +32,17 @@
   --color-white-bg: #FFFAF2;
   --color-blue-bg: #E6EEF0;
   --color-yellow-bg: #FFF4DF;
+  --color-yellow-bg-light: #FFFAF2;
 
   --color-gray-border: #D9D9D9;
 
   /* Shadows */
   --shadow-card-primary: 0px 6px 20px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Leading or Line Spacing */
+  --leading-pg-base: 26px;
+  --leading-pg-lg: 29px;
+
 }
 
 h1 {
