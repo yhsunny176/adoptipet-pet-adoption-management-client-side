@@ -40,7 +40,7 @@ const Registration = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const { createUser, updateUser, setUser, signInWithGoogle, signInWithFacebook } = useContext(AuthContext);
+    const { createUser, updateUser, signInWithGoogle, signInWithFacebook, setLoading } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -120,10 +120,8 @@ const Registration = () => {
                                     const password = values.password;
                                     const photoURL = uploadResult.url;
                                     // Create user with Firebase Auth
-                                    const result = await createUser(email, password);
-                                    const user = result.user;
+                                    await createUser(email, password);
                                     await updateUser({ displayName: name, photoURL });
-                                    setUser({ ...user, displayName: name, photoURL });
                                     toast.success("Registration successful!");
                                     resetForm();
                                     navigate("/", {
@@ -137,6 +135,7 @@ const Registration = () => {
                                 } finally {
                                     setUploading(false);
                                     setSubmitting(false);
+                                    setLoading(false);
                                 }
                             }}>
                             {({ isSubmitting, errors, touched, values, setFieldValue }) => {
@@ -349,9 +348,7 @@ const Registration = () => {
                                     type="button"
                                     onClick={async () => {
                                         try {
-                                            const result = await signInWithGoogle();
-                                            const user = result.user;
-                                            setUser(user);
+                                            await signInWithGoogle();
 
                                             toast.success("Google registration successful!");
                                             navigate("/", {
@@ -391,10 +388,7 @@ const Registration = () => {
                                     type="button"
                                     onClick={async () => {
                                         try {
-                                            const result = await signInWithFacebook();
-                                            const user = result.user;
-                                            // Update user state with additional info if needed
-                                            setUser(user);
+                                            await signInWithFacebook();
 
                                             toast.success("Facebook registration successful!");
                                             navigate("/", {

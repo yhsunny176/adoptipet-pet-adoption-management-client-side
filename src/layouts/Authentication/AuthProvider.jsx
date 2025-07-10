@@ -22,44 +22,42 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const createUser = (email, password) => {
+    const createUser = async (email, password) => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     };
 
-    const updateUser = (updatedData) => {
+    const updateUser = async (updatedData) => {
         setLoading(true);
         return updateProfile(auth.currentUser, updatedData);
     };
 
-    const signInUser = (email, password) => {
+    const signInUser = async (email, password) => {
         setLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     };
 
-    const signInWithGoogle = () => {
+    const signInWithGoogle = async () => {
         setLoading(true);
         return signInWithPopup(auth, googleProvider);
     };
 
-    const signInWithFacebook = () => {
+    const signInWithFacebook = async () => {
         setLoading(true);
         return signInWithPopup(auth, facebookProvider);
     };
 
-    const logOut = () => {
+    const logOut = async () => {
         setLoading(true);
         return signOut(auth);
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
             setLoading(false);
         });
-        return () => {
-            unsubscribe();
-        };
+        return () => unsubscribe();
     }, []);
 
     const authData = {
@@ -67,6 +65,7 @@ const AuthProvider = ({ children }) => {
         setUser,
         loading,
         createUser,
+        setLoading,
         updateUser,
         signInUser,
         signInWithGoogle,
