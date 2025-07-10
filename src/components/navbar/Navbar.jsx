@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Link, NavLink } from "react-router";
-import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
-import logo from "../../assets/logo.svg";
+import { Link, NavLink, useNavigate } from "react-router";
+import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.svg";
+import avatarPlaceholder from "@/assets/panda-placeholder.png";
 import { Menu11Icon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { AuthContext } from "@/contexts/AuthContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Navbar = () => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const { user, logOut, loading } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                navigate("/auth/login", {
+                    state: { message: "Logged out successfully!", type: "success" },
+                });
+            })
+            .catch((error) => {
+                navigate("/auth/login", {
+                    state: { message: `${error.message}`, type: "error" },
+                });
+            });
+    };
+
     return (
         <div className="container mx-auto px-4">
             <NavigationMenu className="flex justify-between w-full" viewport={false}>
@@ -47,10 +68,80 @@ const Navbar = () => {
                             Contact
                         </NavLink>
                     </NavigationMenuItem>
+
                     <NavigationMenuItem>
-                        <Button size={"lg"} className={"bg-rose-dark hover:bg-hover-rose-dark"}>
-                            <Link to="/auth/login">Login</Link>
-                        </Button>
+                        {loading ? (
+                            <div className="flex-none relative">
+                                <Skeleton circle width={40} height={40} className="animate-pulse" />
+                            </div>
+                        ) : user ? (
+                            <div className="flex-none relative cursor-pointer">
+                                <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                                    {user?.photoURL ? (
+                                        <img
+                                            src={user.photoURL}
+                                            alt={"User Avatar"}
+                                            className="h-10 w-10 rounded-full object-cover hover:border-2 border-base-rose  hover:transform hover:scale-105 transition-transform duration-400 ease-in-out"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={avatarPlaceholder}
+                                            alt="User Avatar"
+                                            className="h-10 w-10 rounded-full object-cover hover:border-2 border-base-rose  hover:transform hover:scale-105 transition-transform duration-400 ease-in-out"
+                                        />
+                                    )}
+                                </div>
+
+                                {/* Dropdown menu */}
+                                <div
+                                    className={`absolute right-0 space-y-4 px-2 text-center top-full mt-2 w-48 bg-base-white rounded-lg shadow-card-primary py-2 z-50 transform origin-top 
+                                    transition-all duration-300 ease-in-out ${
+                                        isDropdownOpen
+                                            ? "opacity-100 scale-y-100 translate-y-0"
+                                            : "opacity-0 scale-y-95 translate-y-2 pointer-events-none"
+                                    }`}>
+                                    <Link
+                                        to="/dashboard"
+                                        className="block px-4 py-2 text-black-text-500 hover:bg-red-light hover:text-base-red rounded-sm transition-colors duration-200"
+                                        onClick={() => setIsDropdownOpen(false)}>
+                                        Dashboard
+                                    </Link>
+                                    <Button
+                                        onClick={() => {
+                                            handleLogOut();
+                                        }}
+                                        size={"lg"}
+                                        className="w-full bg-base-rose hover:bg-hover-rose-dark text-base-white">
+                                        Logout
+                                    </Button>
+                                </div>
+
+                                {/* Close dropdown when clicked outside of container */}
+                                {isDropdownOpen && (
+                                    <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>
+                                )}
+                            </div>
+                        ) : null}
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        {loading ? (
+                            <Skeleton width={100} height={40} borderRadius={6} className="animate-pulse" />
+                        ) : user ? (
+                            <Button
+                                onClick={() => {
+                                    handleLogOut();
+                                }}
+                                size={"lg"}
+                                className="w-full bg-base-rose hover:bg-hover-rose-dark text-base-white">
+                                Logout
+                            </Button>
+                        ) : (
+                            <Button
+                                size={"lg"}
+                                className="w-full bg-base-rose hover:bg-hover-rose-dark text-base-white">
+                                <Link to="/auth/login">Login</Link>
+                            </Button>
+                        )}
                     </NavigationMenuItem>
                 </NavigationMenuList>
 
@@ -86,9 +177,20 @@ const Navbar = () => {
                                     Contact
                                 </NavLink>
                                 <div className="pt-4">
-                                    <Button size={"lg"} className="w-full bg-rose-dark hover:bg-hover-rose-dark">
-                                        <Link to="/auth/login">Login</Link>
-                                    </Button>
+                                    {loading ? (
+                                        <Skeleton width="100%" height={40} borderRadius={6} className="animate-pulse" />
+                                    ) : user ? (
+                                        <Button
+                                            onClick={handleLogOut}
+                                            size={"lg"}
+                                            className="w-full bg-rose-dark hover:bg-hover-rose-dark">
+                                            Logout
+                                        </Button>
+                                    ) : (
+                                        <Button size={"lg"} className="w-full bg-rose-dark hover:bg-hover-rose-dark">
+                                            <Link to="/auth/login">Login</Link>
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </SheetContent>
