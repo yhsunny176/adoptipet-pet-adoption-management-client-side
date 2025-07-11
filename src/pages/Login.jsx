@@ -27,7 +27,7 @@ const Login = () => {
     return (
         <div className="min-h-screen bg-yellow-bg relative overflow-hidden">
             {/* Cat Illustration - Top Left */}
-            <div className="absolute top-5 -left-20 sm:-left-18 md:-left-16 z-0">
+            <div className="absolute top-5 -left-20 sm:-left-18 md:-left-20 z-0">
                 <img
                     src={catYellow}
                     alt=""
@@ -75,7 +75,7 @@ const Login = () => {
                         <h1 className="text-4xl md:text-4xl font-bold text-black-base mb-4">
                             Start Your Pet Love Story Today
                         </h1>
-                        <p className="text-pg-base text-sm md:text-base">
+                        <p className="text-pg-black text-sm md:text-base">
                             Create your account to discover amazing pets and begin your adoption journey.
                         </p>
                     </div>

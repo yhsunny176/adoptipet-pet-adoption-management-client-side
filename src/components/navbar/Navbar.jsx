@@ -171,7 +171,7 @@ const Navbar = () => {
                     </NavigationMenuItem>
                     {/* Hamburger Menu */}
                     <div className="flex items-center lg:hidden ml-auto justify-end">
-                        <Sheet open={mobMenuOpen} onOpenChange={mobMenuOpen}>
+                        <Sheet open={mobMenuOpen} onOpenChange={setMobMenuOpen}>
                             <SheetTrigger asChild>
                                 <Button
                                     variant="ghost"

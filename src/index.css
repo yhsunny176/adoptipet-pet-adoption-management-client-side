@@ -28,9 +28,10 @@ a.active {
 
   --color-heading-color: var(--text-heading);
   --color-pg-base: var(--paragraph-prim);
+  --color-pg-black: var(--black-second);
 
   --color-base-white: var(--white-prim);
-  --color-black-base: var(--text-heading);
+  --color-black-base: var(---black-prim);
   --color-base-orange: var(--orange-prim);
   --color-base-rose: var(--rose-prim);
   --color-base-rose-light: var(--rose-lt);
@@ -73,6 +74,8 @@ a.active {
   --rose-lt: oklch(0.9426 0.0241 17.59);
   --rose-dark: oklch(0.5723 0.2118 27.2);
   --white-prim: oklch(0.9945 0.0057 84.57);
+  --black-prim: oklch(0.2801 0.0519 232.1);
+  --black-second: oklch(0.4373 0.0765 230.68);
   --paragraph-prim: oklch(0.4373 0.0765 230.68);
   --navlink-prim: oklch(0.4373 0.0765 230.68);
   --navlink-hover: oklch(0.645 0.1859 26.69);

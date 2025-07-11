@@ -95,7 +95,7 @@ const Registration = () => {
                         <h1 className="text-4xl md:text-4xl font-bold text-black-base mb-4">
                             Start Your Pet Love Story Today
                         </h1>
-                        <p className="text-pg-base text-sm md:text-base">
+                        <p className="text-pg-black text-sm md:text-base">
                             Create your account to discover amazing pets and begin your adoption journey.
                         </p>
                     </div>
@@ -159,7 +159,7 @@ const Registration = () => {
                                         <div>
                                             <label
                                                 htmlFor="name"
-                                                className="block text-sm font-medium text-black-base mb-2">
+                                                className="block text-sm font-medium text-heading-color mb-2">
                                                 Your Name
                                             </label>
                                             <Field
@@ -275,7 +275,7 @@ const Registration = () => {
                                                                         setFieldValue("photo", null);
                                                                         setImagePreview(null);
                                                                     }}
-                                                                    className="absolute top-2 right-2 w-8 h-8 bg-pg-base cursor-pointer hover:bg-black-base rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
+                                                                    className="absolute top-2 right-2 w-8 h-8 bg-pg-black cursor-pointer hover:bg-black-base rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
                                                                     <HugeiconsIcon
                                                                         className="text-base-white"
                                                                         size={12}
