@@ -9,7 +9,7 @@ const Banner = () => {
     return (
         <div className="min-h-screen bg-yellow-bg-light relative">
             <div className="py-12 lg:grid lg:grid-cols-12 lg:max-w-11/12 lg:mx-auto lg:gap-4 lg:items-center xl:max-w-11/12 xl:gap-4 xl:mx-auto 2xl:max-w-10/12 2xl:gap-4 relative z-0">
-                <div className="hidden lg:block absolute lg:right-0 lg:z-0 w-auto h-full">
+                <div className="hidden lg:block absolute lg:right-0 lg:-z-10 w-auto h-full">
                     <img src={bgElems} className="w-full h-full" alt="pet elements" />
                 </div>
                 <div className="lg:col-span-7 xl:col-span-6 2xl:col-span-7">
