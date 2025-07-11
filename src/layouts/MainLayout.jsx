@@ -6,8 +6,8 @@ import { Outlet } from "react-router";
 const MainLayout = () => {
     return (
         <div>
-            <header className="py-8 bg-background-dark">
-                <nav className="lg:max-w-7xl xl:max-w-9/12 mx-auto">
+            <header className="py-8 bg-background-secondary">
+                <nav className="max-w-full lg:max-w-7xl xl:max-w-9/12 mx-auto">
                     <Navbar />
                 </nav>
             </header>

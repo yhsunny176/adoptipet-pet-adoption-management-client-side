@@ -66,7 +66,9 @@ const Login = () => {
             <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
                 <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     <div className="flex items-center justify-center py-8">
-                        <img src={logo} alt="logo" />
+                        <Link to="/">
+                            <img src={logo} alt="logo" />
+                        </Link>
                     </div>
                     {/* Title and Subtitle */}
                     <div className="text-center mb-8">
@@ -224,15 +226,15 @@ const Login = () => {
                                             const user = result.user;
                                             setUser(user);
 
-                                            toast.success("Google registration successful!");
+                                            toast.success("Login successful!");
                                             navigate("/", {
                                                 state: {
-                                                    message: "Registration Successful!",
+                                                    message: "Login Successful!",
                                                     type: "success",
                                                 },
                                             });
                                         } catch (error) {
-                                            toast.error(error.message || "Registration failed. Please try again.");
+                                            toast.error(error.message || "Login failed. Please try again.");
                                         }
                                     }}
                                     className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-gray-700 bg-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">
@@ -267,17 +269,15 @@ const Login = () => {
                                             // Update user state with additional info if needed
                                             setUser(user);
 
-                                            toast.success("Facebook registration successful!");
+                                            toast.success("Login successful!");
                                             navigate("/", {
                                                 state: {
-                                                    message: "Successfully registered with Facebook!",
+                                                    message: "Login Successful",
                                                     type: "success",
                                                 },
                                             });
                                         } catch (error) {
-                                            toast.error(
-                                                error.message || "Facebook registration failed. Please try again."
-                                            );
+                                            toast.error(error.message || "Login Failed. Please try again.");
                                         }
                                     }}
                                     className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-gray-700 bg-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">

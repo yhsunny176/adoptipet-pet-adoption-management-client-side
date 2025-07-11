@@ -13,6 +13,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01FreeIcons, Image02Icon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
+import Navbar from "@/components/navbar/Navbar";
 
 const validationSchema = Yup.object({
     name: Yup.string()
@@ -45,7 +46,7 @@ const Registration = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-yellow-bg relative overflow-hidden">
+        <div className="min-h-screen bg-yellow-bg-light relative overflow-hidden">
             {/* Cat Illustration - Top Left */}
             <div className="absolute top-5 -left-20 sm:-left-18 md:-left-16 z-0">
                 <img
@@ -86,7 +87,9 @@ const Registration = () => {
             <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
                 <div className="w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     <div className="flex items-center justify-center py-8">
-                        <img src={logo} alt="logo" />
+                        <Link to="/">
+                            <img src={logo} alt="logo" />
+                        </Link>
                     </div>
                     {/* Title and Subtitle */}
                     <div className="text-center mb-8">
@@ -350,7 +353,7 @@ const Registration = () => {
                                         try {
                                             await signInWithGoogle();
 
-                                            toast.success("Google registration successful!");
+                                            toast.success("Congrats! Registration successful!");
                                             navigate("/", {
                                                 state: {
                                                     message: "Registration Successful!",
@@ -390,17 +393,15 @@ const Registration = () => {
                                         try {
                                             await signInWithFacebook();
 
-                                            toast.success("Facebook registration successful!");
+                                            toast.success("Congrats! Registration successful!");
                                             navigate("/", {
                                                 state: {
-                                                    message: "Successfully registered with Facebook!",
+                                                    message: "Registration successful!",
                                                     type: "success",
                                                 },
                                             });
                                         } catch (error) {
-                                            toast.error(
-                                                error.message || "Facebook registration failed. Please try again."
-                                            );
+                                            toast.error(error.message || "Registration failed. Please try again.");
                                         }
                                     }}
                                     className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-gray-700 bg-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">

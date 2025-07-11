@@ -4,27 +4,27 @@ import { useTheme } from "@/hooks/useTheme";
 
 const ThemeToggle = () => {
     const { theme, setTheme } = useTheme();
-    const themes = ["light", "dark",];
+    const themes = ["light", "dark"];
 
     const handleThemeChange = () => {
         const newTheme = themes[(themes.indexOf(theme) + 1) % themes.length];
         setTheme(newTheme);
     };
     return (
-        <span className="bg-popover text-popover-foreground w-fit rounded-full flex justify-center items-center m-2 p-2">
-            <button className="cursor-pointer" onClick={handleThemeChange}>
-                {theme === "dark" && (
-                    <h1>
-                        <Moon></Moon>
-                    </h1>
-                )}
-                {theme === "light" && (
-                    <h1>
-                        <Sun></Sun>
-                    </h1>
-                )}
-            </button>
-        </span>
+        <button
+            className="cursor-pointer bg-toggle-bg-base hover:bg-toggle-bg-hover w-fit rounded-full flex justify-center items-center m-2 p-2  transition-colors duration-500 ease-in-out"
+            onClick={handleThemeChange}>
+            {theme === "dark" && (
+                <h1>
+                    <Moon className="text-toggle-icon"></Moon>
+                </h1>
+            )}
+            {theme === "light" && (
+                <h1>
+                    <Sun className="text-toggle-icon"></Sun>
+                </h1>
+            )}
+        </button>
     );
 };
 

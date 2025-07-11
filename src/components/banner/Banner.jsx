@@ -1,16 +1,27 @@
 import React from "react";
 import catImage from "@/assets/Hero/cat-image-01.png";
+import catImageDark from "@/assets/Hero/cat-image-dark.png";
 import dogImage1 from "@/assets/Hero/dog-image-01.png";
+import dogImage1Dark from "@/assets/Hero/dog-image-01-dark.png";
 import dogImage2 from "@/assets/Hero/dog-image-02.png";
+import dogImage2Dark from "@/assets/Hero/dog-image-02-dark.png";
 import bgElems from "@/assets/Hero/Bg Pet elements.png";
+import bgElemsDark from "@/assets/Hero/bg-pet-elems-dark.png";
 import { Button } from "../ui/button";
 import { Link } from "react-router";
+import { useTheme } from "@/hooks/useTheme";
+
 const Banner = () => {
+    const { theme } = useTheme();
     return (
-        <div className="min-h-screen bg-background relative">
-            <div className="py-12 lg:grid lg:grid-cols-12 lg:max-w-11/12 lg:mx-auto lg:gap-4 lg:items-center xl:max-w-11/12 xl:gap-4 xl:mx-auto 2xl:max-w-10/12 2xl:gap-4 relative z-0">
-                <div className="hidden lg:block absolute lg:right-0 lg:-z-10 w-auto h-full">
-                    <img src={bgElems} className="w-full h-full" alt="pet elements" />
+        <div className="min-h-screen bg-background-primary relative">
+            <div className="py-12 lg:py-4 lg:grid lg:grid-cols-12 lg:max-w-11/12 lg:mx-auto lg:gap-4 lg:items-center xl:max-w-11/12 xl:gap-4 xl:mx-auto 2xl:max-w-10/12 2xl:gap-4 relative z-0">
+                <div className="hidden lg:block absolute lg:-right-32 lg:-z-10 w-auto h-full">
+                    {theme === "light" ? (
+                        <img src={bgElems} className="w-full h-full" alt="pet elements" />
+                    ) : (
+                        <img src={bgElemsDark} className="w-full h-full" alt="pet elements" />
+                    )}
                 </div>
                 <div className="lg:col-span-7 xl:col-span-6 2xl:col-span-7">
                     {/* Text Contents */}
@@ -20,7 +31,7 @@ const Banner = () => {
                         </p>
                         {/* Title & Subtitle */}
                         <div className="sm:max-w-10/12 sm:mx-auto lg:*:text-left lg:max-w-full lg:mx-0">
-                            <h1 className="text-3xl font-semibold text-center leading-9 text-base-black mb-6 sm:text-4xl sm:leading-12 md:text-6xl md:leading-20 lg:text-5xl lg:leading-14 xl:text-6xl xl:leading-tight 2xl:text-7xl">
+                            <h1 className="text-3xl font-semibold text-center leading-9 text-heading-color mb-6 sm:text-4xl sm:leading-12 md:text-6xl md:leading-20 lg:text-5xl lg:leading-14 xl:text-6xl xl:leading-tight 2xl:text-7xl">
                                 Every Pet Deserves a Loving Forever Home
                             </h1>
                             <p className="text-center leading-pg-base text-pg-base max-w-11/12 mx-auto lg:mx-0 lg:max-w-10/12 lg:leading-pg-lg xl:text-lg xl:max-w-3xl 2xl:text-xl">
@@ -55,7 +66,7 @@ const Banner = () => {
                             size="xl"
                             variant="default"
                             className={
-                                "relative z-10 bg-base-rose text-base-white mt-0 hover:bg-hover-rose-dark transition-colors duration-600 lg:mt-2 lg:text-lg cursor-pointer xl:text-xl xl:px-8 2xl:text-2xl 2xl:px-10 2xl:py-7"
+                                "relative z-10 bg-base-rose text-base-white mt-0 hover:bg-base-rose-dark transition-colors duration-600 lg:mt-2 lg:text-lg cursor-pointer xl:text-xl xl:px-8 2xl:text-2xl 2xl:px-10 2xl:py-7"
                             }
                             asChild>
                             <Link to="/pet-listing">Adopt a Pet</Link>
@@ -69,15 +80,33 @@ const Banner = () => {
                     <div className="lg:hidden">
                         <div className="max-w-11/12 mx-auto h-full pb-4 flex items-end gap-6 sm:gap-14 sm:justify-center">
                             <div>
-                                <img src={dogImage1} alt="image of a australian shepherd dog with tongue open" />
+                                {theme === "light" ? (
+                                    <img src={dogImage1} alt="image of a australian shepherd dog with tongue open" />
+                                ) : (
+                                    <img
+                                        src={dogImage1Dark}
+                                        alt="image of a australian shepherd dog with tongue open"
+                                    />
+                                )}
                             </div>
                             <div>
-                                <img src={dogImage2} alt="image of a shiba inu dog looking straight up cutely" />
+                                {theme === "light" ? (
+                                    <img src={dogImage2} alt="image of a shiba inu dog looking straight up cutely" />
+                                ) : (
+                                    <img
+                                        src={dogImage2Dark}
+                                        alt="image of a shiba inu dog looking straight up cutely"
+                                    />
+                                )}
                             </div>
                         </div>
                         <div className="flex max-w-11/12 h-full mx-auto items-center justify-center py-4">
-                            <div className="max-w-44 sm:max-w-2xs">
-                                <img src={catImage} alt="image of a ginger cat looking up cutely" />
+                            <div className="max-w-54 sm:max-w-2xs">
+                                {theme === "light" ? (
+                                    <img src={catImage} alt="image of a ginger cat looking up cutely" />
+                                ) : (
+                                    <img src={catImageDark} alt="image of a ginger cat looking up cutely" />
+                                )}
                             </div>
                         </div>
                     </div>
@@ -86,29 +115,53 @@ const Banner = () => {
                     <div className="hidden lg:flex lg:items-center lg:justify-between lg:gap-4 xl:gap-4 2xl:gap-8 xl:max-w-full 2xl:max-w-5xl xl:mx-auto">
                         {/* Left column  */}
                         <div className="w-5/12 flex items-center xl:w-5/12">
-                            <img
-                                src={catImage}
-                                alt="image of a ginger cat looking up cutely"
-                                className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl"
-                            />
+                            {theme === "light" ? (
+                                <img
+                                    src={catImage}
+                                    alt="image of a ginger cat looking up cutely"
+                                    className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl"
+                                />
+                            ) : (
+                                <img
+                                    src={catImageDark}
+                                    alt="image of a ginger cat looking up cutely"
+                                    className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl"
+                                />
+                            )}
                         </div>
 
                         {/* Right column */}
                         <div className="w-6/12 flex flex-col space-y-10 xl:space-y-8 2xl:space-y-16 xl:w-6/12">
                             <div className="w-full">
-                                <img
-                                    src={dogImage1}
-                                    alt="image of a australian shepherd dog with tongue open"
-                                    className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl xl:max-w-xs xl:mx-auto 2xl:max-w-sm"
-                                />
+                                {theme === "light" ? (
+                                    <img
+                                        src={dogImage1}
+                                        alt="image of a australian shepherd dog with tongue open"
+                                        className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl xl:max-w-xs xl:mx-auto 2xl:max-w-sm"
+                                    />
+                                ) : (
+                                    <img
+                                        src={dogImage1Dark}
+                                        alt="image of a australian shepherd dog with tongue open"
+                                        className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl xl:max-w-xs xl:mx-auto 2xl:max-w-sm"
+                                    />
+                                )}
                             </div>
 
                             <div className="w-full">
-                                <img
-                                    src={dogImage2}
-                                    alt="image of a shiba inu dog looking straight up cutely"
-                                    className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl xl:max-w-xs xl:mx-auto 2xl:max-w-sm"
-                                />
+                                {theme === "light" ? (
+                                    <img
+                                        src={dogImage2}
+                                        alt="image of a shiba inu dog looking straight up cutely"
+                                        className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl xl:max-w-xs xl:mx-auto 2xl:max-w-sm"
+                                    />
+                                ) : (
+                                    <img
+                                        src={dogImage2Dark}
+                                        alt="image of a shiba inu dog looking straight up cutely"
+                                        className="w-full h-auto object-contain rounded-lg xl:rounded-xl 2xl:rounded-2xl xl:max-w-xs xl:mx-auto 2xl:max-w-sm"
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
