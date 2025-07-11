@@ -4,16 +4,20 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, NavLink, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.svg";
+import logoDark from "@/assets/logo-secondary.svg";
 import avatarPlaceholder from "@/assets/panda-placeholder.png";
 import { Menu11Icon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AuthContext } from "@/contexts/AuthContext";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import ThemeToggle from "../ThemeToggle";
+import { useTheme } from "@/hooks/useTheme";
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const { user, logOut, loading } = useContext(AuthContext);
+    const { theme } = useTheme();
     const navigate = useNavigate();
 
     const handleLogOut = () => {
@@ -37,7 +41,11 @@ const Navbar = () => {
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <div className="w-32 h-auto">
-                            <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+                            <img
+                                src={theme === "dark" ? logoDark : logo}
+                                alt="Logo"
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                     </NavigationMenuItem>
                 </NavigationMenuList>
@@ -142,6 +150,9 @@ const Navbar = () => {
                                 <Link to="/auth/login">Login</Link>
                             </Button>
                         )}
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <ThemeToggle></ThemeToggle>
                     </NavigationMenuItem>
                 </NavigationMenuList>
 

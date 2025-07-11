@@ -7,14 +7,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthProvider from "./layouts/Authentication/AuthProvider";
 import SkeletonProvider from "./components/ui/skeleton-provider";
+import { ThemeProvider } from "./components/theme-provider";
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <SkeletonProvider>
-            <AuthProvider>
-                <RouterProvider router={router} />
-            </AuthProvider>
-        </SkeletonProvider>
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+            <SkeletonProvider>
+                <AuthProvider>
+                    <RouterProvider router={router} />
+                </AuthProvider>
+            </SkeletonProvider>
+        </ThemeProvider>
         <ToastContainer
             position="top-center"
             autoClose={2500}
