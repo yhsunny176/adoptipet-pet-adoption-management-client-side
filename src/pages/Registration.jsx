@@ -13,11 +13,10 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01FreeIcons, Image02Icon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
-import Navbar from "@/components/navbar/Navbar";
 
 const validationSchema = Yup.object({
     name: Yup.string()
-        .min(2, "Name must be at least 3 characters")
+        .min(3, "Name must be at least 3 characters")
         .max(50, "Name must be less than 20 characters")
         .required("Name is required"),
     email: Yup.string().email("Invalid email format").required("Email is required"),
@@ -46,7 +45,7 @@ const Registration = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-yellow-bg-light relative overflow-hidden">
+        <div className="min-h-screen bg-yellow-bg relative overflow-hidden">
             {/* Cat Illustration - Top Left */}
             <div className="absolute top-5 -left-20 sm:-left-18 md:-left-16 z-0">
                 <img
@@ -93,7 +92,7 @@ const Registration = () => {
                     </div>
                     {/* Title and Subtitle */}
                     <div className="text-center mb-8">
-                        <h1 className="text-4xl md:text-4xl font-bold text-base-black mb-4">
+                        <h1 className="text-4xl md:text-4xl font-bold text-black-base mb-4">
                             Start Your Pet Love Story Today
                         </h1>
                         <p className="text-pg-base text-sm md:text-base">
@@ -158,16 +157,18 @@ const Registration = () => {
                                     <Form className="login-form space-y-6">
                                         {/* Name Field */}
                                         <div>
-                                            <label htmlFor="name" className="block text-sm font-medium text-gray- mb-2">
+                                            <label
+                                                htmlFor="name"
+                                                className="block text-sm font-medium text-black-base mb-2">
                                                 Your Name
                                             </label>
                                             <Field
                                                 type="text"
                                                 name="name"
                                                 placeholder="Enter your full name"
-                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-black rounded-lg transition-all duration-200 ${
+                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
                                                     errors.name && touched.name && values.name !== ""
-                                                        ? "border-base-red bg-red-light"
+                                                        ? "border-red-base bg-red-light"
                                                         : "border-gray-border bg-base-white"
                                                 }`}
                                             />
@@ -180,16 +181,16 @@ const Registration = () => {
                                         <div>
                                             <label
                                                 htmlFor="email"
-                                                className="block text-sm font-medium text-base-black mb-2">
+                                                className="block text-sm font-medium text-black-base mb-2">
                                                 Your Email
                                             </label>
                                             <Field
                                                 type="email"
                                                 name="email"
                                                 placeholder="Enter your email address"
-                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-black rounded-lg transition-all duration-200 ${
+                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
                                                     errors.email && touched.email && values.email !== ""
-                                                        ? "border-base-red bg-red-light"
+                                                        ? "border-red-base bg-red-light"
                                                         : "border-gray-border bg-base-white"
                                                 }`}
                                             />
@@ -202,7 +203,7 @@ const Registration = () => {
                                         <div className="relative">
                                             <label
                                                 htmlFor="password"
-                                                className="block text-sm font-medium text-base-black mb-2">
+                                                className="block text-sm font-medium text-black-base mb-2">
                                                 Password
                                             </label>
                                             <div className="relative">
@@ -210,9 +211,9 @@ const Registration = () => {
                                                     type={showPassword ? "text" : "password"}
                                                     name="password"
                                                     placeholder="Your Password here"
-                                                    className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-black rounded-lg transition-all duration-200 ${
-                                                        errors.name && touched.name && values.name !== ""
-                                                            ? "border-base-red bg-red-light"
+                                                    className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
+                                                        errors.password && touched.password && values.password !== ""
+                                                            ? "border-red-base bg-red-light"
                                                             : "border-gray-border bg-base-white"
                                                     }`}
                                                 />
@@ -236,7 +237,7 @@ const Registration = () => {
                                         <div>
                                             <label
                                                 htmlFor="photo"
-                                                className="block text-sm font-medium text-base-black mb-2">
+                                                className="block text-sm font-medium text-black-base mb-2">
                                                 Profile Photo
                                             </label>
                                             <div className="space-y-4">
@@ -257,7 +258,7 @@ const Registration = () => {
                                                                 : ""
                                                         } ${
                                                             errors.photo && touched.photo
-                                                                ? "border-base-red bg-red-light"
+                                                                ? "border-red-base bg-red-light"
                                                                 : "border-gray-border bg-base-white"
                                                         } relative overflow-hidden`}>
                                                         {imagePreview ? (
@@ -274,7 +275,7 @@ const Registration = () => {
                                                                         setFieldValue("photo", null);
                                                                         setImagePreview(null);
                                                                     }}
-                                                                    className="absolute top-2 right-2 w-8 h-8 bg-pg-base cursor-pointer hover:bg-base-black rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
+                                                                    className="absolute top-2 right-2 w-8 h-8 bg-pg-base cursor-pointer hover:bg-black-base rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
                                                                     <HugeiconsIcon
                                                                         className="text-base-white"
                                                                         size={12}
@@ -306,7 +307,7 @@ const Registration = () => {
                                                 </div>
                                             </div>
                                             {errors.photo && touched.photo && values.photo !== null && (
-                                                <div className="text-base-red text-sm mt-1">{errors.photo}</div>
+                                                <div className="text-red-base text-sm mt-1">{errors.photo}</div>
                                             )}
                                         </div>
 
@@ -404,7 +405,7 @@ const Registration = () => {
                                             toast.error(error.message || "Registration failed. Please try again.");
                                         }
                                     }}
-                                    className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-gray-700 bg-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">
+                                    className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-black-base bg-base-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">
                                     <svg className="w-5 h-5 mr-2" fill="#1877F2" viewBox="0 0 24 24">
                                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                                     </svg>
@@ -415,7 +416,7 @@ const Registration = () => {
 
                         {/* Login if already have account */}
                         <div className="text-center mt-6">
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-gray-medium text-sm">
                                 Already have an account?{" "}
                                 <Link
                                     to="/auth/login"

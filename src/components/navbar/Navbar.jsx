@@ -129,7 +129,7 @@ const Navbar = () => {
                                     }`}>
                                     <Link
                                         to="/dashboard"
-                                        className="block px-4 py-2 text-black-text-500 hover:bg-red-light hover:text-base-red rounded-sm transition-colors duration-200"
+                                        className="block px-4 py-2 text-black-text-500 hover:bg-red-light hover:text-red-base rounded-sm transition-colors duration-200"
                                         onClick={() => setIsDropdownOpen(false)}>
                                         Dashboard
                                     </Link>
@@ -171,7 +171,7 @@ const Navbar = () => {
                     </NavigationMenuItem>
                     {/* Hamburger Menu */}
                     <div className="flex items-center lg:hidden ml-auto justify-end">
-                        <Sheet open={mobMenuOpen} onOpenChange={setMobMenuOpen}>
+                        <Sheet open={mobMenuOpen} onOpenChange={mobMenuOpen}>
                             <SheetTrigger asChild>
                                 <Button
                                     variant="ghost"

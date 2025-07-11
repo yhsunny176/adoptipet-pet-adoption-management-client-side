@@ -72,7 +72,7 @@ const Login = () => {
                     </div>
                     {/* Title and Subtitle */}
                     <div className="text-center mb-8">
-                        <h1 className="text-4xl md:text-4xl font-bold text-base-black mb-4">
+                        <h1 className="text-4xl md:text-4xl font-bold text-black-base mb-4">
                             Start Your Pet Love Story Today
                         </h1>
                         <p className="text-pg-base text-sm md:text-base">
@@ -122,16 +122,16 @@ const Login = () => {
                                     <div>
                                         <label
                                             htmlFor="email"
-                                            className="block text-sm font-medium text-base-black mb-2">
+                                            className="block text-sm font-medium text-black-base mb-2">
                                             Your Email
                                         </label>
                                         <Field
                                             type="email"
                                             name="email"
                                             placeholder="Enter your email address"
-                                            className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-black rounded-lg transition-all duration-200 ${
+                                            className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
                                                 errors.email && touched.email && values.email !== ""
-                                                    ? "border-base-red bg-red-light"
+                                                    ? "border-red-base bg-red-light"
                                                     : "border-gray-border bg-base-white"
                                             }`}
                                         />
@@ -143,7 +143,7 @@ const Login = () => {
                                     <div className="relative">
                                         <label
                                             htmlFor="password"
-                                            className="block text-sm font-medium text-base-black mb-2">
+                                            className="block text-sm font-medium text-black-base mb-2">
                                             Password
                                         </label>
                                         <div className="relative">
@@ -151,9 +151,9 @@ const Login = () => {
                                                 type={showPassword ? "text" : "password"}
                                                 name="password"
                                                 placeholder="Your Password here"
-                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-black rounded-lg transition-all duration-200 ${
+                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
                                                     errors.name && touched.name && values.name !== ""
-                                                        ? "border-base-red bg-red-light"
+                                                        ? "border-red-base bg-red-light"
                                                         : "border-gray-border bg-base-white"
                                                 }`}
                                             />

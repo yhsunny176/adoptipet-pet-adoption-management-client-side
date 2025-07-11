@@ -30,11 +30,12 @@ a.active {
   --color-pg-base: var(--paragraph-prim);
 
   --color-base-white: var(--white-prim);
+  --color-black-base: var(--text-heading);
   --color-base-orange: var(--orange-prim);
   --color-base-rose: var(--rose-prim);
   --color-base-rose-light: var(--rose-lt);
   --color-base-rose-dark: var(--rose-dark);
-  --color-base-red: var(--red-prim);
+  --color-red-base: var(--red-prim);
   --color-red-medium: var(--red-mid);
   --color-red-light: var(--red-lt);
   --color-gray-light: var(--gray-lt);
@@ -42,6 +43,8 @@ a.active {
   --color-gray-dark: var(--gray-dr);
   --color-yellow-bg: var(--yellow-bg-prim);
   --color-blue-coral: var(--blue-cr);
+  --color-gray-border: var(--border-gray-prim);
+  --color-blue-bg: var(--blue-cr-lt);
 
   --color-navitem-base: var(--navlink-prim);
   --color-navitem-base-mb: var(--navlink-mb);
@@ -86,6 +89,9 @@ a.active {
   --gray-md: oklch(0.6717 0.0071 17.33);
   --gray-dr: oklch(0.527 0.0038 17.28);
   --blue-cr: oklch(0.866 0.0593 190.8);
+  --blue-cr-lt: oklch(0.9437 0.009 214.34);
+  --border-gray-prim: oklch(0.9105 0.0046 78.3);
+
 
 }
 
