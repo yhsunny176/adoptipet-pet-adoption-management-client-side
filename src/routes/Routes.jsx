@@ -1,5 +1,7 @@
 import AuthenticationLayout from "@/layouts/Authentication/AuthenticationLayout";
+import DashboardLayout from "@/layouts/DashboardLayout";
 import MainLayout from "@/layouts/MainLayout";
+import AddPets from "@/pages/dashboard/AddPets";
 import ErrorPage from "@/pages/ErrorPage";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -33,6 +35,16 @@ const router = createBrowserRouter([
                 element: <Registration />,
             },
         ],
+    },
+    {
+        path: "/dashboard",
+        element: <DashboardLayout/>,
+        children: [
+            {
+                path:"/dashboard/add-pet",
+                element: <AddPets/>
+            }
+        ]
     },
     {
         path: "/*",
