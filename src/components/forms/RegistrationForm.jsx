@@ -235,7 +235,7 @@ const RegistrationForm = () => {
                                                                         setFieldValue("photo", null);
                                                                         setImagePreview(null);
                                                                     }}
-                                                                    className="absolute top-2 right-2 w-8 h-8 bg-sidebar-navitem-text cursor-pointer hover:bg-base-rose-dark rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
+                                                                    className="absolute top-2 right-2 w-8 h-8 bg-base-rose cursor-pointer hover:bg-base-rose-dark rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
                                                                     <HugeiconsIcon
                                                                         className="text-base-white"
                                                                         size={12}
