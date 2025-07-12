@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useField, useFormikContext } from "formik";
 import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -25,28 +25,56 @@ const extensions = [TextStyle, StarterKit];
 function MenuBar({ editor }) {
     const editorState = useEditorState({
         editor,
-        selector: (ctx) => ({
-            isBold: ctx.editor.isActive("bold"),
-            canBold: ctx.editor.can().chain().focus().toggleBold().run(),
-            isItalic: ctx.editor.isActive("italic"),
-            canItalic: ctx.editor.can().chain().focus().toggleItalic().run(),
-            isStrike: ctx.editor.isActive("strike"),
-            canStrike: ctx.editor.can().chain().focus().toggleStrike().run(),
-            isCode: ctx.editor.isActive("code"),
-            canCode: ctx.editor.can().chain().focus().toggleCode().run(),
-            canClearMarks: ctx.editor.can().chain().focus().unsetAllMarks().run(),
-            isParagraph: ctx.editor.isActive("paragraph"),
-            isHeading1: ctx.editor.isActive("heading", { level: 1 }),
-            isHeading2: ctx.editor.isActive("heading", { level: 2 }),
-            isHeading3: ctx.editor.isActive("heading", { level: 3 }),
-            isBulletList: ctx.editor.isActive("bulletList"),
-            isOrderedList: ctx.editor.isActive("orderedList"),
-            isCodeBlock: ctx.editor.isActive("codeBlock"),
-            isBlockquote: ctx.editor.isActive("blockquote"),
-            canUndo: ctx.editor.can().chain().focus().undo().run(),
-            canRedo: ctx.editor.can().chain().focus().redo().run(),
-        }),
+        selector: (ctx) => {
+            if (!ctx.editor || !ctx.editor.view || ctx.editor.isDestroyed) {
+                return {
+                    isBold: false,
+                    canBold: false,
+                    isItalic: false,
+                    canItalic: false,
+                    isStrike: false,
+                    canStrike: false,
+                    isCode: false,
+                    canCode: false,
+                    canClearMarks: false,
+                    isParagraph: false,
+                    isHeading1: false,
+                    isHeading2: false,
+                    isHeading3: false,
+                    isBulletList: false,
+                    isOrderedList: false,
+                    isCodeBlock: false,
+                    isBlockquote: false,
+                    canUndo: false,
+                    canRedo: false,
+                };
+            }
+            // Only call editor methods if editor is ready
+            return {
+                isBold: ctx.editor.isActive("bold"),
+                canBold: ctx.editor.can().chain().focus().toggleBold().run(),
+                isItalic: ctx.editor.isActive("italic"),
+                canItalic: ctx.editor.can().chain().focus().toggleItalic().run(),
+                isStrike: ctx.editor.isActive("strike"),
+                canStrike: ctx.editor.can().chain().focus().toggleStrike().run(),
+                isCode: ctx.editor.isActive("code"),
+                canCode: ctx.editor.can().chain().focus().toggleCode().run(),
+                canClearMarks: ctx.editor.can().chain().focus().unsetAllMarks().run(),
+                isParagraph: ctx.editor.isActive("paragraph"),
+                isHeading1: ctx.editor.isActive("heading", { level: 1 }),
+                isHeading2: ctx.editor.isActive("heading", { level: 2 }),
+                isHeading3: ctx.editor.isActive("heading", { level: 3 }),
+                isBulletList: ctx.editor.isActive("bulletList"),
+                isOrderedList: ctx.editor.isActive("orderedList"),
+                isCodeBlock: ctx.editor.isActive("codeBlock"),
+                isBlockquote: ctx.editor.isActive("blockquote"),
+                canUndo: ctx.editor.can().chain().focus().undo().run(),
+                canRedo: ctx.editor.can().chain().focus().redo().run(),
+            };
+        },
     });
+
+    if (!editor || !editor.view || editor.isDestroyed) return null;
     return (
         <div className="mb-3 flex gap-2 flex-wrap">
             <button
@@ -200,6 +228,11 @@ function MenuBar({ editor }) {
 const TiptapEditor = ({ name, label }) => {
     const { setFieldValue } = useFormikContext();
     const [field, meta] = useField(name);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
     // LOCAL_STORAGE_KEY must be inside the component to access the correct name
     const LOCAL_STORAGE_KEY = `tiptap-content-${name}`;
 
@@ -253,10 +286,14 @@ const TiptapEditor = ({ name, label }) => {
         }
     }, [field.value, editor]);
 
+    if (!mounted) return null;
+
     return (
         <div className="mb-4 col-start-1 col-span-2">
             {label && <label className="block text-sm font-medium mb-2">{label}</label>}
-            {editor && <MenuBar editor={editor} />}
+
+            {/* Only render MenuBar if editor is fully ready */}
+            {editor && editor.view && !editor.isDestroyed && <MenuBar editor={editor} />}
             <div
                 className={`border rounded-lg px-4 py-3 min-h-[200px] h-full w-full bg-base-white transition-all duration-200 flex flex-col ${
                     meta.touched && meta.error
