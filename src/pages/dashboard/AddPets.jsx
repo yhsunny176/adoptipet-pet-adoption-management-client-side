@@ -1,11 +1,12 @@
-import React from 'react';
+import AddPetForm from "@/components/forms/AddPetForm";
+import React from "react";
 
 const AddPets = () => {
-  return (
-    <div>
-       <h1>This is Add Pets</h1>
-    </div>
-  );
+    return (
+        <div>
+            <AddPetForm />
+        </div>
+    );
 };
 
 export default AddPets;

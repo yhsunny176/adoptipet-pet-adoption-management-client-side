@@ -1,25 +1,23 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.svg";
 import logoDark from "@/assets/logo-secondary.svg";
-import avatarPlaceholder from "@/assets/panda-placeholder.png";
 import { Menu11Icon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { AuthContext } from "@/contexts/AuthContext";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ThemeToggle from "../ThemeToggle";
 import { useTheme } from "@/hooks/useTheme";
+import LogoutButton from "../buttons-custom/LogoutButton";
+import Avatar from "../avatar/Avatar";
+import { AuthContext } from "@/contexts/AuthContext";
 
 const Navbar = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [mobMenuOpen, setMobMenuOpen] = useState(false);
-    const { user, logOut, loading } = useContext(AuthContext);
+    const { loading, user } = useContext(AuthContext);
     const { theme } = useTheme();
-    const navigate = useNavigate();
 
     // Automatically close mobile menu (Sheet) on resize to lg+
     useEffect(() => {
@@ -32,22 +30,8 @@ const Navbar = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const handleLogOut = () => {
-        logOut()
-            .then(() => {
-                navigate("/auth/login", {
-                    state: { message: "Logged out successfully!", type: "success" },
-                });
-            })
-            .catch((error) => {
-                navigate("/auth/login", {
-                    state: { message: `${error.message}`, type: "error" },
-                });
-            });
-    };
-
     return (
-        <div className="container mx-auto px-2 sm:px-4">
+        <div className="nav-container mx-auto px-2 sm:px-4">
             <NavigationMenu className="flex justify-between items-center w-full" viewport={false}>
                 {/* Logo */}
                 <NavigationMenuList>
@@ -100,74 +84,15 @@ const Navbar = () => {
                     {/* Avatar and Theme Toggle */}
                     <NavigationMenuItem className="flex items-center gap-2 sm:gap-3">
                         {/* Avatar */}
-                        {loading ? (
-                            <Skeleton circle width={36} height={36} className="animate-pulse" />
-                        ) : user ? (
-                            <div className="flex-none relative cursor-pointer">
-                                <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                                    {user?.photoURL ? (
-                                        <img
-                                            src={user.photoURL}
-                                            alt={"User Avatar"}
-                                            className="h-9 w-9 rounded-full object-cover hover:border-2 border-base-rose hover:transform hover:scale-105 transition-transform duration-400 ease-in-out"
-                                        />
-                                    ) : (
-                                        <img
-                                            src={avatarPlaceholder}
-                                            alt="User Avatar"
-                                            className="h-9 w-9 rounded-full object-cover hover:border-2 border-base-rose hover:transform hover:scale-105 transition-transform duration-400 ease-in-out"
-                                        />
-                                    )}
-                                </div>
-                                {/* Dropdown menu */}
-                                <div
-                                    className={`absolute right-0 space-y-4 px-2 text-center top-full mt-2 w-48 bg-base-white rounded-lg shadow-card-primary py-2 z-50 transform origin-top 
-                                    transition-all duration-300 ease-in-out ${
-                                        isDropdownOpen
-                                            ? "opacity-100 scale-y-100 translate-y-0"
-                                            : "opacity-0 scale-y-95 translate-y-2 pointer-events-none"
-                                    }`}>
-                                    <Link
-                                        to="/dashboard"
-                                        className="block px-4 py-2 text-black-text-500 hover:bg-red-light hover:text-red-base rounded-sm transition-colors duration-200"
-                                        onClick={() => setIsDropdownOpen(false)}>
-                                        Dashboard
-                                    </Link>
-                                    <Button
-                                        onClick={() => {
-                                            handleLogOut();
-                                        }}
-                                        size={"lg"}
-                                        className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white">
-                                        Logout
-                                    </Button>
-                                </div>
-                                {isDropdownOpen && (
-                                    <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>
-                                )}
-                            </div>
-                        ) : null}
+
+                        {!loading && user && <Avatar />}
+
                         {/* Theme Toggle */}
                         <ThemeToggle />
                     </NavigationMenuItem>
                     {/* Desktop Nav */}
                     <NavigationMenuItem className="hidden lg:block ml-4">
-                        {loading ? (
-                            <Skeleton width={100} height={40} borderRadius={6} className="animate-pulse" />
-                        ) : user ? (
-                            <Button
-                                onClick={() => {
-                                    handleLogOut();
-                                }}
-                                size={"lg"}
-                                className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white">
-                                Logout
-                            </Button>
-                        ) : (
-                            <Button size={"lg"} className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white">
-                                <Link to="/auth/login">Login</Link>
-                            </Button>
-                        )}
+                        <LogoutButton />
                     </NavigationMenuItem>
                     {/* Hamburger Menu */}
                     <div className="flex items-center lg:hidden ml-auto justify-end">
@@ -204,27 +129,7 @@ const Navbar = () => {
                                         Contact
                                     </NavLink>
                                     <div className="pt-4">
-                                        {loading ? (
-                                            <Skeleton
-                                                width="100%"
-                                                height={40}
-                                                borderRadius={6}
-                                                className="animate-pulse"
-                                            />
-                                        ) : user ? (
-                                            <Button
-                                                onClick={handleLogOut}
-                                                size={"lg"}
-                                                className="w-full text-base-white bg-base-rose hover:bg-base-rose-dark">
-                                                Logout
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                size={"lg"}
-                                                className="w-full bg-base-rose text-base-white hover:bg-base-rose-dark">
-                                                <Link to="/auth/login">Login</Link>
-                                            </Button>
-                                        )}
+                                        <LogoutButton />
                                     </div>
                                 </div>
                             </SheetContent>

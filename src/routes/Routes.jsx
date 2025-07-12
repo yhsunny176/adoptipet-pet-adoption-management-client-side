@@ -9,6 +9,8 @@ import Registration from "@/pages/Registration";
 import React from "react";
 
 import { createBrowserRouter } from "react-router";
+import PrivateRoute from "./PrivateRoute";
+import PageLoader from "@/components/loader/PageLoader";
 
 const router = createBrowserRouter([
     {
@@ -38,13 +40,21 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        element: <DashboardLayout/>,
+        element: (
+            <PrivateRoute>
+                <DashboardLayout />
+            </PrivateRoute>
+        ),
         children: [
             {
-                path:"/dashboard/add-pet",
-                element: <AddPets/>
-            }
-        ]
+                path: "/dashboard/add-pet",
+                element: (
+                    <PrivateRoute>
+                        <AddPets />
+                    </PrivateRoute>
+                ),
+            },
+        ],
     },
     {
         path: "/*",
