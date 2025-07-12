@@ -69,13 +69,7 @@ const RegistrationForm = () => {
                             }}
                             validationSchema={validationSchema}
                             validateOnMount={false}
-                            onSubmit={async (values, { setSubmitting, resetForm, setTouched, errors }) => {
-                                if (Object.keys(errors).length > 0) {
-                                    setTouched({ name: true, email: true, password: true, photo: true });
-                                    toast.warn("Please enter all required fields correctly.");
-                                    setSubmitting(false);
-                                    return;
-                                }
+                            onSubmit={async (values, { setSubmitting, resetForm }) => {
                                 try {
                                     setUploading(true);
                                     // Upload image to Cloudinary
@@ -241,7 +235,7 @@ const RegistrationForm = () => {
                                                                         setFieldValue("photo", null);
                                                                         setImagePreview(null);
                                                                     }}
-                                                                    className="absolute top-2 right-2 w-8 h-8 bg-pg-black cursor-pointer hover:bg-black-base rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
+                                                                    className="absolute top-2 right-2 w-8 h-8 bg-sidebar-navitem-text cursor-pointer hover:bg-base-rose-dark rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
                                                                     <HugeiconsIcon
                                                                         className="text-base-white"
                                                                         size={12}

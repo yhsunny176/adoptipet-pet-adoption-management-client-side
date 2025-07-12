@@ -15,9 +15,9 @@ const DashboardLayout = () => {
                         <header className="sticky top-0 z-10 flex h-20 shrink-0 items-center gap-2 border-b border-gray-light px-4 bg-background-secondary">
                             <div className="w-full flex justify-between">
                                 <div className="flex items-center gap-4">
-                                    <SidebarTrigger />
-                                    <div className="db-navitems flex items-center gap-8 mt-1">
-                                        <NavLink to="/">Home</NavLink>
+                                    <SidebarTrigger/>
+                                    <div className="db-navitems flex items-center gap-8 mt-1 text-pg-base">
+                                        <NavLink className="hover:text-base-rose-dark" to="/">Home</NavLink>
                                     </div>
                                 </div>
                                 {/* Theme Toggle */}

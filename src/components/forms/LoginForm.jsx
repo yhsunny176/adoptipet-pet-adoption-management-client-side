@@ -48,13 +48,7 @@ const LoginForm = () => {
                             }}
                             validationSchema={validationSchema}
                             validateOnMount={false}
-                            onSubmit={async (values, { setSubmitting, setTouched, errors }) => {
-                                if (Object.keys(errors).length > 0) {
-                                    setTouched({ email: true, password: true });
-                                    toast.warn("Please enter all required fields correctly.");
-                                    setSubmitting(false);
-                                    return;
-                                }
+                            onSubmit={async (values, { setSubmitting }) => {
                                 try {
                                     const { email, password } = values;
                                     const userCredential = await signInUser(email, password);
