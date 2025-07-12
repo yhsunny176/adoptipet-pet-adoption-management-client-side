@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import logo from "@/assets/logo.svg";
+import logo from "../../assets/logo.png";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,7 @@ const RegistrationForm = () => {
                 <div className="w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     <div className="flex items-center justify-center py-8">
                         <Link to="/">
-                            <img src={logo} alt="logo" />
+                            <img src={logo} alt="logo" className="h-10 w-auto" />
                         </Link>
                     </div>
                     {/* Title and Subtitle */}
@@ -114,12 +114,10 @@ const RegistrationForm = () => {
                                     }
                                 };
                                 return (
-                                    <Form className="login-form space-y-6">
+                                    <Form className="registration-form space-y-6">
                                         {/* Name Field */}
                                         <div>
-                                            <label
-                                                htmlFor="name"
-                                                className="block text-sm font-medium text-heading-color mb-2">
+                                            <label htmlFor="name" className="block text-sm font-medium mb-2">
                                                 Your Name
                                             </label>
                                             <Field

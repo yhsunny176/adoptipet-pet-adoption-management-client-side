@@ -4,7 +4,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-h1 {
+h1,
+h2,
+h3 {
   font-family: var(--font-heading);
 }
 
@@ -19,8 +21,13 @@ a {
   font-weight: 700;
 }
 
-.login-form label {
+label {
   font-family: var(--font-heading);
+  color: var(--color-black-base)
+}
+
+.pet-add-form label {
+  color: var(--color-label-form);
 }
 
 @theme {
@@ -32,6 +39,7 @@ a {
   /* Main colors */
   --color-background-primary: var(--background);
   --color-background-secondary: var(--background-dark);
+  --color-background-tertiary: var(--background-ter);
 
   --color-heading-color: var(--text-heading);
   --color-pg-base: var(--paragraph-prim);
@@ -54,6 +62,7 @@ a {
   --color-gray-border: var(--border-gray-prim);
   --color-blue-bg: var(--blue-cr-lt);
 
+
   --color-navitem-base: var(--navlink-prim);
   --color-navitem-base-mb: var(--navlink-mb);
   --color-navitem-hover: var(--navlink-hover);
@@ -61,6 +70,8 @@ a {
   --color-toggle-bg-hover: var(--toggle-hover);
   --color-toggle-icon: var(--toggle-icon);
   --color-menu-mobile: var(--menu-mob);
+
+  --color-label-form: var(--label-form);
 
   /* Sidebar */
   --color-sidebar: var(--sidebar);
@@ -91,6 +102,7 @@ a {
   --font-head: 'DynaPuff', 'sans-serif';
   --background: oklch(0.9868 0.0118 79.79);
   --background-dark: oklch(0.9702 0.03 83.63);
+  --background-ter: oklch(0.994 0 0);
   --text-heading: oklch(0.2801 0.0519 232.1);
   --rose-prim: oklch(0.645 0.1859 26.69);
   --red-prim: oklch(0.4865 0.1814 27.32);
@@ -117,6 +129,7 @@ a {
   --blue-cr: oklch(0.866 0.0593 190.8);
   --blue-cr-lt: oklch(0.9437 0.009 214.34);
   --border-gray-prim: oklch(0.9105 0.0046 78.3);
+  --label-form: oklch(0.2801 0.0519 232.1);
 
   /* Sidebar */
   --sidebar: oklch(0.9702 0.03 83.63);
@@ -139,6 +152,7 @@ a {
   /* Main */
   --background: oklch(0.1822 0 0);
   --background-dark: oklch(0.1904 0.004 106.77);
+  --background-ter: oklch(0.1822 0 0);
   --text-heading: oklch(0.6964 0.1594 25.2);
   --white-prim: oklch(0.9851 0 0);
   --paragraph-prim: oklch(0.9851 0 0);
@@ -147,6 +161,7 @@ a {
   --toggle-hover: oklch(0.5723 0.2118 27.2);
   --toggle-icon: oklch(0.9851 0 0);
   --menu-mob: oklch(0.9851 0 0);
+  --label-form: oklch(0.7995 0.1538 71.7);
 
   /* Sidbar Dark */
   --sidebar: oklch(0.1822 0 0);
@@ -162,4 +177,46 @@ a {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.9851 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+}
+
+.react-select__control {
+  @apply w-full !border !border-gray-border !rounded-lg transition-all duration-200 !bg-base-white min-h-[48px] shadow-none;
+}
+
+.react-select__control--is-invalid .react-select__value-container {
+  @apply !border !border-red-base !bg-red-light;
+}
+
+.react-select__value-container {
+  @apply !px-4 !py-3 !rounded-lg;
+}
+
+.react-select__placeholder {
+  @apply !text-gray-400;
+}
+
+.react-select__single-value {
+  @apply !text-black-base;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.react-select__input-container {
+  @apply !m-0 !p-0;
+}
+
+.react-select__placeholder {
+  @apply !text-gray-medium !my-0;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.react-select__indicator-separator {
+  display: none;
+}
+
+.react-select__menu {
+  z-index: 20;
+  font-size: 1rem;
+  font-family: inherit;
 }

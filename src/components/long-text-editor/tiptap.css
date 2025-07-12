@@ -1,0 +1,178 @@
+
+
+.tiptap-editor-content .ProseMirror {
+  min-height: 160px;
+  max-height: 300px;
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  outline: none !important;
+  box-shadow: none !important;
+  resize: none;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.tiptap-editor-content .ProseMirror:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+
+/* Basic editor styles */
+/* Tiptap editor content always uses light mode colors, even in dark mode */
+.tiptap,
+.dark .tiptap,
+.tiptap * {
+  --tiptap-pg: oklch(0.4373 0.0765 230.68) !important;
+  --tiptap-heading: oklch(0.2801 0.0519 232.1) !important;
+  --tiptap-red: oklch(0.6365 0.1958 24.62) !important;
+}
+
+.tiptap :first-child {
+  margin-top: 0 !important;
+}
+
+.tiptap ul,
+.dark .tiptap ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+  color: var(--tiptap-pg) !important;
+}
+
+.tiptap ol,
+.dark .tiptap ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+  color: var(--tiptap-pg) !important;
+}
+
+.tiptap ul li,
+.tiptap ol li,
+.dark .tiptap ul li,
+.dark .tiptap ol li {
+  color: var(--tiptap-pg) !important;
+}
+
+.tiptap ul li p,
+.tiptap ol li p,
+.dark .tiptap ul li p,
+.dark .tiptap ol li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  color: var(--tiptap-pg) !important;
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6,
+.dark .tiptap h1,
+.dark .tiptap h2,
+.dark .tiptap h3,
+.dark .tiptap h4,
+.dark .tiptap h5,
+.dark .tiptap h6 {
+  line-height: 1.1;
+  margin-top: 2.5rem;
+  text-wrap: pretty;
+  color: var(--tiptap-heading) !important;
+}
+
+.tiptap p,
+.dark .tiptap p {
+  color: oklch(0.2801 0.0519 232.1);
+}
+
+.tiptap h1,
+.tiptap h2,
+.dark .tiptap h1,
+.dark .tiptap h2 {
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tiptap h1,
+.dark .tiptap h1 {
+  font-size: 1.4rem;
+}
+
+.tiptap h2,
+.dark .tiptap h2 {
+  font-size: 1.2rem;
+}
+
+.tiptap h3,
+.dark .tiptap h3 {
+  font-size: 1.1rem;
+}
+
+.tiptap h4,
+.tiptap h5,
+.tiptap h6,
+.dark .tiptap h4,
+.dark .tiptap h5,
+.dark .tiptap h6 {
+  font-size: 1rem;
+}
+
+.tiptap pre,
+.dark .tiptap pre {
+  background: #222 !important;
+  border-radius: 0.5rem;
+  color: #fff !important;
+  font-family: 'JetBrainsMono', monospace;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+}
+
+.tiptap pre code,
+.dark .tiptap pre code {
+  background-color: #f3e8ff !important;
+  border-radius: 0.4rem;
+  color: #222 !important;
+  font-size: 0.95em;
+  padding: 0.2em 0.4em;
+  font-family: 'JetBrainsMono', monospace;
+}
+
+.tiptap code,
+.dark .tiptap code {
+  background-color: #f3e8ff !important;
+  border-radius: 0.4rem;
+  color: #222 !important;
+  font-size: 0.95em;
+  padding: 0.2em 0.4em;
+  font-family: 'JetBrainsMono', monospace;
+}
+
+.tiptap blockquote,
+.dark .tiptap blockquote {
+  border-left: 3px solid var(--tiptap-heading) !important;
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  color: var(--tiptap-pg) !important;
+}
+
+.tiptap hr,
+.dark .tiptap hr {
+  border: none;
+  border-top: 1px solid var(--tiptap-pg) !important;
+  margin: 2rem 0;
+}
+
+/* Strikethrough color for Tiptap editor */
+.tiptap del,
+.tiptap s,
+.tiptap .ProseMirror-strike,
+.dark .tiptap del,
+.dark .tiptap s,
+.dark .tiptap .ProseMirror-strike {
+  color: var(--tiptap-red) !important;
+  text-decoration-color: var(--tiptap-red) !important;
+}

@@ -1,16 +1,8 @@
 import React from "react";
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail,
-} from "../ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarRail } from "../ui/sidebar";
 import { NavLink } from "react-router";
-import logo from "@/assets/logo.svg";
-import logoDark from "@/assets/logo-secondary.svg";
+import logo from "../../assets/logo.png";
+import logoDark from "../../assets/logo-secondary.png";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
     AddMoneyCircleIcon,
@@ -70,18 +62,18 @@ const SidebarDashboard = (props) => {
             <div className="bg-sidebar-secondary max-w-full px-3 pb-4 h-max flex items-center justify-between mt-5 border-b border-b-black-base">
                 <div className="max-w-24 h-full">
                     {theme === "light" ? (
-                        <img src={logo} alt="adoptipet brand logo" className="w-full h-full" />
+                        <img src={logo} alt="AdoptiPet Logo" className="w-full h-full" />
                     ) : (
-                        <img src={logoDark} alt="adoptipet brand logo for dark mode theme" className="w-full h-full" />
+                        <img src={logoDark} alt="AdoptiPet Logo Dark" className="w-full h-full" />
                     )}
                 </div>
             </div>
             <SidebarContent className={"py-8 px-3 bg-sidebar-secondary"}>
                 {/* We create a SidebarGroup for each parent. */}
-                {data.navMain.map((item) => (
-                    <SidebarMenu>
-                        {item.items.map((child) => (
-                            <SidebarMenuItem key={child.title}>
+                {data.navMain.map((item, idx) => (
+                    <SidebarMenu key={item.items?.[0]?.title || idx}>
+                        {item.items.map((child, cidx) => (
+                            <SidebarMenuItem key={child.url || child.title || cidx}>
                                 <NavLink
                                     to={child.url}
                                     className={({ isActive }) =>

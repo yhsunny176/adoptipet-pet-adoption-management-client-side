@@ -3,8 +3,8 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/compon
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo.svg";
-import logoDark from "@/assets/logo-secondary.svg";
+import logo from "../../assets/logo.png";
+import logoDark from "../../assets/logo-secondary.png";
 import { Menu11Icon } from "@hugeicons/core-free-icons/index";
 import { HugeiconsIcon } from "@hugeicons/react";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -38,11 +38,11 @@ const Navbar = () => {
                     <NavigationMenuItem>
                         <div className="w-32 h-auto">
                             <Link to="/">
-                                <img
-                                    src={theme === "dark" ? logoDark : logo}
-                                    alt="Logo"
-                                    className="w-full h-full object-cover"
-                                />
+                                {theme === "dark" ? (
+                                    <img src={logoDark} alt="Logo Dark" className="w-full h-full object-cover" />
+                                ) : (
+                                    <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+                                )}
                             </Link>
                         </div>
                     </NavigationMenuItem>

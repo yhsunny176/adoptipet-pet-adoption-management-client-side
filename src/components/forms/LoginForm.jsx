@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
-import logo from "@/assets/logo.svg";
+import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "@/contexts/AuthContext";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -27,7 +27,7 @@ const LoginForm = () => {
                 <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                     <div className="flex items-center justify-center py-8">
                         <Link to="/">
-                            <img src={logo} alt="logo" />
+                            <img src={logo} alt="logo" className="h-10 w-auto" />
                         </Link>
                     </div>
                     {/* Title and Subtitle */}
@@ -79,7 +79,7 @@ const LoginForm = () => {
                             }}>
                             {({ isSubmitting, errors, touched }) => {
                                 return (
-                                    <Form className="space-y-6">
+                                    <Form className="login-form space-y-6">
                                         {/* Email */}
                                         <div>
                                             <label
