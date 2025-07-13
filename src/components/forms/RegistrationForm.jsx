@@ -4,11 +4,12 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
-import uploadImageCloudinary from "@/utils/cloudinary__upload__";
 import { AuthContext } from "@/contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Cancel01FreeIcons, Image02Icon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
+import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
+import ImageField from "../photo-upload-field/ImageField";
+import { saveUserDatabase } from "@/utils/save__user__data";
 
 const validationSchema = Yup.object({
     name: Yup.string()
@@ -20,7 +21,7 @@ const validationSchema = Yup.object({
         .min(6, "Password must be at least 6 characters")
         .matches(/^(?=.*[a-z])(?=.*[A-Z])/, "Password must contain at least one uppercase and one lowercase letter")
         .required("Password is required"),
-    photo: Yup.mixed()
+    photoFile: Yup.mixed()
         .required("Image required")
         .test("fileSize", "File size must be less than 5MB", (value) => {
             if (!value) return false;
@@ -33,12 +34,11 @@ const validationSchema = Yup.object({
 });
 
 const RegistrationForm = () => {
-    const [imagePreview, setImagePreview] = useState(null);
-    const [uploading, setUploading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const { createUser, updateUser, signInWithGoogle, signInWithFacebook, setLoading } = useContext(AuthContext);
 
     const navigate = useNavigate();
+
     return (
         <div>
             {/* Registration Form */}
@@ -65,233 +65,146 @@ const RegistrationForm = () => {
                                 name: "",
                                 email: "",
                                 password: "",
-                                photo: null,
+                                photoFile: null,
+                                photoURL: "",
                             }}
                             validationSchema={validationSchema}
                             validateOnMount={false}
                             onSubmit={async (values, { setSubmitting, resetForm }) => {
                                 try {
-                                    setUploading(true);
-                                    // Upload image to Cloudinary
-                                    const uploadResult = await uploadImageCloudinary(values.photo);
-                                    if (!uploadResult.success) {
-                                        throw new Error(uploadResult.error);
-                                    }
                                     const name = values.name;
                                     const email = values.email;
                                     const password = values.password;
-                                    const photoURL = uploadResult.url;
-                                    // Create user with Firebase Auth
+                                    const photoURL = values.photoURL;
                                     await createUser(email, password);
                                     await updateUser({ displayName: name, photoURL });
-                                    toast.success("Registration successful!");
+
+                                    const userData = {
+                                        name,
+                                        email,
+                                        profilepic: photoURL,
+                                    };
+
+                                    await saveUserDatabase(userData);
+
                                     resetForm();
-                                    navigate("/", {
-                                        state: {
-                                            message: "Congrats! Registration Successful!",
-                                            type: "success",
-                                        },
-                                    });
+                                    navigate("/");
+                                    toast.success("Registration successful!");
                                 } catch (error) {
                                     toast.error(error.message || "Registration failed. Please try again.");
                                 } finally {
-                                    setUploading(false);
                                     setSubmitting(false);
                                     setLoading(false);
                                 }
                             }}>
-                            {({ isSubmitting, errors, touched, setFieldValue }) => {
-                                // Image change handler for Formik
-                                const handleImageChange = (event) => {
-                                    const file = event.target.files[0];
-                                    if (file) {
-                                        setFieldValue("photo", file);
-                                        const reader = new FileReader();
-                                        reader.onload = (e) => {
-                                            setImagePreview(e.target.result);
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }
-                                };
-                                return (
-                                    <Form className="registration-form space-y-6">
-                                        {/* Name Field */}
-                                        <div>
-                                            <label htmlFor="name" className="block text-sm font-medium mb-2">
-                                                Your Name
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                name="name"
-                                                placeholder="Enter your full name"
-                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
-                                                    errors.name && touched.name
-                                                        ? "border-red-base bg-red-light"
-                                                        : "border-gray-border bg-base-white"
-                                                }`}
-                                            />
-                                            {errors.name && touched.name && (
-                                                <div className="text-red-medium text-sm mt-1">{errors.name}</div>
-                                            )}
-                                        </div>
+                            {({ isSubmitting, errors, touched }) => (
+                                <Form className="registration-form space-y-6">
+                                    {/* Name Field */}
+                                    <div>
+                                        <label htmlFor="name" className="block text-sm font-medium mb-2">
+                                            Your Full Name
+                                        </label>
+                                        <Field
+                                            type="text"
+                                            name="name"
+                                            placeholder="Enter your full name"
+                                            className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
+                                                errors.name && touched.name
+                                                    ? "border-red-base bg-red-light"
+                                                    : "border-gray-border bg-base-white"
+                                            }`}
+                                        />
+                                        {errors.name && touched.name && (
+                                            <div className="text-red-medium text-sm mt-1">{errors.name}</div>
+                                        )}
+                                    </div>
 
-                                        {/* Email */}
-                                        <div>
-                                            <label
-                                                htmlFor="email"
-                                                className="block text-sm font-medium text-black-base mb-2">
-                                                Your Email
-                                            </label>
-                                            <Field
-                                                type="email"
-                                                name="email"
-                                                placeholder="Enter your email address"
-                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
-                                                    errors.email && touched.email
-                                                        ? "border-red-base bg-red-light"
-                                                        : "border-gray-border bg-base-white"
-                                                }`}
-                                            />
-                                            {errors.email && touched.email && (
-                                                <div className="text-red-medium text-sm mt-1">{errors.email}</div>
-                                            )}
-                                        </div>
+                                    {/* Email */}
+                                    <div>
+                                        <label
+                                            htmlFor="email"
+                                            className="block text-sm font-medium text-black-base mb-2">
+                                            Your Email
+                                        </label>
+                                        <Field
+                                            type="email"
+                                            name="email"
+                                            placeholder="Enter your email address"
+                                            className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
+                                                errors.email && touched.email
+                                                    ? "border-red-base bg-red-light"
+                                                    : "border-gray-border bg-base-white"
+                                            }`}
+                                        />
+                                        {errors.email && touched.email && (
+                                            <div className="text-red-medium text-sm mt-1">{errors.email}</div>
+                                        )}
+                                    </div>
 
-                                        {/* Password */}
+                                    {/* Password */}
+                                    <div className="relative">
+                                        <label
+                                            htmlFor="password"
+                                            className="block text-sm font-medium text-black-base mb-2">
+                                            Password
+                                        </label>
                                         <div className="relative">
-                                            <label
-                                                htmlFor="password"
-                                                className="block text-sm font-medium text-black-base mb-2">
-                                                Password
-                                            </label>
-                                            <div className="relative">
-                                                <Field
-                                                    type={showPassword ? "text" : "password"}
-                                                    name="password"
-                                                    placeholder="Your Password here"
-                                                    className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
-                                                        errors.password && touched.password
-                                                            ? "border-red-base bg-red-light"
-                                                            : "border-gray-border bg-base-white"
-                                                    }`}
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    className="absolute right-3 top-3 text-gray-medium hover:text-base-rose focus:outline-none cursor-pointer transition-colors duration-500 ease-in-out">
-                                                    {showPassword ? (
-                                                        <HugeiconsIcon icon={ViewOffIcon} />
-                                                    ) : (
-                                                        <HugeiconsIcon icon={ViewIcon} />
-                                                    )}
-                                                </button>
-                                            </div>
-                                            {errors.password && touched.password && (
-                                                <div className="text-red-medium text-sm mt-1">{errors.password}</div>
-                                            )}
+                                            <Field
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                placeholder="Your Password here"
+                                                className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-black-base rounded-lg transition-all duration-200 ${
+                                                    errors.password && touched.password
+                                                        ? "border-red-base bg-red-light"
+                                                        : "border-gray-border bg-base-white"
+                                                }`}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute right-3 top-3 text-gray-medium hover:text-base-rose focus:outline-none cursor-pointer transition-colors duration-500 ease-in-out">
+                                                {showPassword ? (
+                                                    <HugeiconsIcon icon={ViewOffIcon} />
+                                                ) : (
+                                                    <HugeiconsIcon icon={ViewIcon} />
+                                                )}
+                                            </button>
                                         </div>
+                                        {errors.password && touched.password && (
+                                            <div className="text-red-medium text-sm mt-1">{errors.password}</div>
+                                        )}
+                                    </div>
 
-                                        {/* Photo Upload */}
-                                        <div>
-                                            <label
-                                                htmlFor="photo"
-                                                className="block text-sm font-medium text-black-base mb-2">
-                                                Profile Photo
-                                            </label>
-                                            <div className="space-y-4">
-                                                <div className="relative">
-                                                    <input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={handleImageChange}
-                                                        className="sr-only"
-                                                        id="photo-upload"
-                                                        disabled={imagePreview ? true : false}
-                                                    />
-                                                    <label
-                                                        htmlFor={imagePreview ? undefined : "photo-upload"}
-                                                        className={`block w-full h-24 px-4 py-3 border-2 border-dashed rounded-lg transition-all duration-500 ${
-                                                            !imagePreview
-                                                                ? "cursor-pointer hover:border-blue-coral hover:bg-blue-bg"
-                                                                : ""
-                                                        } ${
-                                                            errors.photo && touched.photo
-                                                                ? "border-red-base bg-red-light"
-                                                                : "border-gray-border bg-base-white"
-                                                        } relative overflow-hidden`}>
-                                                        {imagePreview ? (
-                                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                                <img
-                                                                    src={imagePreview}
-                                                                    alt="Preview"
-                                                                    className="w-full h-full object-contain p-2"
-                                                                />
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        setFieldValue("photo", null);
-                                                                        setImagePreview(null);
-                                                                    }}
-                                                                    className="absolute top-2 right-2 w-8 h-8 bg-base-rose cursor-pointer hover:bg-base-rose-dark rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
-                                                                    <HugeiconsIcon
-                                                                        className="text-base-white"
-                                                                        size={12}
-                                                                        icon={Cancel01FreeIcons}
-                                                                    />
-                                                                </button>
-                                                            </div>
-                                                        ) : (
-                                                            /* Default Upload UI */
-                                                            <div className="text-center h-full flex flex-col items-center justify-center">
-                                                                <HugeiconsIcon
-                                                                    className="text-gray-medium"
-                                                                    icon={Image02Icon}
-                                                                />
-                                                                <div className="mt-2">
-                                                                    <p className="text-sm text-gray-medium">
-                                                                        <span className="font-medium text-base-orange">
-                                                                            Click to upload
-                                                                        </span>{" "}
-                                                                        or drag and drop
-                                                                    </p>
-                                                                    <p className="text-sm text-gray-medium">
-                                                                        PNG, JPG, WebP
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            {errors.photo && touched.photo && (
-                                                <div className="text-red-base text-sm mt-1">{errors.photo}</div>
-                                            )}
-                                        </div>
+                                    {/* Photo Upload */}
+                                    <ImageField
+                                        nameFile="photoFile"
+                                        nameURL="photoURL"
+                                        label="Profile Photo"
+                                        containerHeight="min-h-[180px]"
+                                    />
 
-                                        {/* Submit Button */}
-                                        <Button
-                                            type="submit"
-                                            disabled={isSubmitting || uploading}
-                                            className="w-full font-semibold py-6 px-8 rounded-lg transition-colors duration-600 ease-in-out hover:bg-hover-rose-dark disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-white"
-                                            style={{
-                                                backgroundColor: "#E86F69",
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                if (!isSubmitting && !uploading) {
-                                                    e.target.style.backgroundColor = "#E34D46";
-                                                }
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                if (!isSubmitting && !uploading) {
-                                                    e.target.style.backgroundColor = "#E86F69";
-                                                }
-                                            }}>
-                                            {isSubmitting ? "Creating Account" : "Create Account"}
-                                        </Button>
-                                    </Form>
-                                );
-                            }}
+                                    {/* Submit Button */}
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full font-semibold py-6 px-8 rounded-lg transition-colors duration-600 ease-in-out hover:bg-hover-rose-dark disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-white"
+                                        style={{
+                                            backgroundColor: "#E86F69",
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (!isSubmitting) {
+                                                e.target.style.backgroundColor = "#E34D46";
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (!isSubmitting) {
+                                                e.target.style.backgroundColor = "#E86F69";
+                                            }
+                                        }}>
+                                        {isSubmitting ? "Creating Account" : "Create Account"}
+                                    </Button>
+                                </Form>
+                            )}
                         </Formik>
 
                         {/* Social Logins */}
@@ -310,15 +223,16 @@ const RegistrationForm = () => {
                                     type="button"
                                     onClick={async () => {
                                         try {
-                                            await signInWithGoogle();
+                                            const result = await signInWithGoogle();
+                                            const googleUserData = {
+                                                name: result?.user?.displayName,
+                                                email: result?.user?.email,
+                                                profilepic: result?.user?.photoURL,
+                                            };
+                                            await saveUserDatabase(googleUserData);
 
+                                            navigate("/");
                                             toast.success("Congrats! Registration successful!");
-                                            navigate("/", {
-                                                state: {
-                                                    message: "Registration Successful!",
-                                                    type: "success",
-                                                },
-                                            });
                                         } catch (error) {
                                             toast.error(error.message || "Registration failed. Please try again.");
                                         }
@@ -350,15 +264,15 @@ const RegistrationForm = () => {
                                     type="button"
                                     onClick={async () => {
                                         try {
-                                            await signInWithFacebook();
-
+                                            const result = await signInWithFacebook();
+                                            const fbUserData = {
+                                                name: result?.user?.displayName,
+                                                email: result?.user?.email,
+                                                profilepic: result?.user?.photoURL,
+                                            };
+                                            await saveUserDatabase(fbUserData);
+                                            navigate("/");
                                             toast.success("Congrats! Registration successful!");
-                                            navigate("/", {
-                                                state: {
-                                                    message: "Registration successful!",
-                                                    type: "success",
-                                                },
-                                            });
                                         } catch (error) {
                                             toast.error(error.message || "Registration failed. Please try again.");
                                         }

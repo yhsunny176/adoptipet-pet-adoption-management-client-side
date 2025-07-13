@@ -4,7 +4,7 @@ import uploadImageCloudinary from "@/utils/cloudinary__upload__";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01FreeIcons, Image02Icon } from "@hugeicons/core-free-icons/index";
 
-const ImageField = ({ nameFile, nameURL, label }) => {
+const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]" }) => {
     const [meta] = useField(nameFile);
     const { setFieldValue } = useFormikContext();
     const [imagePreview, setImagePreview] = useState(null);
@@ -84,7 +84,7 @@ const ImageField = ({ nameFile, nameURL, label }) => {
     return (
         <div className="space-y-4">
             <label className="block text-sm font-medium text-black-base mb-3">{label}</label>
-            <div className="relative border-2 border-dashed border-base-orange rounded-lg min-h-[300px]">
+            <div className={`relative border-2 border-dashed border-base-orange rounded-lg ${containerHeight}`}>
                 <input
                     type="file"
                     accept="image/*"
@@ -95,7 +95,7 @@ const ImageField = ({ nameFile, nameURL, label }) => {
                 />
                 <label
                     htmlFor={!imagePreview && !uploading ? `${nameFile}-upload` : undefined}
-                    className={`flex items-center justify-center w-full h-full px-4 py-3 rounded-lg transition-all duration-500 min-h-[300px] ${
+                    className={`flex items-center justify-center w-full h-full px-4 py-3 rounded-lg transition-all duration-500 ${containerHeight} ${
                         !imagePreview && !uploading ? "cursor-pointer hover:border-base-rose-dark hover:bg-blue-bg" : ""
                     } ${
                         meta.touched && meta.error ? "border-red-base bg-red-light" : "border-gray-border bg-base-white"

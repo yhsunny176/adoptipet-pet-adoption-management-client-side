@@ -1,6 +1,6 @@
 import React from "react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarRail } from "../ui/sidebar";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import logo from "../../assets/logo.png";
 import logoDark from "../../assets/logo-secondary.png";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -62,9 +62,13 @@ const SidebarDashboard = (props) => {
             <div className="bg-sidebar-secondary max-w-full px-3 pb-4 h-max flex items-center justify-between mt-5 border-b border-b-black-base">
                 <div className="max-w-24 h-full">
                     {theme === "light" ? (
-                        <img src={logo} alt="AdoptiPet Logo" className="w-full h-full" />
+                        <Link to={"/"}>
+                            <img src={logo} alt="AdoptiPet Logo" className="w-full h-full" />
+                        </Link>
                     ) : (
-                        <img src={logoDark} alt="AdoptiPet Logo Dark" className="w-full h-full" />
+                        <Link to={"/"}>
+                            <img src={logoDark} alt="AdoptiPet Logo" className="w-full h-full" />
+                        </Link>
                     )}
                 </div>
             </div>

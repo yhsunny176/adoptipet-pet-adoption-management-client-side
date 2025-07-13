@@ -262,14 +262,29 @@ const TiptapEditor = ({ name, label }) => {
             setFieldValue(name, saved);
             editor.commands.setContent(saved);
         }
-    }, [editor]);
+    }, [editor, field.value, name, setFieldValue, LOCAL_STORAGE_KEY]);
+
+    // On mount, clear any tiptap-editor localStorage keys that do not match the current page
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        const currentPath = window.location.pathname;
+        Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith("tiptap-editor-") && !key.endsWith(currentPath)) {
+                localStorage.removeItem(key);
+            }
+        });
+        // On unmount, clear the current editor's localStorage key
+        return () => {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+        };
+    }, [LOCAL_STORAGE_KEY]);
 
     // Keep editor in sync with Formik field, but don't overwrite with empty value on mount
     useEffect(() => {
         if (editor && field.value && field.value !== editor.getHTML()) {
             editor.commands.setContent(field.value);
         }
-    }, [field.value, editor]);
+    }, [field.value, editor, LOCAL_STORAGE_KEY]);
 
     // Only clear localStorage if both Formik and editor are empty
     useEffect(() => {
@@ -284,7 +299,7 @@ const TiptapEditor = ({ name, label }) => {
         ) {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
         }
-    }, [field.value, editor]);
+    }, [field.value, editor, LOCAL_STORAGE_KEY]);
 
     if (!mounted) return null;
 
