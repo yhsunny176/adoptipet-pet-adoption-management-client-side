@@ -59,9 +59,9 @@ label {
   --color-gray-dark: var(--gray-dr);
   --color-yellow-bg: var(--yellow-bg-prim);
   --color-blue-coral: var(--blue-cr);
-  --color-gray-border: var(--border-gray-prim);
   --color-blue-bg: var(--blue-cr-lt);
-
+  
+  --color-gray-border: var(--border-gray-prim);
 
   --color-navitem-base: var(--navlink-prim);
   --color-navitem-base-mb: var(--navlink-mb);
@@ -124,11 +124,11 @@ label {
   --yellow-bg-prim: oklch(0.9702 0.03 83.63);
   --menu-mob: oklch(0.2801 0.0519 232.1);
   --gray-lt: oklch(0.9105 0.0046 78.3);
-  --gray-md: oklch(0.6717 0.0071 17.33);
+  --gray-md: oklch(62.862% 0.00719 16.802);
   --gray-dr: oklch(0.527 0.0038 17.28);
   --blue-cr: oklch(0.866 0.0593 190.8);
   --blue-cr-lt: oklch(0.9437 0.009 214.34);
-  --border-gray-prim: oklch(0.9105 0.0046 78.3);
+  --border-gray-prim: oklch(77.039% 0.00598 84.482);
   --label-form: oklch(0.2801 0.0519 232.1);
 
   /* Sidebar */
@@ -219,4 +219,10 @@ label {
   z-index: 20;
   font-size: 1rem;
   font-family: inherit;
+}
+
+/* Sweet alert */
+.swal-title-custom-font {
+    font-family: var(--font-pg) !important;
+    font-size: 1.5rem !important;
 }
