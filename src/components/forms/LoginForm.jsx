@@ -4,10 +4,11 @@ import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import logo from "../../assets/logo.png";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "@/contexts/AuthContext";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
+import PageLoader from "../loader/PageLoader";
 
 // Validation schema for login
 const validationSchema = Yup.object({
@@ -18,7 +19,11 @@ const validationSchema = Yup.object({
 const LoginForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const { signInUser, signInWithGoogle, signInWithFacebook, setUser } = useContext(AuthContext);
+    const { signInUser, signInWithGoogle, signInWithFacebook, setUser, loading, user } = useContext(AuthContext);
+    const location = useLocation();
+    const from = location?.state.from?.pathname || "/";
+    if (user) return <Navigate to={from} replace={true} />;
+    if (loading) return <PageLoader />;
 
     return (
         <div>
@@ -57,12 +62,7 @@ const LoginForm = () => {
 
                                     toast.success("Login successful! Welcome back!");
                                     setSubmitting(false);
-                                    navigate("/", {
-                                        state: {
-                                            message: "Welcome back! You've been logged in successfully.",
-                                            type: "success",
-                                        },
-                                    });
+                                    navigate(from, { replace: true });
                                 } catch (error) {
                                     let errorMessage = "Login failed. One or more credentials are wrong.";
                                     if (error.code === "auth/user-not-found") {
@@ -190,12 +190,7 @@ const LoginForm = () => {
                                             setUser(user);
 
                                             toast.success("Login successful!");
-                                            navigate("/", {
-                                                state: {
-                                                    message: "Login Successful!",
-                                                    type: "success",
-                                                },
-                                            });
+                                            navigate(from, { replace: true });
                                         } catch (error) {
                                             toast.error(error.message || "Login failed. Please try again.");
                                         }
@@ -233,12 +228,7 @@ const LoginForm = () => {
                                             setUser(user);
 
                                             toast.success("Login successful!");
-                                            navigate("/", {
-                                                state: {
-                                                    message: "Login Successful",
-                                                    type: "success",
-                                                },
-                                            });
+                                            navigate(from, { replace: true });
                                         } catch (error) {
                                             toast.error(error.message || "Login Failed. Please try again.");
                                         }

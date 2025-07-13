@@ -5,11 +5,12 @@ import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/contexts/AuthContext";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
 import ImageField from "../photo-upload-field/ImageField";
 import { saveUserDatabase } from "@/utils/save__user__data";
+import PageLoader from "../loader/PageLoader";
 
 const validationSchema = Yup.object({
     name: Yup.string()
@@ -35,9 +36,12 @@ const validationSchema = Yup.object({
 
 const RegistrationForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const { createUser, updateUser, signInWithGoogle, signInWithFacebook, setLoading } = useContext(AuthContext);
-
+    const { user, createUser, updateUser, signInWithGoogle, signInWithFacebook, loading, setLoading } =
+        useContext(AuthContext);
     const navigate = useNavigate();
+    const from = location?.state?.from?.pathname || "/";
+    if (user) return <Navigate to={from} replace={true} />;
+    if (loading) return <PageLoader />;
 
     return (
         <div>
@@ -88,7 +92,7 @@ const RegistrationForm = () => {
                                     await saveUserDatabase(userData);
 
                                     resetForm();
-                                    navigate("/");
+                                    navigate(from, { replace: true });
                                     toast.success("Registration successful!");
                                 } catch (error) {
                                     toast.error(error.message || "Registration failed. Please try again.");
@@ -231,7 +235,7 @@ const RegistrationForm = () => {
                                             };
                                             await saveUserDatabase(googleUserData);
 
-                                            navigate("/");
+                                            navigate(from, { replace: true });
                                             toast.success("Congrats! Registration successful!");
                                         } catch (error) {
                                             toast.error(error.message || "Registration failed. Please try again.");
@@ -271,7 +275,7 @@ const RegistrationForm = () => {
                                                 profilepic: result?.user?.photoURL,
                                             };
                                             await saveUserDatabase(fbUserData);
-                                            navigate("/");
+                                            navigate(from, { replace: true });
                                             toast.success("Congrats! Registration successful!");
                                         } catch (error) {
                                             toast.error(error.message || "Registration failed. Please try again.");
