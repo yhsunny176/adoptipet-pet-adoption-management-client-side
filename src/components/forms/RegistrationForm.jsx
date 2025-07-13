@@ -43,6 +43,34 @@ const RegistrationForm = () => {
     if (user) return <Navigate to={from} replace={true} />;
     if (loading) return <PageLoader />;
 
+    const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+            const name = values.name;
+            const email = values.email;
+            const password = values.password;
+            const photoURL = values.photoURL;
+            await createUser(email, password);
+            await updateUser({ displayName: name, photoURL });
+
+            const userData = {
+                name,
+                email,
+                profilepic: photoURL,
+            };
+
+            await saveUserDatabase(userData);
+
+            resetForm();
+            navigate(from, { replace: true });
+            toast.success("Registration successful!");
+        } catch (error) {
+            toast.error(error.message || "Registration failed. Please try again.");
+        } finally {
+            setSubmitting(false);
+            setLoading(false);
+        }
+    };
+
     return (
         <div>
             {/* Registration Form */}
@@ -74,33 +102,7 @@ const RegistrationForm = () => {
                             }}
                             validationSchema={validationSchema}
                             validateOnMount={false}
-                            onSubmit={async (values, { setSubmitting, resetForm }) => {
-                                try {
-                                    const name = values.name;
-                                    const email = values.email;
-                                    const password = values.password;
-                                    const photoURL = values.photoURL;
-                                    await createUser(email, password);
-                                    await updateUser({ displayName: name, photoURL });
-
-                                    const userData = {
-                                        name,
-                                        email,
-                                        profilepic: photoURL,
-                                    };
-
-                                    await saveUserDatabase(userData);
-
-                                    resetForm();
-                                    navigate(from, { replace: true });
-                                    toast.success("Registration successful!");
-                                } catch (error) {
-                                    toast.error(error.message || "Registration failed. Please try again.");
-                                } finally {
-                                    setSubmitting(false);
-                                    setLoading(false);
-                                }
-                            }}>
+                            onSubmit={handleFormSubmit}>
                             {({ isSubmitting, errors, touched }) => (
                                 <Form className="registration-form space-y-6">
                                     {/* Name Field */}

@@ -25,6 +25,31 @@ const LoginForm = () => {
     if (user) return <Navigate to={from} replace={true} />;
     if (loading) return <PageLoader />;
 
+    const handleFormSubmit = async (values, { setSubmitting }) => {
+        try {
+            const { email, password } = values;
+            const userCredential = await signInUser(email, password);
+            const user = userCredential.user;
+            if (user) setUser(user);
+
+            toast.success("Login successful! Welcome back!");
+            setSubmitting(false);
+            navigate(from, { replace: true });
+        } catch (error) {
+            let errorMessage = "Login failed. One or more credentials are wrong.";
+            if (error.code === "auth/user-not-found") {
+                errorMessage = "No account found with this email. Please register.";
+            } else if (error.code === "auth/wrong-password") {
+                errorMessage = "Incorrect password. Please try again.";
+            } else if (error.code === "auth/too-many-requests") {
+                errorMessage = "Too many failed login attempts. Please try again later.";
+            }
+            toast.error(errorMessage);
+            setSubmitting(false);
+            return;
+        }
+    };
+
     return (
         <div>
             {/* Login Form */}
@@ -53,30 +78,7 @@ const LoginForm = () => {
                             }}
                             validationSchema={validationSchema}
                             validateOnMount={false}
-                            onSubmit={async (values, { setSubmitting }) => {
-                                try {
-                                    const { email, password } = values;
-                                    const userCredential = await signInUser(email, password);
-                                    const user = userCredential.user;
-                                    if (user) setUser(user);
-
-                                    toast.success("Login successful! Welcome back!");
-                                    setSubmitting(false);
-                                    navigate(from, { replace: true });
-                                } catch (error) {
-                                    let errorMessage = "Login failed. One or more credentials are wrong.";
-                                    if (error.code === "auth/user-not-found") {
-                                        errorMessage = "No account found with this email. Please register.";
-                                    } else if (error.code === "auth/wrong-password") {
-                                        errorMessage = "Incorrect password. Please try again.";
-                                    } else if (error.code === "auth/too-many-requests") {
-                                        errorMessage = "Too many failed login attempts. Please try again later.";
-                                    }
-                                    toast.error(errorMessage);
-                                    setSubmitting(false);
-                                    return;
-                                }
-                            }}>
+                            onSubmit={handleFormSubmit}>
                             {({ isSubmitting, errors, touched }) => {
                                 return (
                                     <Form className="login-form space-y-6">
