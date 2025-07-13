@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link, NavLink } from "react-router";
@@ -12,11 +12,9 @@ import ThemeToggle from "../ThemeToggle";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
 import Avatar from "../avatar/Avatar";
-import { AuthContext } from "@/contexts/AuthContext";
 
 const Navbar = () => {
     const [mobMenuOpen, setMobMenuOpen] = useState(false);
-    const { loading, user } = useContext(AuthContext);
     const { theme } = useTheme();
 
     // Automatically close mobile menu (Sheet) on resize to lg+
@@ -85,7 +83,7 @@ const Navbar = () => {
                     <NavigationMenuItem className="flex items-center gap-2 sm:gap-3">
                         {/* Avatar */}
 
-                        {!loading && user && <Avatar />}
+                        <Avatar />
 
                         {/* Theme Toggle */}
                         <ThemeToggle />

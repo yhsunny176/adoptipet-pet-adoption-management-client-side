@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useField, useFormikContext } from "formik";
 import uploadImageCloudinary from "@/utils/cloudinary__upload__";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -7,6 +7,7 @@ import { Cancel01FreeIcons, Image02Icon } from "@hugeicons/core-free-icons/index
 const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]" }) => {
     const [meta] = useField(nameFile);
     const { setFieldValue } = useFormikContext();
+    const fileInputRef = useRef(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [uploadError, setUploadError] = useState("");
@@ -14,6 +15,18 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
     const [canceled, setCanceled] = useState(false);
     const [removed, setRemoved] = useState(false);
     const canceledRef = useRef(false);
+
+    useEffect(() => {
+        if (!meta.value) {
+            setImagePreview(null);
+            setUploadSuccess(false);
+            setUploadError("");
+            setCanceled(false);
+            setRemoved(false);
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    }, [meta.value]);
 
     // Handle Image Change in Formik Field
     const handleImageChange = async (event) => {
@@ -68,6 +81,7 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
             setUploading(false);
             setCanceled(true);
             setRemoved(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
         } else {
             // Handle cross button after image uploaded
             setFieldValue(nameURL, "");
@@ -78,6 +92,7 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
             setUploading(false);
             setCanceled(false);
             setRemoved(true);
+            if (fileInputRef.current) fileInputRef.current.value = "";
         }
     };
 
@@ -91,24 +106,24 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
                     onChange={handleImageChange}
                     className="sr-only"
                     id={`${nameFile}-upload`}
-                    disabled={imagePreview || uploading}
+                    disabled={!!imagePreview || uploading}
+                    ref={fileInputRef}
                 />
                 <label
                     htmlFor={!imagePreview && !uploading ? `${nameFile}-upload` : undefined}
                     className={`flex items-center justify-center w-full h-full px-4 py-3 rounded-lg transition-all duration-500 ${containerHeight} ${
-                        !imagePreview && !uploading ? "cursor-pointer hover:border-base-rose-dark hover:bg-blue-bg" : ""
+                        !imagePreview && !uploading
+                            ? "cursor-pointer hover:border-base-rose-dark hover:bg-blue-bg"
+                            : "cursor-not-allowed opacity-60"
                     } ${
                         meta.touched && meta.error ? "border-red-base bg-red-light" : "border-gray-border bg-base-white"
-                    } relative overflow-hidden`}>
+                    } relative overflow-hidden`}
+                    tabIndex={-1}
+                    aria-disabled={!!imagePreview || uploading}
+                    style={!imagePreview && !uploading ? {} : { pointerEvents: "none" }}>
                     {imagePreview ? (
                         <div className="absolute inset-0 flex items-center justify-center">
                             <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-2" />
-                            <button
-                                type="button"
-                                onClick={handleRemoveImage}
-                                className="absolute top-2 right-2 w-8 h-8 bg-base-rose cursor-pointer hover:bg-base-rose-dark rounded-full flex items-center justify-center z-10 transition-all duration-200 shadow-md">
-                                <HugeiconsIcon className="text-base-white" size={12} icon={Cancel01FreeIcons} />
-                            </button>
                             {uploading && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60">
                                     <span className="text-base font-semibold text-navitem-base">
@@ -130,6 +145,21 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
                         </div>
                     )}
                 </label>
+                {/* Cross button absolutely positioned outside the label so it's not affected by label opacity */}
+                {imagePreview && (
+                    <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="absolute top-2 right-2 w-8 h-8 bg-base-rose cursor-pointer hover:bg-base-rose-dark rounded-full flex items-center justify-center z-20 transition-all duration-200 shadow-md"
+                        style={{ backgroundColor: "#E34D46", opacity: 1, pointerEvents: "auto" }}>
+                        <HugeiconsIcon
+                            className="text-base-white"
+                            size={12}
+                            icon={Cancel01FreeIcons}
+                            style={{ opacity: 1 }}
+                        />
+                    </button>
+                )}
             </div>
             {meta.touched && meta.error && <div className="text-red-medium font-bold text-sm mt-1">{meta.error}</div>}
             {!imagePreview && uploading && (

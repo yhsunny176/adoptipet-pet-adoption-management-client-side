@@ -23,7 +23,7 @@ const Avatar = () => {
                 });
             });
     };
-    
+
     return (
         <div>
             {/* Avatar */}

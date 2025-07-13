@@ -1,12 +1,14 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
 import Select from "react-select";
 import TiptapEditor from "../long-text-editor/TipTapEditor";
 import ImageField from "../photo-upload-field/ImageField";
+import { AuthContext } from "@/contexts/AuthContext";
+import axios from "axios";
 
 const validationSchema = Yup.object({
     photoFile: Yup.mixed()
@@ -30,13 +32,55 @@ const validationSchema = Yup.object({
 const petCategoryOptions = [
     { value: "dog", label: "Dog" },
     { value: "cat", label: "Cat" },
-    { value: "bird", label: "Bird" },
     { value: "rabbit", label: "Rabbit" },
+    { value: "hamster", label: "Hamster" },
+    { value: "guinea_pig", label: "Guinea Pig" },
+    { value: "ferret", label: "Ferret" },
+    { value: "mouse", label: "Mouse" },
+    { value: "rat", label: "Rat" },
+    { value: "gerbil", label: "Gerbil" },
+    { value: "chinchilla", label: "Chinchilla" },
+    { value: "bird", label: "Bird" },
+    { value: "parrot", label: "Parrot" },
+    { value: "canary", label: "Canary" },
+    { value: "finch", label: "Finch" },
+    { value: "lovebird", label: "Lovebird" },
+    { value: "cockatiel", label: "Cockatiel" },
+    { value: "fish", label: "Fish" },
+    { value: "goldfish", label: "Goldfish" },
+    { value: "betta_fish", label: "Betta Fish" },
+    { value: "tropical_fish", label: "Tropical Fish" },
+    { value: "turtle", label: "Turtle" },
+    { value: "tortoise", label: "Tortoise" },
+    { value: "lizard", label: "Lizard" },
+    { value: "gecko", label: "Gecko" },
+    { value: "iguana", label: "Iguana" },
+    { value: "snake", label: "Snake" },
+    { value: "frog", label: "Frog" },
+    { value: "toad", label: "Toad" },
+    { value: "hedgehog", label: "Hedgehog" },
+    { value: "sugar_glider", label: "Sugar Glider" },
+    { value: "hermit_crab", label: "Hermit Crab" },
+    { value: "chicken", label: "Chicken" },
+    { value: "duck", label: "Duck" },
+    { value: "pig", label: "Pig" },
+    { value: "goat", label: "Goat" },
+    { value: "horse", label: "Horse" },
+    { value: "pony", label: "Pony" },
+    { value: "donkey", label: "Donkey" },
+    { value: "cow", label: "Cow" },
+    { value: "sheep", label: "Sheep" },
+    { value: "reptile", label: "Reptile" },
+    { value: "amphibian", label: "Amphibian" },
+    { value: "small_mammal", label: "Small Mammal" },
+    { value: "farm_animal", label: "Farm Animal" },
+    { value: "exotic_pet", label: "Exotic Pet" },
     { value: "other", label: "Other" },
 ];
 
 const AddPetForm = () => {
     const [cancelled, setCancelled] = useState(false);
+    const { user } = useContext(AuthContext);
 
     return (
         <div className="bg-background-tertiary w-full">
@@ -59,26 +103,43 @@ const AddPetForm = () => {
                             setCancelled(false);
                             return;
                         }
+
                         try {
-                            const allPetData = {
-                                ...values,
+                            const petData = {
+                                pet_name: values?.petName,
+                                pet_image: values?.photoURL,
+                                pet_age: values?.petAge,
+                                location: values?.petLocation,
+                                category: values.petCategory?.value,
+                                short_desc: values?.shortDesc,
+                                long_desc: values?.longDesc,
                                 adopted: false,
-                                petCategory: values.petCategory?.value || "",
+                                added_by: {
+                                    name: user?.displayName,
+                                    profilepic: user?.photoURL,
+                                    email: user?.email,
+                                },
                             };
-                            delete allPetData.photoFile;
 
-                            console.log(allPetData);
+                            await axios.post(`${import.meta.env.VITE_API_URL}/add-pet`, petData, {
+                                withCredentials: true,
+                            });
 
-                            
-                            Swal.fire({
+                            const result = await Swal.fire({
                                 icon: "success",
-                                showConfirmButton: false,
-                                timer: 1500,
+                                title: "Pet Added Successfully!",
+                                showCancelButton: true,
+                                confirmButtonText: "See my pets",
+                                cancelButtonText: "Add more",
                                 customClass: {
                                     title: "swal-title-custom-font",
                                 },
                             });
-                            resetForm();
+                            if (result.isConfirmed) {
+                                window.location.href = "/my-added-pets";
+                            } else {
+                                resetForm();
+                            }
                         } catch (error) {
                             toast.error(error.message || "Failed Adding a Pet. Please Try Again!");
                         } finally {
@@ -118,7 +179,6 @@ const AddPetForm = () => {
                                         )}
                                     </div>
 
-
                                     {/* Pet Age */}
                                     <div>
                                         <label
@@ -144,7 +204,6 @@ const AddPetForm = () => {
                                         )}
                                     </div>
 
-
                                     {/* Pet Location */}
                                     <div>
                                         <label
@@ -169,7 +228,6 @@ const AddPetForm = () => {
                                             </div>
                                         )}
                                     </div>
-
 
                                     {/* Pet Category */}
                                     <div>
