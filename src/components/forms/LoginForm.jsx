@@ -19,11 +19,11 @@ const validationSchema = Yup.object({
 const LoginForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const { signInUser, signInWithGoogle, signInWithFacebook, setUser, loading, user } = useContext(AuthContext);
+    const { signInUser, signInWithGoogle, signInWithFacebook, setUser, user, setLoading } =
+        useContext(AuthContext);
     const location = useLocation();
     const from = location?.state.from?.pathname || "/";
     if (user) return <Navigate to={from} replace={true} />;
-    if (loading) return <PageLoader />;
 
     const handleFormSubmit = async (values, { setSubmitting }) => {
         try {
@@ -46,7 +46,10 @@ const LoginForm = () => {
             }
             toast.error(errorMessage);
             setSubmitting(false);
+            setLoading(false);
             return;
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -195,6 +198,9 @@ const LoginForm = () => {
                                             navigate(from, { replace: true });
                                         } catch (error) {
                                             toast.error(error.message || "Login failed. Please try again.");
+                                            setLoading(false);
+                                        } finally {
+                                            setLoading(false);
                                         }
                                     }}
                                     className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-gray-700 bg-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">
@@ -233,6 +239,9 @@ const LoginForm = () => {
                                             navigate(from, { replace: true });
                                         } catch (error) {
                                             toast.error(error.message || "Login Failed. Please try again.");
+                                            setLoading(false);
+                                        } finally {
+                                            setLoading(false);
                                         }
                                     }}
                                     className="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-md border border-gray-light font-medium text-gray-700 bg-white hover:shadow-card-primary cursor-pointer transition-all duration-600 ease-in-out">
