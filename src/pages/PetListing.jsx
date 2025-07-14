@@ -2,45 +2,79 @@ import CardContainer from "@/components/card/CardContainer";
 import PetCard from "@/components/card/PetCard";
 import EmptyState from "@/components/EmptyState";
 import Navbar from "@/components/navbar/Navbar";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
+import Loader from "@/components/loader/Loader";
 import SearchBar from "@/components/SearchBar";
 import CategorySelect from "@/components/CategorySelect";
 import { petCategoryOptions } from "@/utils/pet_categories";
+import { useInView } from "react-intersection-observer";
 
 const PetListing = () => {
     const [search, setSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const { ref, inView } = useInView();
 
     //Get Pet data using Tanstack Query and Axios GET Method
-    const { data: allPetsData, isLoading } = useQuery({
-        queryKey: ["all pets"],
-        queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/all-pets`);
+    const {
+        data: allPetsData,
+        status,
+        isFetching,
+        isFetchingNextPage,
+        fetchNextPage,
+        hasNextPage,
+    } = useInfiniteQuery({
+        queryKey: ["all pets", search, selectedCategory],
+        queryFn: async ({ pageParam }) => {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/all-pets?cursor=${pageParam}&limit=6`);
             return res.data;
         },
+        initialPageParam: 0,
+        getPreviousPageParam: (firstPage) => firstPage.previousId ?? undefined,
+        getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
     });
 
-    // If there is no pet data, show EmptyState
-    const noCategoryData = allPetsData && allPetsData.length === 0;
+    // Prevent scrolling when loading
+    useEffect(() => {
+        if (status === "pending") {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [status]);
+
+    // Flatten all pets from all pages
+    const allPets = allPetsData ? allPetsData.pages.flatMap((page) => page.pets) : [];
 
     // Filtered and sorted pets
-    let filteredPets = [];
-    if (allPetsData) {
-        filteredPets = [...allPetsData]
-            .filter((pet) => {
-                const searchDataMatch = pet.pet_name.toLowerCase().includes(search.toLowerCase());
-                if (!selectedCategory) {
-                    return searchDataMatch;
-                }
-                const normalize = (str) => str?.toString().toLowerCase().replace(/\s|_/g, "");
-                const categoryDataMatch = normalize(pet.category) === normalize(selectedCategory.value);
-                return searchDataMatch && categoryDataMatch;
-            })
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    }
+    const filteredPets = allPets
+        .filter((pet) => {
+            // Only show pets that are not adopted
+            if (pet.adopted) return false;
+            const searchDataMatch = pet.pet_name.toLowerCase().includes(search.toLowerCase());
+            if (!selectedCategory) {
+                return searchDataMatch;
+            }
+            const normalize = (str) => str?.toString().toLowerCase().replace(/\s|_/g, "");
+            const categoryDataMatch = normalize(pet.category) === normalize(selectedCategory.value);
+            return searchDataMatch && categoryDataMatch;
+        })
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    // Intersection observer effect
+    useEffect(() => {
+        if (inView && hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+        }
+    }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    // If there is no pet data, show EmptyState
+    const noCategoryData = allPetsData && filteredPets.length === 0 && !isFetching && !isFetchingNextPage;
 
     return (
         <div className="bg-background-primary flex flex-col min-h-screen">
@@ -76,8 +110,8 @@ const PetListing = () => {
                     </div>
                 </div>
             </div>
-            <div className="mx-auto py-12 xl:max-w-9/12 flex-1 flex items-center justify-center">
-                {isLoading ? (
+            <div className="mx-auto py-12 xl:max-w-9/12 flex-1">
+                {status === "pending" ? (
                     <CardContainer>
                         {[...Array(6)].map((_, idx) => (
                             <div key={idx} className="p-4">
@@ -97,16 +131,34 @@ const PetListing = () => {
                             </div>
                         ))}
                     </CardContainer>
+                ) : status === "error" ? (
+                    <div className="flex items-center justify-center">Error Loading Data</div>
                 ) : noCategoryData ? (
-                    <EmptyState />
+                    <div className="flex items-center justify-center">
+                        <EmptyState />
+                    </div>
                 ) : filteredPets && filteredPets.length > 0 ? (
-                    <CardContainer>
-                        {filteredPets.map((petData) => (
-                            <PetCard key={petData._id} petData={petData} />
-                        ))}
-                    </CardContainer>
+                    <div className="flex flex-col items-center">
+                        <CardContainer>
+                            {filteredPets.map((petData) => (
+                                <PetCard key={petData._id} petData={petData} />
+                            ))}
+                        </CardContainer>
+                        {/* Intersection Observer trigger for infinite scroll */}
+                        {hasNextPage && (
+                            <div className="w-full flex justify-center py-8">
+                                {isFetchingNextPage ? (
+                                    <Loader height={40} width={6} color="#2563eb" />
+                                ) : (
+                                    <div ref={ref} className="h-4 w-full" />
+                                )}
+                            </div>
+                        )}
+                    </div>
                 ) : (
-                    <EmptyState />
+                    <div className="flex items-center justify-center">
+                        <EmptyState />
+                    </div>
                 )}
             </div>
         </div>
