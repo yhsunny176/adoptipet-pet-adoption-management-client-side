@@ -8,16 +8,20 @@ import "react-toastify/dist/ReactToastify.css";
 import AuthProvider from "./layouts/Authentication/AuthProvider";
 import SkeletonProvider from "./components/ui/skeleton-provider";
 import { ThemeProvider } from "./components/theme-provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-            <SkeletonProvider>
-                <AuthProvider>
-                    <RouterProvider router={router} />
-                </AuthProvider>
-            </SkeletonProvider>
-        </ThemeProvider>
+        <SkeletonProvider>
+            <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+                <QueryClientProvider client={queryClient}>
+                    <AuthProvider>
+                        <RouterProvider router={router} />
+                    </AuthProvider>
+                </QueryClientProvider>
+            </ThemeProvider>
+        </SkeletonProvider>
         <ToastContainer
             position="top-center"
             autoClose={2500}

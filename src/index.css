@@ -40,6 +40,8 @@ label {
   --color-background-primary: var(--background);
   --color-background-secondary: var(--background-dark);
   --color-background-tertiary: var(--background-ter);
+  --color-background-quaternary: var(--background-quat);
+  --color-background-head-text: var(--bg-head-text);
 
   --color-heading-color: var(--text-heading);
   --color-pg-base: var(--paragraph-prim);
@@ -54,14 +56,17 @@ label {
   --color-red-base: var(--red-prim);
   --color-red-medium: var(--red-mid);
   --color-red-light: var(--red-lt);
+  --color-gray-extra-light: var(--gray-extra-lt);
   --color-gray-light: var(--gray-lt);
   --color-gray-medium: var(--gray-md);
   --color-gray-dark: var(--gray-dr);
   --color-yellow-bg: var(--yellow-bg-prim);
   --color-blue-coral: var(--blue-cr);
   --color-blue-bg: var(--blue-cr-lt);
-  
+
   --color-gray-border: var(--border-gray-prim);
+  --color-card-border-prim: var(--border-card);
+  --color-card-br-hover: var(--card-border-hov);
 
   --color-navitem-base: var(--navlink-prim);
   --color-navitem-base-mb: var(--navlink-mb);
@@ -89,7 +94,7 @@ label {
   --color-sidebar-ring: var(--sidebar-ring);
 
   /* Shadows */
-  --shadow-card-primary: 0px 6px 20px -5px rgba(0, 0, 0, 0.1);
+  --shadow-card-primary: var(--card-shadow);
 
   /* Leading or Line Spacing */
   --leading-pg-base: 26px;
@@ -100,10 +105,14 @@ label {
   /* Main*/
   --font-paragraph: 'Amiko', 'sans-serif';
   --font-head: 'DynaPuff', 'sans-serif';
+
   --background: oklch(0.9868 0.0118 79.79);
   --background-dark: oklch(0.9702 0.03 83.63);
   --background-ter: oklch(0.994 0 0);
+  --background-quaternary: oklch(0.9712 0.0253 78.92);
   --text-heading: oklch(0.2801 0.0519 232.1);
+  --bg-head-text: oklch(0.9569 0.044 83.91);
+
   --rose-prim: oklch(0.645 0.1859 26.69);
   --red-prim: oklch(0.4865 0.1814 27.32);
   --rose-lt: oklch(0.9426 0.0241 17.59);
@@ -123,12 +132,16 @@ label {
   --red-lt: oklch(0.9426 0.0241 17.59);
   --yellow-bg-prim: oklch(0.9702 0.03 83.63);
   --menu-mob: oklch(0.2801 0.0519 232.1);
+  --gray-extra-lt: oklch(0.9523 0.0029 84.56);
   --gray-lt: oklch(0.9105 0.0046 78.3);
   --gray-md: oklch(62.862% 0.00719 16.802);
   --gray-dr: oklch(0.527 0.0038 17.28);
   --blue-cr: oklch(0.866 0.0593 190.8);
   --blue-cr-lt: oklch(0.9437 0.009 214.34);
   --border-gray-prim: oklch(77.039% 0.00598 84.482);
+  --border-card: oklch(0.8901 0.0081 73.74);
+  --card-border-hov: oklch(0.8895 0.0557 250.93);
+
   --label-form: oklch(0.2801 0.0519 232.1);
 
   /* Sidebar */
@@ -146,6 +159,9 @@ label {
   --sidebar-border: oklch(0.9105 0.0046 78.3);
   --sidebar-ring: oklch(0.708 0 0);
 
+  /* Shadow */
+  --card-shadow: 0px 10px 37px -7px rgba(0, 0, 0, 0.1);
+
 }
 
 .dark {
@@ -153,6 +169,8 @@ label {
   --background: oklch(0.1822 0 0);
   --background-dark: oklch(0.1904 0.004 106.77);
   --background-ter: oklch(0.1822 0 0);
+  --background-quat: oklch(0.2174 0.0019 106.56);
+  --bg-head-text: oklch(0.2123 0.0058 106.88);
   --text-heading: oklch(0.6964 0.1594 25.2);
   --white-prim: oklch(0.9851 0 0);
   --paragraph-prim: oklch(0.9851 0 0);
@@ -161,6 +179,9 @@ label {
   --toggle-hover: oklch(0.5723 0.2118 27.2);
   --toggle-icon: oklch(0.9851 0 0);
   --menu-mob: oklch(0.9851 0 0);
+  --border-card: oklch(0.3848 0.0027 17.27);
+  --card-border-hov: oklch(0.8698 0.0868 62.34);
+
   --label-form: oklch(0.7995 0.1538 71.7);
 
   /* Sidbar Dark */
@@ -177,6 +198,12 @@ label {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.9851 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+
+
+  /* Shadow */
+  --card-shadow: 0px 12px 24.5px 8px rgba(32, 30, 30, 0.20);
+
+
 }
 
 .react-select__control {
@@ -221,8 +248,12 @@ label {
   font-family: inherit;
 }
 
+.react-select-container__value-container {
+  @apply !px-4 !py-3 !rounded-lg;
+}
+
 /* Sweet alert */
 .swal-title-custom-font {
-    font-family: var(--font-pg) !important;
-    font-size: 1.5rem !important;
+  font-family: var(--font-pg) !important;
+  font-size: 1.5rem !important;
 }

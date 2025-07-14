@@ -22,7 +22,8 @@ const LoginForm = () => {
     const { signInUser, signInWithGoogle, signInWithFacebook, setUser, user, setLoading } =
         useContext(AuthContext);
     const location = useLocation();
-    const from = location?.state.from?.pathname || "/";
+    const from = location?.state?.from?.pathname || "/";
+    
     if (user) return <Navigate to={from} replace={true} />;
 
     const handleFormSubmit = async (values, { setSubmitting }) => {

@@ -1,3 +1,4 @@
+import React from "react";
 import AuthenticationLayout from "@/layouts/Authentication/AuthenticationLayout";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import MainLayout from "@/layouts/MainLayout";
@@ -6,11 +7,9 @@ import ErrorPage from "@/pages/ErrorPage";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Registration from "@/pages/Registration";
-import React from "react";
-
 import { createBrowserRouter } from "react-router";
 import PrivateRoute from "./PrivateRoute";
-import PageLoader from "@/components/loader/PageLoader";
+import PetListing from "@/pages/PetListing";
 
 const router = createBrowserRouter([
     {
@@ -55,6 +54,10 @@ const router = createBrowserRouter([
                 ),
             },
         ],
+    },
+    {
+        path: "/pet-listing",
+        element: <PetListing/>
     },
     {
         path: "/*",

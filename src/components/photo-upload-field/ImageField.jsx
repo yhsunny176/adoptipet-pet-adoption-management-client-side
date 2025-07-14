@@ -16,17 +16,15 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
     const [removed, setRemoved] = useState(false);
     const canceledRef = useRef(false);
 
-    useEffect(() => {
-        if (!meta.value) {
-            setImagePreview(null);
-            setUploadSuccess(false);
-            setUploadError("");
-            setCanceled(false);
-            setRemoved(false);
-            setUploading(false);
-            if (fileInputRef.current) fileInputRef.current.value = "";
-        }
-    }, [meta.value]);
+useEffect(() => {
+    if (!meta.value) {
+        setImagePreview(null);
+        setUploadSuccess(false);
+        setUploadError("");
+        setUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+}, [meta.value]);
 
     // Handle Image Change in Formik Field
     const handleImageChange = async (event) => {
