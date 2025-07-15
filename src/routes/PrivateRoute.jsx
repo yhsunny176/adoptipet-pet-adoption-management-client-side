@@ -1,10 +1,10 @@
 import PageLoader from "@/components/loader/PageLoader";
-import { AuthContext } from "@/contexts/AuthContext";
-import React, { useContext } from "react";
+import useAuth from "@/hooks/useAuth";
+import React from "react";
 import { Navigate, useLocation } from "react-router";
 
 const PrivateRoute = ({ children }) => {
-    const { user, loading } = useContext(AuthContext);
+    const { user, loading } = useAuth();
     const location = useLocation();
 
     if (loading) {

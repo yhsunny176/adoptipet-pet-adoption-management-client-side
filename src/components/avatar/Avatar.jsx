@@ -1,13 +1,14 @@
 import { AuthContext } from "@/contexts/AuthContext";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useNavigate } from "react-router";
 import avatarPlaceholder from "@/assets/panda-placeholder.png";
 import { Button } from "../ui/button";
+import useAuth from "@/hooks/useAuth";
 
 const Avatar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const { user, logOut, loading } = useContext(AuthContext);
+    const { user, logOut, loading } = useAuth();
     const navigate = useNavigate();
 
     const handleLogOut = () => {

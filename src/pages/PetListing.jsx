@@ -5,7 +5,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
+import PetListingSkeleton from "@/components/loader/Skeletons/PetListingSkeleton";
 import Loader from "@/components/loader/Loader";
 import SearchBar from "@/components/SearchBar";
 import CategorySelect from "@/components/CategorySelect";
@@ -80,7 +80,7 @@ const PetListing = () => {
         <div className="bg-background-primary flex flex-col min-h-screen">
             <Navbar />
             <div>
-                <div className="text-center space-y-6 max-w-9/12 bg-background-head-text mx-auto rounded-3xl py-6 mt-12 md:py-8">
+                <div className="text-center space-y-6 max-w-11/12 px-4 2xl:max-w-9/12 bg-background-head-text mx-auto rounded-3xl py-6 mt-12 md:py-8">
                     <h1 className="text-4xl text-heading-color">Adopt a Pet from our Pet Listing</h1>
                     <p className="text-pg-base">
                         Discover pets in need of a loving home, ready to become part of your family. Each listing is a
@@ -90,9 +90,9 @@ const PetListing = () => {
             </div>
 
             {/* Search and Category Filter */}
-            <div className="w-full max-w-9/12 mx-auto mt-10 mb-6 px-2">
+            <div className="w-full max-w-11/12 xl:max-w-9/12 mx-auto mt-10 mb-6 px-2">
                 <div className="flex items-center gap-4 w-full">
-                    <div className="w-4/5">
+                    <div className="w-3/6">
                         <SearchBar
                             className="w-full"
                             value={search}
@@ -100,7 +100,7 @@ const PetListing = () => {
                             placeholder="Search pets by name.."
                         />
                     </div>
-                    <div className="w-1/5">
+                    <div className="w-3/6">
                         <CategorySelect
                             value={selectedCategory}
                             onChange={(option) => setSelectedCategory(option)}
@@ -110,29 +110,13 @@ const PetListing = () => {
                     </div>
                 </div>
             </div>
-            <div className="mx-auto py-12 xl:max-w-9/12 flex-1">
+            <div className="mx-auto py-12 max-w-11/12 md:max-w-11/12 lg:max-w-11/12 xl:max-w-9/12 flex-1">
                 {status === "pending" ? (
                     <CardContainer>
-                        {[...Array(6)].map((_, idx) => (
-                            <div key={idx} className="p-4">
-                                <Skeleton
-                                    height={320}
-                                    width={260}
-                                    style={{ borderRadius: 16 }}
-                                    baseColor="#e0e7ef"
-                                    highlightColor="#f5f7fa"
-                                />
-                                <div className="mt-4">
-                                    <Skeleton height={24} width={180} baseColor="#e0e7ef" highlightColor="#f5f7fa" />
-                                </div>
-                                <div className="mt-2">
-                                    <Skeleton height={18} width={120} baseColor="#e0e7ef" highlightColor="#f5f7fa" />
-                                </div>
-                            </div>
-                        ))}
+                        <PetListingSkeleton />
                     </CardContainer>
                 ) : status === "error" ? (
-                    <div className="flex items-center justify-center">Error Loading Data</div>
+                    <EmptyState />
                 ) : noCategoryData ? (
                     <div className="flex items-center justify-center">
                         <EmptyState />

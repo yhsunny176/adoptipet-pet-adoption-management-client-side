@@ -2,9 +2,10 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { MapPin } from "lucide-react";
 import { Button } from "../ui/button";
+import { Link } from "react-router";
 
 const PetCard = ({ petData }) => {
-    const { pet_image, pet_name, pet_age, location, pet_category, short_desc } = petData || {};
+    const { pet_image, pet_name, pet_age, location, pet_category, short_desc, _id } = petData || {};
     const { name, profilepic } = petData.added_by;
 
     return (
@@ -31,7 +32,7 @@ const PetCard = ({ petData }) => {
                     <div className="text-sm font-medium text-base-rose">{pet_category}</div>
 
                     <div className="flex gap-2 items-center w-full">
-                        <p className="text-sm text-gray-dark">Added by:</p>
+                        <p className="text-sm text-base-rose">Added by:</p>
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8">
                                 <img
@@ -40,7 +41,7 @@ const PetCard = ({ petData }) => {
                                     className="w-full h-full object-cover rounded-full"
                                 />
                             </div>
-                            <span className="font-medium">{name}</span>
+                            <span className="font-medium text-pg-base">{name}</span>
                         </div>
                     </div>
 
@@ -49,8 +50,8 @@ const PetCard = ({ petData }) => {
                     </div>
 
                     <CardFooter>
-                        <Button className="w-full py-6 bg-base-rose hover:bg-base-rose-dark text-base-white">
-                            View Details
+                        <Button asChild className="w-full py-6 bg-base-rose hover:bg-base-rose-dark text-base-white">
+                            <Link to={`/pet-detail/${_id}`}>View Detail</Link>
                         </Button>
                     </CardFooter>
                 </CardContent>

@@ -134,8 +134,8 @@ label {
   --menu-mob: oklch(0.2801 0.0519 232.1);
   --gray-extra-lt: oklch(0.9523 0.0029 84.56);
   --gray-lt: oklch(0.9105 0.0046 78.3);
-  --gray-md: oklch(62.862% 0.00719 16.802);
-  --gray-dr: oklch(0.527 0.0038 17.28);
+  --gray-md: oklch(64.282% 0.00835 16.894);
+  --gray-dr: oklch(55.474% 0.00369 16.328);
   --blue-cr: oklch(0.866 0.0593 190.8);
   --blue-cr-lt: oklch(0.9437 0.009 214.34);
   --border-gray-prim: oklch(77.039% 0.00598 84.482);
@@ -256,4 +256,12 @@ label {
 .swal-title-custom-font {
   font-family: var(--font-pg) !important;
   font-size: 1.5rem !important;
+}
+
+.pet-description h1,
+.pet-description h2,
+.pet-description h3 {
+  color: var(--color-pg-base);
+  font-size: 1.3rem;
+  
 }

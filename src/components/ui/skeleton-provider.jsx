@@ -2,8 +2,8 @@ import React from "react";
 import { SkeletonTheme } from "react-loading-skeleton";
 
 const SkeletonProvider = ({ children }) => {
-    const baseColor = "#FEE2E2";
-    const highlightColor = "#FECACA";
+    const baseColor = "#e0e7ef";
+    const highlightColor = "#f5f7fa";
 
     return (
         <SkeletonTheme baseColor={baseColor} highlightColor={highlightColor} duration={2}>

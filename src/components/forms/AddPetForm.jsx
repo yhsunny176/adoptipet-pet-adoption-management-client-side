@@ -1,15 +1,15 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
 import Select from "react-select";
 import TiptapEditor from "../long-text-editor/TipTapEditor";
 import ImageField from "../photo-upload-field/ImageField";
-import { AuthContext } from "@/contexts/AuthContext";
 import axios from "axios";
 import { petCategoryOptions } from "@/utils/pet_categories";
+import useAuth from "@/hooks/useAuth";
 
 const validationSchema = Yup.object({
     photoFile: Yup.mixed()
@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
 
 const AddPetForm = () => {
     const [cancelled, setCancelled] = useState(false);
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
 
     return (
         <div className="bg-background-tertiary w-full">

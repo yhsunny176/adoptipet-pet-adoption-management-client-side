@@ -1,16 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
-import { AuthContext } from "@/contexts/AuthContext";
 import { Link, Navigate, useNavigate } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
 import ImageField from "../photo-upload-field/ImageField";
 import { saveUserDatabase } from "@/utils/save__user__data";
 import PageLoader from "../loader/PageLoader";
+import useAuth from "@/hooks/useAuth";
 
 const validationSchema = Yup.object({
     name: Yup.string()
@@ -36,8 +36,7 @@ const validationSchema = Yup.object({
 
 const RegistrationForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const { user, createUser, updateUser, signInWithGoogle, signInWithFacebook, loading, setLoading } =
-        useContext(AuthContext);
+    const { user, createUser, updateUser, signInWithGoogle, signInWithFacebook, loading, setLoading } = useAuth();
     const navigate = useNavigate();
     const from = location?.state?.from?.pathname || "/";
     if (user) return <Navigate to={from} replace={true} />;

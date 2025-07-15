@@ -1,14 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import logo from "../../assets/logo.png";
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
-import { AuthContext } from "@/contexts/AuthContext";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
-import PageLoader from "../loader/PageLoader";
+import useAuth from "@/hooks/useAuth";
 
 // Validation schema for login
 const validationSchema = Yup.object({
@@ -19,11 +18,10 @@ const validationSchema = Yup.object({
 const LoginForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const { signInUser, signInWithGoogle, signInWithFacebook, setUser, user, setLoading } =
-        useContext(AuthContext);
+    const { signInUser, signInWithGoogle, signInWithFacebook, setUser, user, setLoading } = useAuth();
     const location = useLocation();
     const from = location?.state?.from?.pathname || "/";
-    
+
     if (user) return <Navigate to={from} replace={true} />;
 
     const handleFormSubmit = async (values, { setSubmitting }) => {

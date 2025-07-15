@@ -1,12 +1,12 @@
-import { AuthContext } from "@/contexts/AuthContext";
-import React, { useContext } from "react";
+import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { Link, useNavigate } from "react-router";
 import { Button } from "../ui/button";
+import useAuth from "@/hooks/useAuth";
 
 const LogoutButton = () => {
     const navigate = useNavigate();
-    const { user, loading, logOut } = useContext(AuthContext);
+    const { user, loading, logOut } = useAuth();
 
     const handleLogOut = () => {
         logOut()

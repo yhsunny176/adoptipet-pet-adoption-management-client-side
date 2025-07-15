@@ -1,0 +1,227 @@
+import useAuth from "@/hooks/useAuth";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import * as Yup from "yup";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import { Field, Formik, Form } from "formik";
+
+// Validation schema
+const validationSchema = Yup.object({
+    phone: Yup.string()
+        .required("Phone number is required")
+        .matches(/^\d{11}$/, "Phone number must be exactly 11 digits"),
+    address: Yup.string().required("Address is required"),
+});
+
+const AdoptForm = () => {
+    const { user } = useAuth();
+    const { id } = useParams();
+    const [alreadyRequested, setAlreadyRequested] = useState(false);
+
+    // Fetch pet data
+    const {
+        data: petInfo,
+        isLoading,
+        isError,
+    } = useQuery({
+        queryKey: ["pet-detail", id],
+        queryFn: async () => {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/pet-detail/${id}`);
+            return res.data;
+        },
+        enabled: !!id,
+    });
+
+    // Check if already requested
+    useEffect(() => {
+        const checkAlreadyRequested = async () => {
+            if (!user?.email || !id) return;
+            try {
+                const res = await axios.get(`${import.meta.env.VITE_API_URL}/adopt-request/check`, {
+                    params: { pet_id: id, user_email: user.email },
+                    withCredentials: true,
+                });
+                setAlreadyRequested(res.data?.alreadyRequested === true);
+            } catch {
+                setAlreadyRequested(false);
+            }
+        };
+        checkAlreadyRequested();
+    }, [user?.email, id]);
+
+    if (isLoading) {
+        return <div className="text-center py-10">Loading pet information...</div>;
+    }
+    if (isError || !petInfo) {
+        return <div className="text-center py-10 text-red-500">Failed to load pet information.</div>;
+    }
+
+    return (
+        <div>
+            <div className="grid grid-cols-1 auto-rows-max gap-4">
+                <Formik
+                    initialValues={{
+                        phone: "",
+                        address: "",
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={async (values, { setSubmitting, resetForm }) => {
+                        try {
+                            const adoptionRequest = {
+                                pet_id: petInfo._id,
+                                pet_name: petInfo.pet_name,
+                                pet_image: petInfo.pet_image,
+                                user_name: user?.displayName,
+                                user_email: user?.email,
+                                phone: values.phone,
+                                address: values.address,
+                            };
+
+                            await axios.post(`${import.meta.env.VITE_API_URL}/adopt-request`, adoptionRequest, {
+                                withCredentials: true,
+                            });
+
+                            setAlreadyRequested(true);
+
+                            // Close modal first, then show SweetAlert after a short delay
+                            const evt = new CustomEvent("close-modal");
+                            window.dispatchEvent(evt);
+                            setTimeout(() => {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Adoption Request Submitted!",
+                                    html: `Thank you for your interest in adopting <b>${petInfo.pet_name}</b>.<br>We will contact you soon.`,
+                                    confirmButtonText: "OK",
+                                    customClass: {
+                                        title: "swal-title-custom-font",
+                                    },
+                                });
+                            }, 300);
+
+                            resetForm();
+                        } catch (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Submission Failed",
+                                text: error.message || "Failed to submit adoption request. Please try again!",
+                            });
+                        } finally {
+                            setSubmitting(false);
+                        }
+                    }}>
+                    {({ isSubmitting, errors, touched }) => (
+                        <Form className="space-y-6 max-w-full p-8 rounded-lg shadow">
+                            {/* Pet Info */}
+                            <div className="mb-4">
+                                <div className="flex flex-wrap items-center gap-4 min-w-0">
+                                    {petInfo.pet_image && (
+                                        <img
+                                            src={petInfo.pet_image}
+                                            alt={petInfo.pet_name}
+                                            className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg flex-shrink-0"
+                                        />
+                                    )}
+                                    <div className="space-y-2 min-w-0 flex-1">
+                                        <div className="font-bold font-pg text-2xl break-words truncate max-w-full">{petInfo.pet_name}</div>
+                                        <div className="text-gray-medium font-pg text-xs sm:text-md break-words truncate max-w-full overflow-x-auto">
+                                            <span className="text-red-base">Pet ID:</span> {petInfo._id}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* User Name disabled */}
+                            <div>
+                                <label htmlFor="userName" className="block text-sm font-medium text-black-base mb-2">
+                                    Your Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="userName"
+                                    value={user?.displayName || ""}
+                                    disabled
+                                    className="w-full px-4 py-3 border border-gray-border bg-gray-100 rounded-lg"
+                                />
+                            </div>
+
+                            {/* User Email disabled */}
+                            <div>
+                                <label htmlFor="userEmail" className="block text-sm font-medium text-black-base mb-2">
+                                    Your Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="userEmail"
+                                    value={user?.email || ""}
+                                    disabled
+                                    className="w-full px-4 py-3 border border-gray-border bg-gray-100 rounded-lg"
+                                />
+                            </div>
+
+                            {/* Phone Number */}
+                            <div>
+                                <label htmlFor="phone" className="block text-sm font-medium text-black-base mb-2">
+                                    Phone Number
+                                </label>
+                                <Field
+                                    type="text"
+                                    name="phone"
+                                    id="phone"
+                                    placeholder="Enter your phone number"
+                                    className={`w-full px-4 py-3 border rounded-lg ${
+                                        errors.phone && touched.phone
+                                            ? "border-red-base bg-red-light"
+                                            : "border-gray-border bg-base-white"
+                                    }`}
+                                />
+                                {errors.phone && touched.phone && (
+                                    <div className="text-red-medium font-bold text-sm mt-1">{errors.phone}</div>
+                                )}
+                            </div>
+
+                            {/* Address */}
+                            <div>
+                                <label htmlFor="address" className="block text-sm font-medium text-black-base mb-2">
+                                    Address
+                                </label>
+                                <Field
+                                    as="textarea"
+                                    name="address"
+                                    id="address"
+                                    rows={3}
+                                    placeholder="Enter your address"
+                                    className={`w-full px-4 py-3 border border-gray-border rounded-lg resize-none ${
+                                        errors.address && touched.address
+                                            ? "border-red-base bg-red-light"
+                                            : "border-gray-border bg-base-white"
+                                    }`}
+                                />
+                                {errors.address && touched.address && (
+                                    <div className="text-red-medium font-bold text-sm mt-1">{errors.address}</div>
+                                )}
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="pt-4">
+                                <button
+                                    type="submit"
+                                    className="w-full font-semibold py-4 px-8 rounded-lg cursor-pointer transition-colors duration-700 ease-in-out bg-base-rose hover:bg-base-rose-dark text-white"
+                                    disabled={isSubmitting || alreadyRequested}>
+                                    {alreadyRequested
+                                        ? "Request Already Sent"
+                                        : isSubmitting
+                                        ? "Submitting"
+                                        : "Submit Adoption Request"}
+                                </button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+        </div>
+    );
+};
+
+export default AdoptForm;
