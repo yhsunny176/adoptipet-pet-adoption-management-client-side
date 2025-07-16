@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import Loader from "@/components/loader/Loader";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useAuth from "@/hooks/useAuth";
 import {
@@ -15,17 +14,9 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import { useTheme } from "@/hooks/useTheme";
 import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
+import TablePagination from "@/components/pagination/TablePagination";
 
 const MyAddedPets = () => {
     const { user } = useAuth();
@@ -122,15 +113,20 @@ const MyAddedPets = () => {
                 const pet = info.row.original;
                 return (
                     <div className="flex gap-2">
+
+                        {/* Update Button */}
                         <Button
                             size="sm"
                             className="px-2 py-1 bg-base-white text-blue-regular border border-blue-regular hover:bg-blue-regular hover:text-base-white rounded text-sm hover:shadow-card-primary"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(`/dashboard/update-pet/${pet._id}`);
+                                navigate(`/pet-update/${pet._id}`);
                             }}>
                             Update
                         </Button>
+
+
+                        {/* Delete Button */}
                         <Button
                             size="sm"
                             className="px-2 py-1 bg-base-white text-base-orange border border-base-rose-dark hover:bg-base-rose-dark hover:text-base-white rounded text-sm hover:shadow-card-primary"
@@ -140,6 +136,8 @@ const MyAddedPets = () => {
                             }}>
                             Delete
                         </Button>
+
+                        {/* Adopted Button */}
                         <Button
                             size="sm"
                             className={`px-2 py-1 bg-base-white text-green-primary border border-green-primary hover:bg-green-primary hover:text-base-white rounded text-sm hover:shadow-card-primary ${
@@ -174,7 +172,7 @@ const MyAddedPets = () => {
         initialState: { pagination: { pageSize: 10 } },
     });
 
-    if (isLoading) return <AddedPetsSkeleton/>;
+    if (isLoading) return <AddedPetsSkeleton />;
 
     return (
         <>
@@ -185,6 +183,7 @@ const MyAddedPets = () => {
                             <div className="shadow-card-primary border border-card-border-prim bg-background-tertiary rounded-lg overflow-hidden">
                                 <div className="w-full overflow-x-auto">
                                     <table className="min-w-full leading-normal">
+                                        {/* Table Heading */}
                                         <thead>
                                             {table.getHeaderGroups().map((headerGroup) => (
                                                 <tr key={headerGroup.id}>
@@ -217,7 +216,10 @@ const MyAddedPets = () => {
                                                 </tr>
                                             ))}
                                         </thead>
+
+                                        {/* Table Body Start */}
                                         <tbody>
+                                            {/* Rows */}
                                             {table.getRowModel().rows.map((row, idx) => (
                                                 <tr
                                                     key={row.id}
@@ -229,6 +231,8 @@ const MyAddedPets = () => {
                                                     <td className="px-12 py-4 border-b border-card-border-prim text-md text-center text-pg-base">
                                                         {idx + 1}
                                                     </td>
+
+                                                    {/* Action Buttons */}
                                                     {row
                                                         .getVisibleCells()
                                                         .filter((cell) => cell.column.id !== "serial")
@@ -259,54 +263,8 @@ const MyAddedPets = () => {
                                         </div>
                                         <div className="w-full flex justify-end">
                                             {/* Shadcn Pagination */}
-                                            <Pagination>
-                                                <PaginationContent>
-                                                    <PaginationItem>
-                                                        <PaginationPrevious
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                table.previousPage();
-                                                            }}
-                                                            className="text-sm rounded bg-background-quaternary text-heading-color border border-gray-light hover:bg-base-rose hover:text-base-white min-w-6 h-8 transition-colors duration-300 ease-in-out"
-                                                            disabled={!table.getCanPreviousPage()}
-                                                        />
-                                                    </PaginationItem>
-                                                    {Array.from({ length: table.getPageCount() }, (_, i) => (
-                                                        <PaginationItem key={i}>
-                                                            <PaginationLink
-                                                                isActive={table.getState().pagination.pageIndex === i}
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    table.setPageIndex(i);
-                                                                }}
-                                                                className={`text-sm text-pg-base border border-gray-light hover:border-none rounded hover:bg-base-rose hover:text-base-white min-w-4 h-8 ${
-                                                                    table.getState().pagination.pageIndex === i
-                                                                        ? "bg-base-rose text-base-white border-none transition-colors duration-500 cursor-pointer"
-                                                                        : ""
-                                                                }`}>
-                                                                {i + 1}
-                                                            </PaginationLink>
-                                                        </PaginationItem>
-                                                    ))}
-                                                    {table.getPageCount() > 5 &&
-                                                        table.getState().pagination.pageIndex <
-                                                            table.getPageCount() - 2 && (
-                                                            <PaginationItem>
-                                                                <PaginationEllipsis className="min-w-6 h-6" />
-                                                            </PaginationItem>
-                                                        )}
-                                                    <PaginationItem>
-                                                        <PaginationNext
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                table.nextPage();
-                                                            }}
-                                                            className="text-sm rounded bg-background-quaternary text-heading-color border border-gray-light hover:bg-base-rose hover:text-base-white min-w-6 h-8 transition-colors duration-300 ease-in-out"
-                                                            disabled={!table.getCanNextPage()}
-                                                        />
-                                                    </PaginationItem>
-                                                </PaginationContent>
-                                            </Pagination>
+
+                                            <TablePagination table={table} />
                                         </div>
                                     </div>
                                 )}

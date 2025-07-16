@@ -13,6 +13,7 @@ import PetListing from "@/pages/PetListing";
 import CategoryPetsPage from "@/pages/CategoryPetsPage";
 import SinglePetDetail from "@/pages/SinglePetDetail";
 import MyAddedPets from "@/pages/dashboard/user/MyAddedPets";
+import UpdatePetData from "@/pages/dashboard/user/UpdatePetData";
 
 const router = createBrowserRouter([
     {
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
                 path: "my-added-pets/:email",
                 element: (
                     <PrivateRoute>
-                        <MyAddedPets/>
+                        <MyAddedPets />
                     </PrivateRoute>
                 ),
             },
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
     {
         path: "/pet-detail/:id",
         element: <SinglePetDetail />,
+    },
+    {
+        path: "/pet-update/:id",
+        element: (
+            <PrivateRoute>
+                <UpdatePetData />
+            </PrivateRoute>
+        ),
     },
     {
         path: "/*",
