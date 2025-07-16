@@ -10,8 +10,8 @@ const PetCard = ({ petData }) => {
 
     return (
         <div>
-            <Card className="h-full grid grid-rows-[auto_1fr]">
-                <CardContent className="flex flex-col gap-4 p-4">
+            <Card className="h-full flex flex-col">
+                <CardContent className="flex flex-col gap-4 p-4 flex-1">
                     <div className="w-full max-h-64">
                         <img src={pet_image} alt="Pet image" className="w-full h-full object-cover rounded-lg" />
                     </div>
@@ -48,13 +48,12 @@ const PetCard = ({ petData }) => {
                     <div className="text-sm">
                         <p className="leading-pg-base text-gray-dark line-clamp-2">{short_desc}</p>
                     </div>
-
-                    <CardFooter>
-                        <Button asChild className="w-full py-6 bg-base-rose hover:bg-base-rose-dark text-base-white">
-                            <Link to={`/pet-detail/${_id}`}>View Detail</Link>
-                        </Button>
-                    </CardFooter>
                 </CardContent>
+                <CardFooter className="mt-auto px-4 mb-6">
+                    <Button asChild className="w-full py-6 bg-base-rose hover:bg-base-rose-dark text-base-white">
+                        <Link to={`/pet-detail/${_id}`}>View Detail</Link>
+                    </Button>
+                </CardFooter>
             </Card>
         </div>
     );

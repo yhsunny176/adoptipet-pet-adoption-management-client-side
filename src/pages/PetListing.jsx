@@ -69,12 +69,7 @@ const PetListing = () => {
             const normalize = (str) => str?.toString().toLowerCase().replace(/\s|_/g, "").trim();
             const petCategoryNorm = normalize(pet.category);
             const selectedCategoryNorm = normalize(selectedCategory.value);
-            // Debug log for category comparison
-            if (petCategoryNorm !== selectedCategoryNorm) {
-                console.log(
-                    `Pet: ${pet.pet_name}, pet.category: '${pet.category}', normalized: '${petCategoryNorm}', selected: '${selectedCategory.value}', normalized selected: '${selectedCategoryNorm}'`
-                );
-            }
+
             // Allow plural/singular match
             const pluralize = (str) => (str.endsWith("s") ? str : str + "s");
             const singularize = (str) => (str.endsWith("s") ? str.slice(0, -1) : str);
