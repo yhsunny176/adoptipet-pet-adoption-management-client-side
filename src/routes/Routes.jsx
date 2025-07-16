@@ -10,6 +10,9 @@ import Registration from "@/pages/Registration";
 import { createBrowserRouter } from "react-router";
 import PrivateRoute from "./PrivateRoute";
 import PetListing from "@/pages/PetListing";
+
+
+import CategoryPetsPage from "@/pages/CategoryPetsPage";
 import SinglePetDetail from "@/pages/SinglePetDetail";
 
 const router = createBrowserRouter([
@@ -55,6 +58,10 @@ const router = createBrowserRouter([
                 ),
             },
         ],
+    },
+    {
+        path: "/category-pets/:category",
+        element: <CategoryPetsPage />,
     },
     {
         path: "/pet-listing",

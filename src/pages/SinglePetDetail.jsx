@@ -46,7 +46,7 @@ const SinglePetDetail = () => {
         );
     }
 
-    const { pet_image, pet_name, location, category, short_desc, long_desc, added_by } = singlePetData || {};
+    const { pet_image, pet_name, pet_age, location, category, short_desc, long_desc, added_by } = singlePetData || {};
 
     const closeModal = () => {
         setIsOpen(false);
@@ -74,12 +74,27 @@ const SinglePetDetail = () => {
                     {/* Right side contents */}
                     <div className="xl:col-span-5 flex flex-col gap-6">
                         {/* Basic Info */}
-                        <div className="flex flex-wrap items-center justify-between gap-4 sm:gap-6 md:gap-16 px-6 sm:px-4 md:px-8 rounded-xl py-4 border border-gray-light w-full overflow-x-auto">
+                        <div className="flex flex-wrap items-center justify-between gap-2 max-w-fullsm:gap-6 md:gap-12 px-6 sm:px-4 md:px-8 xl:flex-row xl:max-w-max rounded-xl py-4 border border-gray-light w-full overflow-x-auto">
                             <div className="flex flex-col gap-1">
-                                <h1 className="text-md text-pg-base font-bold mt-1">Pet Name:</h1>
-                                <p className="text-2xl sm:text-3xl font-bold text-base-rose !font-heading">
+                                <h1 className="text-sm text-pg-base font-bold mt-1">Pet Name:</h1>
+                                <p className="text-xl sm:text-3xl font-bold text-base-rose !font-heading">
                                     {pet_name}
                                 </p>
+                            </div>
+
+                            <div className="border-r border-base-rose h-8 mx-2"></div>
+
+                            <div className="flex flex-col gap-1">
+                                <h1 className="text-md text-pg-base font-bold mt-1">Pet Age:</h1>
+                                <p className="text-2xl sm:text-3xl font-bold text-base-rose !font-heading capitalize">
+                                    {pet_age}
+                                </p>
+                            </div>
+                            
+                            <div className="border-r border-base-rose h-8 mx-2"></div>
+
+                            <div className="flex flex-col gap-1">
+                                <h1 className="text-md text-pg-base font-bold mt-1">Pet Category:</h1>
                                 <p className="text-2xl sm:text-3xl font-bold text-base-rose !font-heading capitalize">
                                     {category}
                                 </p>
@@ -154,7 +169,7 @@ const SinglePetDetail = () => {
                                 <Button
                                     variant="lg"
                                     className={
-                                        "bg-base-rose hover:bg-base-rose-dark text-base-white py-6 px-6 sm:py-8 sm:px-6 cursor-pointer w-full max-w-full"
+                                        "bg-base-rose hover:bg-base-rose-dark text-base-white py-6 px-6 cursor-pointer w-full max-w-full transition-colors duration-600 ease-in-out"
                                     }
                                     disabled={!user}>
                                     Adopt the Pet

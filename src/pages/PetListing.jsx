@@ -28,7 +28,12 @@ const PetListing = () => {
     } = useInfiniteQuery({
         queryKey: ["all pets", search, selectedCategory],
         queryFn: async ({ pageParam }) => {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/all-pets?cursor=${pageParam}&limit=6`);
+            const params = new URLSearchParams();
+            params.append("cursor", pageParam);
+            params.append("limit", 6);
+            if (search) params.append("search", search);
+            if (selectedCategory && selectedCategory.value) params.append("category", selectedCategory.value);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/all-pets?${params.toString()}`);
             return res.data;
         },
         initialPageParam: 0,
@@ -60,8 +65,25 @@ const PetListing = () => {
             if (!selectedCategory) {
                 return searchDataMatch;
             }
-            const normalize = (str) => str?.toString().toLowerCase().replace(/\s|_/g, "");
-            const categoryDataMatch = normalize(pet.category) === normalize(selectedCategory.value);
+            // Normalize: lowercase, remove spaces/underscores
+            const normalize = (str) => str?.toString().toLowerCase().replace(/\s|_/g, "").trim();
+            const petCategoryNorm = normalize(pet.category);
+            const selectedCategoryNorm = normalize(selectedCategory.value);
+            // Debug log for category comparison
+            if (petCategoryNorm !== selectedCategoryNorm) {
+                console.log(
+                    `Pet: ${pet.pet_name}, pet.category: '${pet.category}', normalized: '${petCategoryNorm}', selected: '${selectedCategory.value}', normalized selected: '${selectedCategoryNorm}'`
+                );
+            }
+            // Allow plural/singular match
+            const pluralize = (str) => (str.endsWith("s") ? str : str + "s");
+            const singularize = (str) => (str.endsWith("s") ? str.slice(0, -1) : str);
+            const categoryDataMatch =
+                petCategoryNorm === selectedCategoryNorm ||
+                pluralize(petCategoryNorm) === selectedCategoryNorm ||
+                petCategoryNorm === pluralize(selectedCategoryNorm) ||
+                singularize(petCategoryNorm) === selectedCategoryNorm ||
+                petCategoryNorm === singularize(selectedCategoryNorm);
             return searchDataMatch && categoryDataMatch;
         })
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

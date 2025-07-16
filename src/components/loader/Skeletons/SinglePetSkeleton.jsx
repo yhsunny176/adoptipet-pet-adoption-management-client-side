@@ -21,7 +21,7 @@ const SinglePetSkeleton = () => {
                     {/* Right side skeletons */}
                     <div className="xl:col-span-5 flex flex-col gap-6">
                         {/* Basic Info Skeleton */}
-                        <div className="flex flex-wrap items-center justify-between gap-4 sm:gap-6 md:gap-16 px-6 sm:px-4 md:px-8 rounded-xl py-4 border border-gray-light w-full overflow-x-auto">
+                        <div className="flex flex-wrap items-center justify-between gap-4 sm:gap-6 md:gap-16 px-6 sm:px-4 md:px-8 xl:max-w-max rounded-xl py-4 border border-gray-light w-full overflow-x-auto">
                             <div className="flex flex-col gap-1">
                                 <Skeleton width={80} height={18} />
                                 <Skeleton width={90} height={28} />

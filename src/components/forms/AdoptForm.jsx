@@ -124,7 +124,9 @@ const AdoptForm = () => {
                                         />
                                     )}
                                     <div className="space-y-2 min-w-0 flex-1">
-                                        <div className="font-bold font-pg text-2xl break-words truncate max-w-full">{petInfo.pet_name}</div>
+                                        <div className="font-bold font-pg text-2xl break-words truncate max-w-full">
+                                            {petInfo.pet_name}
+                                        </div>
                                         <div className="text-gray-medium font-pg text-xs sm:text-md break-words truncate max-w-full overflow-x-auto">
                                             <span className="text-red-base">Pet ID:</span> {petInfo._id}
                                         </div>
@@ -207,7 +209,13 @@ const AdoptForm = () => {
                             <div className="pt-4">
                                 <button
                                     type="submit"
-                                    className="w-full font-semibold py-4 px-8 rounded-lg cursor-pointer transition-colors duration-700 ease-in-out bg-base-rose hover:bg-base-rose-dark text-white"
+                                    className={`w-full font-semibold py-4 px-8 rounded-lg transition-colors duration-700 ease-in-out text-white
+                                        ${
+                                            isSubmitting || alreadyRequested
+                                                ? "bg-base-rose-light cursor-not-allowed"
+                                                : "bg-base-rose hover:bg-base-rose-dark cursor-pointer"
+                                        }
+                                    `}
                                     disabled={isSubmitting || alreadyRequested}>
                                     {alreadyRequested
                                         ? "Request Already Sent"

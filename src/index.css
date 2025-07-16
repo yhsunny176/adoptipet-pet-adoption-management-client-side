@@ -263,5 +263,14 @@ label {
 .pet-description h3 {
   color: var(--color-pg-base);
   font-size: 1.3rem;
-  
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
