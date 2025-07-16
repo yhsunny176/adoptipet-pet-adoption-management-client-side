@@ -48,8 +48,19 @@ const SinglePetDetail = () => {
 
     const { pet_image, pet_name, pet_age, location, category, short_desc, long_desc, added_by } = singlePetData || {};
 
-    const closeModal = () => {
-        setIsOpen(false);
+    // SweetAlert for Login warning before adoption request
+    const handleAdoptClick = async (open) => {
+        if (!user) {
+            const Swal = (await import("sweetalert2")).default;
+            Swal.fire({
+                icon: "info",
+                title: "Login Required",
+                text: "Please log in to adopt a pet.",
+                confirmButtonText: "OK",
+            });
+            return;
+        }
+        setIsOpen(open);
     };
 
     return (
@@ -77,9 +88,7 @@ const SinglePetDetail = () => {
                         <div className="flex flex-wrap items-center justify-between gap-2 max-w-fullsm:gap-6 md:gap-12 px-6 sm:px-4 md:px-8 xl:flex-row xl:max-w-max rounded-xl py-4 border border-gray-light w-full overflow-x-auto">
                             <div className="flex flex-col gap-1">
                                 <h1 className="text-sm text-pg-base font-bold mt-1">Pet Name:</h1>
-                                <p className="text-xl sm:text-3xl font-bold text-base-rose !font-heading">
-                                    {pet_name}
-                                </p>
+                                <p className="text-xl sm:text-3xl font-bold text-base-rose !font-heading">{pet_name}</p>
                             </div>
 
                             <div className="border-r border-base-rose h-8 mx-2"></div>
@@ -90,7 +99,7 @@ const SinglePetDetail = () => {
                                     {pet_age}
                                 </p>
                             </div>
-                            
+
                             <div className="border-r border-base-rose h-8 mx-2"></div>
 
                             <div className="flex flex-col gap-1">
@@ -161,17 +170,13 @@ const SinglePetDetail = () => {
                     <div className="col-span-full flex flex-col items-stretch">
                         <Modal
                             open={isOpen}
-                            onOpenChange={(open) => {
-                                if (!open) closeModal();
-                                else setIsOpen(true);
-                            }}
+                            onOpenChange={handleAdoptClick}
                             trigger={
                                 <Button
                                     variant="lg"
                                     className={
                                         "bg-base-rose hover:bg-base-rose-dark text-base-white py-6 px-6 cursor-pointer w-full max-w-full transition-colors duration-600 ease-in-out"
-                                    }
-                                    disabled={!user}>
+                                    }>
                                     Adopt the Pet
                                 </Button>
                             }
