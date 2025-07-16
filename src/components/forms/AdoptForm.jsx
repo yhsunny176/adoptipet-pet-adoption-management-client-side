@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { Field, Formik, Form } from "formik";
+import { toast } from "react-toastify";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -19,6 +20,7 @@ const AdoptForm = () => {
     const { user } = useAuth();
     const { id } = useParams();
     const [alreadyRequested, setAlreadyRequested] = useState(false);
+    const [ownPet, setOwnPet] = useState(false);
 
     // Fetch pet data
     const {
@@ -44,8 +46,10 @@ const AdoptForm = () => {
                     withCredentials: true,
                 });
                 setAlreadyRequested(res.data?.alreadyRequested === true);
+                setOwnPet(res.data?.ownPet === true);
             } catch {
                 setAlreadyRequested(false);
+                setOwnPet(false);
             }
         };
         checkAlreadyRequested();
@@ -55,8 +59,10 @@ const AdoptForm = () => {
         return <div className="text-center py-10">Loading pet information...</div>;
     }
     if (isError || !petInfo) {
-        return <div className="text-center py-10 text-red-500">Failed to load pet information.</div>;
+        return toast.error("Failed to load pet information.");
     }
+
+    const { name, email } = petInfo.added_by;
 
     return (
         <div>
@@ -77,6 +83,10 @@ const AdoptForm = () => {
                                 user_email: user?.email,
                                 phone: values.phone,
                                 address: values.address,
+                                added_by: {
+                                    name: name,
+                                    email: email,
+                                },
                             };
 
                             await axios.post(`${import.meta.env.VITE_API_URL}/adopt-request`, adoptionRequest, {
@@ -177,6 +187,7 @@ const AdoptForm = () => {
                                             ? "border-red-base bg-red-light"
                                             : "border-gray-border bg-base-white"
                                     }`}
+                                    disabled={ownPet}
                                 />
                                 {errors.phone && touched.phone && (
                                     <div className="text-red-medium font-bold text-sm mt-1">{errors.phone}</div>
@@ -199,6 +210,7 @@ const AdoptForm = () => {
                                             ? "border-red-base bg-red-light"
                                             : "border-gray-border bg-base-white"
                                     }`}
+                                    disabled={ownPet}
                                 />
                                 {errors.address && touched.address && (
                                     <div className="text-red-medium font-bold text-sm mt-1">{errors.address}</div>
@@ -209,20 +221,29 @@ const AdoptForm = () => {
                             <div className="pt-4">
                                 <button
                                     type="submit"
-                                    className={`w-full font-semibold py-4 px-8 rounded-lg transition-colors duration-700 ease-in-out text-white
+                                    className={`w-full font-semibold py-4 px-8 rounded-lg transition-colors duration-700 ease-in-out text-base white
                                         ${
-                                            isSubmitting || alreadyRequested
+                                            ownPet
+                                                ? "bg-gray-light cursor-not-allowed text-gray-medium"
+                                                : isSubmitting || alreadyRequested
                                                 ? "bg-base-rose-light cursor-not-allowed"
                                                 : "bg-base-rose hover:bg-base-rose-dark cursor-pointer"
                                         }
                                     `}
-                                    disabled={isSubmitting || alreadyRequested}>
-                                    {alreadyRequested
+                                    disabled={isSubmitting || alreadyRequested || ownPet}>
+                                    {ownPet
+                                        ? "You can't request adoption for your own pet"
+                                        : alreadyRequested
                                         ? "Request Already Sent"
                                         : isSubmitting
                                         ? "Submitting"
                                         : "Submit Adoption Request"}
                                 </button>
+                                {ownPet && (
+                                    <div className="text-base-rose font-bold text-center mt-2">
+                                        You cannot request adoption for a pet you have added.
+                                    </div>
+                                )}
                             </div>
                         </Form>
                     )}

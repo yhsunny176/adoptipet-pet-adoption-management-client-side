@@ -88,7 +88,7 @@ const AddPetForm = () => {
                                 },
                             });
                             if (result.isConfirmed) {
-                                window.location.href = "/my-added-pets";
+                                window.location.href = `/dashboard/my-added-pets/${user?.email}`;
                             } else {
                                 resetForm();
                             }

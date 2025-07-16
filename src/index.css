@@ -63,6 +63,8 @@ label {
   --color-yellow-bg: var(--yellow-bg-prim);
   --color-blue-coral: var(--blue-cr);
   --color-blue-bg: var(--blue-cr-lt);
+  --color-green-primary: var(--green-main);
+  --color-blue-regular: var(--blue-norm);
 
   --color-gray-border: var(--border-gray-prim);
   --color-card-border-prim: var(--border-card);
@@ -138,16 +140,19 @@ label {
   --gray-dr: oklch(55.474% 0.00369 16.328);
   --blue-cr: oklch(0.866 0.0593 190.8);
   --blue-cr-lt: oklch(0.9437 0.009 214.34);
+  --blue-norm: oklch(0.5487 0.2224 263.44);
   --border-gray-prim: oklch(77.039% 0.00598 84.482);
   --border-card: oklch(0.8901 0.0081 73.74);
   --card-border-hov: oklch(0.8895 0.0557 250.93);
 
   --label-form: oklch(0.2801 0.0519 232.1);
 
+  --green-main: oklch(0.6745 0.1665 153.67);
+
   /* Sidebar */
   --sidebar: oklch(0.9702 0.03 83.63);
   --sidebar-sec: oklch(0.9702 0 0);
-  --sidebar-sb: oklch(0.527 0.0038 17.28);
+  --sidebar-sb: oklch(41.279% 0.16874 29.135);
   --sidebar-link-txt: oklch(0.527 0.0038 17.28);
   --sidebar-link-txt-hover: oklch(0.2801 0.0519 232.1);
   --sidebar-link-hover: oklch(0.7995 0.1538 71.7);

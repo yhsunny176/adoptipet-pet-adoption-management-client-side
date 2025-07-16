@@ -14,8 +14,8 @@ const SinglePetSkeleton = () => {
             <div className="w-full max-w-11/12 mx-auto flex flex-1 py-6 px-2 sm:px-4 md:px-8">
                 <div className="grid grid-cols-1 xl:grid-cols-8 gap-6 xl:gap-8 w-full">
                     {/* Image Skeleton */}
-                    <div className="w-full h-96 xl:h-full xl:col-span-3 rounded-2xl border border-base-rose flex items-center justify-center overflow-hidden">
-                        <Skeleton className="w-full h-full" style={{ height: "100%" }} />
+                    <div className="w-full h-96 xl:h-full xl:col-span-3 rounded-2xl flex items-center justify-center overflow-hidden">
+                        <Skeleton width={540} height={360}/>
                     </div>
 
                     {/* Right side skeletons */}

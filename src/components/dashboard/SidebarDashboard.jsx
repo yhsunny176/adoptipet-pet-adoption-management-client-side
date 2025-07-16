@@ -14,48 +14,50 @@ import {
 import { DogIcon } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
-
-const data = {
-    navMain: [
-        {
-            items: [
-                {
-                    title: "Add a Pet",
-                    url: "/dashboard/add-pet",
-                    icon: <HugeiconsIcon icon={HeartAddIcon} />,
-                },
-                {
-                    title: "My Added Pets",
-                    url: "/dashboard/my-added-pet",
-                    icon: <DogIcon strokeWidth={1.25} />,
-                },
-                {
-                    title: "Adoption Request",
-                    url: "/dashboard/adoption-request",
-                    icon: <HugeiconsIcon icon={FileUploadIcon} />,
-                },
-                {
-                    title: "Create Donation Campaigns",
-                    url: "/dashboard/create-donation-campaigns",
-                    icon: <HugeiconsIcon icon={AddMoneyCircleIcon} />,
-                },
-                {
-                    title: "My Donation Campaigns",
-                    url: "/dashboard/my-donation-campaigns",
-                    icon: <HugeiconsIcon icon={InvoiceIcon} />,
-                },
-                {
-                    title: "My Donations",
-                    url: "/dashboard/my-donations",
-                    icon: <HugeiconsIcon icon={Payment02Icon} />,
-                },
-            ],
-        },
-    ],
-};
+import useAuth from "@/hooks/useAuth";
 
 const SidebarDashboard = (props) => {
     const { theme } = useTheme();
+    const { user } = useAuth();
+
+    const data = {
+        navMain: [
+            {
+                items: [
+                    {
+                        title: "Add a Pet",
+                        url: "/dashboard/add-pet",
+                        icon: <HugeiconsIcon icon={HeartAddIcon} />,
+                    },
+                    {
+                        title: "My Added Pets",
+                        url: `/dashboard/my-added-pets/${user?.email}`,
+                        icon: <DogIcon strokeWidth={1.25} />,
+                    },
+                    {
+                        title: "Adoption Request",
+                        url: "/dashboard/adoption-requests",
+                        icon: <HugeiconsIcon icon={FileUploadIcon} />,
+                    },
+                    {
+                        title: "Create Donation Campaigns",
+                        url: "/dashboard/create-donation-campaigns",
+                        icon: <HugeiconsIcon icon={AddMoneyCircleIcon} />,
+                    },
+                    {
+                        title: "My Donation Campaigns",
+                        url: "/dashboard/my-donation-campaigns",
+                        icon: <HugeiconsIcon icon={InvoiceIcon} />,
+                    },
+                    {
+                        title: "My Donations",
+                        url: "/dashboard/my-donations",
+                        icon: <HugeiconsIcon icon={Payment02Icon} />,
+                    },
+                ],
+            },
+        ],
+    };
 
     return (
         <Sidebar {...props}>
@@ -73,7 +75,7 @@ const SidebarDashboard = (props) => {
                 </div>
             </div>
             <SidebarContent className={"py-8 px-3 bg-sidebar-secondary"}>
-                {/* We create a SidebarGroup for each parent. */}
+                {/* SidebarGroup for each parent. */}
                 {data.navMain.map((item, idx) => (
                     <SidebarMenu key={item.items?.[0]?.title || idx}>
                         {item.items.map((child, cidx) => (

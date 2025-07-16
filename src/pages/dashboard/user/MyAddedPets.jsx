@@ -1,0 +1,328 @@
+import { useQuery } from "@tanstack/react-query";
+import Loader from "@/components/loader/Loader";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import useAuth from "@/hooks/useAuth";
+import {
+    useReactTable,
+    getCoreRowModel,
+    getSortedRowModel,
+    getPaginationRowModel,
+    flexRender,
+} from "@tanstack/react-table";
+import { useState } from "react";
+import DeleteModal from "@/components/modal/DeleteModal";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useTheme } from "@/hooks/useTheme";
+import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
+
+const MyAddedPets = () => {
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
+    const [deleteId, setDeleteId] = useState(null);
+    const [adoptLoading, setAdoptLoading] = useState(null);
+    const [sort, setSort] = useState([]);
+    const { theme } = useTheme();
+
+    const {
+        data: myPetsData = [],
+        isLoading,
+        refetch,
+    } = useQuery({
+        queryKey: ["myPetsData", user?.email],
+        queryFn: async () => {
+            const { data } = await axiosSecure(`/dashboard/my-added-pets/${user?.email}`);
+            return data;
+        },
+    });
+
+    // Adopt pet handler
+    const handleAdopt = async (pet) => {
+        setAdoptLoading(pet._id);
+        try {
+            await axiosSecure.patch(`/dashboard/adopt-pet/${pet._id}`);
+            refetch();
+        } catch (err) {
+            // handle error
+            toast.error(err);
+        } finally {
+            setAdoptLoading(null);
+        }
+    };
+
+    // Delete pet handler
+    const handleDelete = async (petId) => {
+        try {
+            await axiosSecure.delete(`/dashboard/my-added-pets/${petId}`);
+            setDeleteId(null);
+            refetch();
+        } catch (err) {
+            // handle error
+            toast.error(err);
+        }
+    };
+
+    const columns = [
+        {
+            header: "Serial",
+            id: "serial",
+            cell: () => null,
+            enableSorting: false,
+        },
+        {
+            header: "Pet Image",
+            accessorKey: "pet_image",
+            cell: (info) => (
+                <img src={info.getValue()} alt="pet" className="mx-auto object-cover rounded-lg h-14 w-18" />
+            ),
+            enableSorting: false,
+        },
+        {
+            header: "Pet Name",
+            accessorKey: "pet_name",
+        },
+        {
+            header: "Category",
+            accessorKey: "category",
+        },
+        {
+            header: "Status",
+            accessorKey: "adopted",
+            cell: (info) => (
+                <span
+                    className={
+                        info.getValue()
+                            ? "text-green-primary font-pg font-semibold"
+                            : "text-base-rose font-pg font-semibold"
+                    }>
+                    {info.getValue() ? "Adopted" : "Not Adopted"}
+                </span>
+            ),
+            sortingFn: (rowA, rowB, columnId) => {
+                // Sort adopted first
+                return (rowB.getValue(columnId) ? 1 : 0) - (rowA.getValue(columnId) ? 1 : 0);
+            },
+        },
+        {
+            header: "Actions",
+            id: "actions",
+            cell: (info) => {
+                const pet = info.row.original;
+                return (
+                    <div className="flex gap-2">
+                        <Button
+                            size="sm"
+                            className="px-2 py-1 bg-base-white text-blue-regular border border-blue-regular hover:bg-blue-regular hover:text-base-white rounded text-sm hover:shadow-card-primary"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/dashboard/update-pet/${pet._id}`);
+                            }}>
+                            Update
+                        </Button>
+                        <Button
+                            size="sm"
+                            className="px-2 py-1 bg-base-white text-base-orange border border-base-rose-dark hover:bg-base-rose-dark hover:text-base-white rounded text-sm hover:shadow-card-primary"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteId(pet._id);
+                            }}>
+                            Delete
+                        </Button>
+                        <Button
+                            size="sm"
+                            className={`px-2 py-1 bg-base-white text-green-primary border border-green-primary hover:bg-green-primary hover:text-base-white rounded text-sm hover:shadow-card-primary ${
+                                pet.adopted ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                            disabled={pet.adopted || adoptLoading === pet._id}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleAdopt(pet);
+                            }}>
+                            {adoptLoading === pet._id ? "Processing.." : "Adopted"}
+                        </Button>
+                    </div>
+                );
+            },
+            enableSorting: false,
+        },
+    ];
+
+    const table = useReactTable({
+        data: myPetsData,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        state: {
+            sorting: sort,
+        },
+        onSortingChange: setSort,
+        manualPagination: false,
+        pageCount: Math.ceil(myPetsData.length / 10),
+        initialState: { pagination: { pageSize: 10 } },
+    });
+
+    if (isLoading) return <AddedPetsSkeleton/>;
+
+    return (
+        <>
+            <div className="container mx-auto px-4 sm:px-8">
+                <div className="py-8">
+                    <div className="flex justify-center">
+                        <div className="w-full max-w-11/12 sm:max-w-full">
+                            <div className="shadow-card-primary border border-card-border-prim bg-background-tertiary rounded-lg overflow-hidden">
+                                <div className="w-full overflow-x-auto">
+                                    <table className="min-w-full leading-normal">
+                                        <thead>
+                                            {table.getHeaderGroups().map((headerGroup) => (
+                                                <tr key={headerGroup.id}>
+                                                    {headerGroup.headers.map((header) => (
+                                                        <th
+                                                            key={header.id}
+                                                            className={`px-8 pt-8 pb-6 bg-background-quaternary border-b border-card-border-prim text-heading-color font-bold font-pg text-md uppercase cursor-pointer select-none ${
+                                                                header.id === "actions" ? "text-left" : "text-center"
+                                                            }`}
+                                                            onClick={
+                                                                header.column.getCanSort()
+                                                                    ? header.column.getToggleSortingHandler()
+                                                                    : undefined
+                                                            }>
+                                                            <span className="inline-flex items-center gap-1">
+                                                                {flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext()
+                                                                )}
+                                                                {header.column.getIsSorted() ? (
+                                                                    header.column.getIsSorted() === "asc" ? (
+                                                                        <ChevronUpIcon className="w-4 h-4" />
+                                                                    ) : (
+                                                                        <ChevronDownIcon className="w-4 h-4" />
+                                                                    )
+                                                                ) : null}
+                                                            </span>
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </thead>
+                                        <tbody>
+                                            {table.getRowModel().rows.map((row, idx) => (
+                                                <tr
+                                                    key={row.id}
+                                                    className={`cursor-pointer transition-colors duration-200 ${
+                                                        theme === "light"
+                                                            ? "hover:bg-gray-extra-light"
+                                                            : "hover:bg-gray-dark"
+                                                    }`}>
+                                                    <td className="px-12 py-4 border-b border-card-border-prim text-md text-center text-pg-base">
+                                                        {idx + 1}
+                                                    </td>
+                                                    {row
+                                                        .getVisibleCells()
+                                                        .filter((cell) => cell.column.id !== "serial")
+                                                        .map((cell) => (
+                                                            <td
+                                                                key={cell.id}
+                                                                className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base capitalize font-medium ${
+                                                                    cell.column.id === "actions"
+                                                                        ? "text-left"
+                                                                        : "text-center"
+                                                                }`}>
+                                                                {flexRender(
+                                                                    cell.column.columnDef.cell,
+                                                                    cell.getContext()
+                                                                )}
+                                                            </td>
+                                                        ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {/* Pagination Controls */}
+                                {myPetsData.length > 10 && (
+                                    <div className="flex justify-between items-center px-6 py-6  bg-background-tertiary border-t">
+                                        <div className="min-w-max font-medium">
+                                            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                                        </div>
+                                        <div className="w-full flex justify-end">
+                                            {/* Shadcn Pagination */}
+                                            <Pagination>
+                                                <PaginationContent>
+                                                    <PaginationItem>
+                                                        <PaginationPrevious
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                table.previousPage();
+                                                            }}
+                                                            className="text-sm rounded bg-background-quaternary text-heading-color border border-gray-light hover:bg-base-rose hover:text-base-white min-w-6 h-8 transition-colors duration-300 ease-in-out"
+                                                            disabled={!table.getCanPreviousPage()}
+                                                        />
+                                                    </PaginationItem>
+                                                    {Array.from({ length: table.getPageCount() }, (_, i) => (
+                                                        <PaginationItem key={i}>
+                                                            <PaginationLink
+                                                                isActive={table.getState().pagination.pageIndex === i}
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    table.setPageIndex(i);
+                                                                }}
+                                                                className={`text-sm text-pg-base border border-gray-light hover:border-none rounded hover:bg-base-rose hover:text-base-white min-w-4 h-8 ${
+                                                                    table.getState().pagination.pageIndex === i
+                                                                        ? "bg-base-rose text-base-white border-none transition-colors duration-500 cursor-pointer"
+                                                                        : ""
+                                                                }`}>
+                                                                {i + 1}
+                                                            </PaginationLink>
+                                                        </PaginationItem>
+                                                    ))}
+                                                    {table.getPageCount() > 5 &&
+                                                        table.getState().pagination.pageIndex <
+                                                            table.getPageCount() - 2 && (
+                                                            <PaginationItem>
+                                                                <PaginationEllipsis className="min-w-6 h-6" />
+                                                            </PaginationItem>
+                                                        )}
+                                                    <PaginationItem>
+                                                        <PaginationNext
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                table.nextPage();
+                                                            }}
+                                                            className="text-sm rounded bg-background-quaternary text-heading-color border border-gray-light hover:bg-base-rose hover:text-base-white min-w-6 h-8 transition-colors duration-300 ease-in-out"
+                                                            disabled={!table.getCanNextPage()}
+                                                        />
+                                                    </PaginationItem>
+                                                </PaginationContent>
+                                            </Pagination>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Delete Modal */}
+            <DeleteModal
+                isOpen={!!deleteId}
+                closeModal={() => setDeleteId(null)}
+                onConfirm={() => handleDelete(deleteId)}
+            />
+        </>
+    );
+};
+
+export default MyAddedPets;

@@ -10,10 +10,9 @@ import Registration from "@/pages/Registration";
 import { createBrowserRouter } from "react-router";
 import PrivateRoute from "./PrivateRoute";
 import PetListing from "@/pages/PetListing";
-
-
 import CategoryPetsPage from "@/pages/CategoryPetsPage";
 import SinglePetDetail from "@/pages/SinglePetDetail";
+import MyAddedPets from "@/pages/dashboard/user/MyAddedPets";
 
 const router = createBrowserRouter([
     {
@@ -50,10 +49,18 @@ const router = createBrowserRouter([
         ),
         children: [
             {
-                path: "/dashboard/add-pet",
+                path: "add-pet",
                 element: (
                     <PrivateRoute>
                         <AddPets />
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "my-added-pets/:email",
+                element: (
+                    <PrivateRoute>
+                        <MyAddedPets/>
                     </PrivateRoute>
                 ),
             },
@@ -65,11 +72,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/pet-listing",
-        element: <PetListing/>
+        element: <PetListing />,
     },
     {
         path: "/pet-detail/:id",
-        element: <SinglePetDetail/>
+        element: <SinglePetDetail />,
     },
     {
         path: "/*",
