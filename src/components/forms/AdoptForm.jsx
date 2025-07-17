@@ -221,7 +221,7 @@ const AdoptForm = () => {
                             <div className="pt-4">
                                 <button
                                     type="submit"
-                                    className={`w-full font-semibold py-4 px-8 rounded-lg transition-colors duration-700 ease-in-out text-base white
+                                    className={`w-full font-semibold py-4 px-8 rounded-lg transition-colors duration-700 ease-in-out text-base-white
                                         ${
                                             ownPet
                                                 ? "bg-gray-light cursor-not-allowed text-gray-medium"

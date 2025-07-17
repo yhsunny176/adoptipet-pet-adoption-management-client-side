@@ -14,6 +14,7 @@ import CategoryPetsPage from "@/pages/CategoryPetsPage";
 import SinglePetDetail from "@/pages/SinglePetDetail";
 import MyAddedPets from "@/pages/dashboard/user/MyAddedPets";
 import UpdatePetData from "@/pages/dashboard/user/UpdatePetData";
+import AdoptionRequests from "@/pages/dashboard/user/AdoptionRequests";
 
 const router = createBrowserRouter([
     {
@@ -62,6 +63,14 @@ const router = createBrowserRouter([
                 element: (
                     <PrivateRoute>
                         <MyAddedPets />
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "adoption-requests/:email",
+                element: (
+                    <PrivateRoute>
+                        <AdoptionRequests />
                     </PrivateRoute>
                 ),
             },

@@ -36,7 +36,7 @@ const SidebarDashboard = (props) => {
                     },
                     {
                         title: "Adoption Request",
-                        url: "/dashboard/adoption-requests",
+                        url: `/dashboard/adoption-requests/${user?.email}`,
                         icon: <HugeiconsIcon icon={FileUploadIcon} />,
                     },
                     {

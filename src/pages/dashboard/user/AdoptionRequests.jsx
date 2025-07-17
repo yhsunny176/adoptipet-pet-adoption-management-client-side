@@ -9,69 +9,60 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import DeleteModal from "@/components/modal/DeleteModal";
-import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
 import TablePagination from "@/components/pagination/TablePagination";
-import Swal from "sweetalert2";
-import EmptyState from "@/components/EmptyState";
+import EmptyState from "@/components/Emptystate";
 
-const MyAddedPets = () => {
+const AdoptionRequests = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const navigate = useNavigate();
-    const [deleteData, setDeleteData] = useState(null);
-    const [adoptLoading, setAdoptLoading] = useState(null);
+    const [acceptLoading, setAcceptLoading] = useState(null);
+    const [rejectLoading, setRejectLoading] = useState(null);
+    const [dynamicStatus, setDynamicStatus] = useState({});
     const [sort, setSort] = useState([]);
     const { theme } = useTheme();
 
     const {
-        data: myPetsData = [],
+        data: adoptReqData = [],
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: ["myPetsData", user?.email],
+        queryKey: ["adoptReqData", user?.email],
         queryFn: async () => {
-            const { data } = await axiosSecure(`/dashboard/my-added-pets/${user?.email}`);
+            const { data } = await axiosSecure(`/dashboard/adoption-requests/${user?.email}`);
             return data;
         },
     });
 
-    // Adopt pet handler
-    const handleAdopt = async (pet) => {
-        setAdoptLoading(pet._id);
+    // Acceptance handler
+    const acceptAdoptRequest = async (pet) => {
+        setAcceptLoading(pet._id);
+        setDynamicStatus((prev) => ({ ...prev, [pet._id]: "accepted" }));
         try {
-            // Call the correct API endpoint to update adopted status
-            await axiosSecure.patch(`/adopt-status-update/${pet._id}`);
+            await axiosSecure.patch(`/adoption-request-update/${pet._id}`, { adoption_status: "accepted" });
             refetch();
         } catch (err) {
             toast.error(err?.response?.data?.message || "Failed to update adoption status");
         } finally {
-            setAdoptLoading(null);
+            setAcceptLoading(null);
         }
     };
 
-    // Delete pet handler
-    const handleDelete = async (petId) => {
+    // Rejection handler
+    const rejectAdoptRequest = async (pet) => {
+        setRejectLoading(pet._id);
+        setDynamicStatus((prev) => ({ ...prev, [pet._id]: "rejected" }));
         try {
-            const { data } = await axiosSecure.delete(`/dashboard/my-added-pets/${petId}`);
-            if (data?.success) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Deleted!",
-                    text: data.message || "Pet deleted successfully",
-                    timer: 1800,
-                    showConfirmButton: false,
-                });
-            }
-            setDeleteData(null);
+            await axiosSecure.patch(`/adoption-request-update/${pet._id}`, { adoption_status: "rejected" });
             refetch();
         } catch (err) {
-            toast.error(err?.response?.data?.message || "Failed to delete pet");
+            toast.error(err?.response?.data?.message || "Failed to update adoption status");
+        } finally {
+            setRejectLoading(null);
         }
     };
 
@@ -95,69 +86,88 @@ const MyAddedPets = () => {
             accessorKey: "pet_name",
         },
         {
-            header: "Category",
-            accessorKey: "category",
+            header: "Username",
+            accessorKey: "user_name",
         },
         {
-            header: "Status",
-            accessorKey: "adopted",
-            cell: (info) => (
-                <span
-                    className={
-                        info.getValue()
-                            ? "text-green-primary font-pg font-semibold"
-                            : "text-base-rose font-pg font-semibold"
-                    }>
-                    {info.getValue() ? "Adopted" : "Not Adopted"}
-                </span>
-            ),
+          header: "Email",
+          accessorKey: "user_email",  
+        },
+        {
+          header: "Phone Number",
+          accessorKey: "phone",  
+        },
+        {
+          header: "Adopter Address",
+          accessorKey: "address",  
+        },
+        {
+            header: "Request Status",
+            accessorKey: "adoption_status",
+            cell: (info) => {
+                const status = info.getValue();
+                let label = "pending";
+                let colorClass = "text-gray-medium font-pg font-semibold";
+                if (status === "accepted") {
+                    label = "Accepted";
+                    colorClass = "text-green-primary font-pg font-semibold";
+                } else if (status === "rejected") {
+                    label = "Rejected";
+                    colorClass = "text-base-rose font-pg font-semibold";
+                }
+                return <span className={colorClass}>{label}</span>;
+            },
             sortingFn: (rowA, rowB, columnId) => {
                 // Sort adopted first
                 return (rowB.getValue(columnId) ? 1 : 0) - (rowA.getValue(columnId) ? 1 : 0);
             },
         },
         {
-            header: "Actions",
+            header: "Adoption Request",
             id: "actions",
             cell: (info) => {
                 const pet = info.row.original;
+                const status = dynamicStatus[pet._id] || pet.adoption_status;
                 return (
                     <div className="flex gap-2">
-                        {/* Update Button */}
-                        <Button
-                            size="sm"
-                            className="px-2 py-1 bg-base-white text-blue-regular border border-blue-regular hover:bg-blue-regular hover:text-base-white rounded text-sm hover:shadow-card-primary"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/pet-update/${pet._id}`);
-                            }}>
-                            Update
-                        </Button>
-
-                        {/* Delete Button */}
-                        <Button
-                            size="sm"
-                            className="px-2 py-1 bg-base-white text-base-orange border border-base-rose-dark hover:bg-base-rose-dark hover:text-base-white rounded text-sm hover:shadow-card-primary"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setDeleteData(pet._id);
-                            }}>
-                            Delete
-                        </Button>
-
-                        {/* Adopted Button */}
-                        <Button
-                            size="sm"
-                            className={`px-2 py-1 bg-base-white text-green-primary border border-green-primary hover:bg-green-primary hover:text-base-white rounded text-sm hover:shadow-card-primary ${
-                                pet.adopted ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
-                            disabled={pet.adopted || adoptLoading === pet._id}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleAdopt(pet);
-                            }}>
-                            {pet.adopted ? "Adoption Done" : adoptLoading === pet._id ? "Processing.." : "Adopted"}
-                        </Button>
+                        {status === "accepted" ? (
+                            <Button
+                                size="sm"
+                                className="px-2 py-1 bg-base-white text-green-primary border border-green-primary rounded text-sm opacity-50 cursor-not-allowed"
+                                disabled>
+                                Accepted
+                            </Button>
+                        ) : status === "rejected" ? (
+                            <Button
+                                size="sm"
+                                className="px-2 py-1 bg-base-white text-base-rose border border-base-rose rounded text-sm opacity-50 cursor-not-allowed"
+                                disabled>
+                                Rejected
+                            </Button>
+                        ) : (
+                            <>
+                                <Button
+                                    size="sm"
+                                    className={`px-2 py-1 bg-base-white text-green-primary border border-green-primary hover:bg-green-primary hover:text-base-white rounded text-sm hover:shadow-card-primary`}
+                                    disabled={acceptLoading === pet._id}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        acceptAdoptRequest(pet);
+                                    }}>
+                                    {acceptLoading === pet._id ? "Accepting.." : "Accept"}
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    className={`px-2 py-1 bg-base-white text-base-rose border border-base-rose hover:bg-base-rose hover:text-base-white rounded text-sm hover:shadow-card-primary`}
+                                    disabled={rejectLoading === pet._id}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        rejectAdoptRequest(pet);
+                                    }}>
+                                    {rejectLoading === pet._id ? "Rejecting.." : "Reject"}
+                                </Button>
+                            </>
+                        )}
                     </div>
                 );
             },
@@ -166,7 +176,7 @@ const MyAddedPets = () => {
     ];
 
     const table = useReactTable({
-        data: myPetsData,
+        data: adoptReqData,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -176,13 +186,13 @@ const MyAddedPets = () => {
         },
         onSortingChange: setSort,
         manualPagination: false,
-        pageCount: Math.ceil(myPetsData.length / 10),
+        pageCount: Math.ceil(adoptReqData.length / 10),
         initialState: { pagination: { pageSize: 10 } },
     });
 
     if (isLoading) return <AddedPetsSkeleton />;
 
-    if (!isLoading && myPetsData.length === 0) {
+    if (!isLoading && adoptReqData.length === 0) {
         // handle empty state in table body
     }
 
@@ -231,8 +241,7 @@ const MyAddedPets = () => {
 
                                         {/* Table Body Start */}
                                         <tbody>
-                                            {/* Rows */}
-                                            {myPetsData.length === 0 ? (
+                                            {adoptReqData.length === 0 ? (
                                                 <tr>
                                                     <td colSpan={columns.length} className="py-12">
                                                         <EmptyState />
@@ -258,9 +267,9 @@ const MyAddedPets = () => {
                                                             .map((cell) => (
                                                                 <td
                                                                     key={cell.id}
-                                                                    className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base capitalize font-medium ${
+                                                                    className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base font-medium ${
                                                                         cell.column.id === "actions"
-                                                                            ? "text-left"
+                                                                            ? "text-center"
                                                                             : "text-center"
                                                                     }`}>
                                                                     {flexRender(
@@ -276,7 +285,7 @@ const MyAddedPets = () => {
                                     </table>
                                 </div>
                                 {/* Pagination Controls */}
-                                {myPetsData.length > 10 && (
+                                {adoptReqData.length > 10 && (
                                     <div className="flex justify-between items-center px-6 py-6  bg-background-tertiary border-t">
                                         <div className="min-w-max font-medium">
                                             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
@@ -293,14 +302,8 @@ const MyAddedPets = () => {
                     </div>
                 </div>
             </div>
-            {/* Delete Modal */}
-            <DeleteModal
-                isOpen={!!deleteData}
-                closeModal={() => setDeleteData(null)}
-                onConfirm={() => handleDelete(deleteData)}
-            />
         </>
     );
 };
 
-export default MyAddedPets;
+export default AdoptionRequests;
