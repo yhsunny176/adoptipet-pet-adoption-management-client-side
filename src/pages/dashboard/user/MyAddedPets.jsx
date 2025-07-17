@@ -44,11 +44,11 @@ const MyAddedPets = () => {
     const handleAdopt = async (pet) => {
         setAdoptLoading(pet._id);
         try {
-            await axiosSecure.patch(`/dashboard/adopt-pet/${pet._id}`);
+            // Call the correct API endpoint to update adopted status
+            await axiosSecure.patch(`/adopt-status-update/${pet._id}`, { adopted: true });
             refetch();
         } catch (err) {
-            // handle error
-            toast.error(err);
+            toast.error(err?.response?.data?.message || "Failed to update adoption status");
         } finally {
             setAdoptLoading(null);
         }
@@ -155,7 +155,7 @@ const MyAddedPets = () => {
                                 e.stopPropagation();
                                 handleAdopt(pet);
                             }}>
-                            {adoptLoading === pet._id ? "Processing.." : "Adopted"}
+                            {pet.adopted ? "Adoption Done" : adoptLoading === pet._id ? "Processing.." : "Adopted"}
                         </Button>
                     </div>
                 );
