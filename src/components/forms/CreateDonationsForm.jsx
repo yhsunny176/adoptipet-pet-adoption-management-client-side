@@ -60,7 +60,7 @@ const CreateDonationsForm = () => {
 
                         try {
                             const petData = {
-                                maxAmount: values?.maxAmount,
+                                max_amount: values?.maxAmount,
                                 pet_name: values?.petName,
                                 pet_image: values?.photoURL,
                                 last_don_date: values?.lastDateDon,
@@ -161,7 +161,7 @@ const CreateDonationsForm = () => {
                                         )}
                                     </div>
 
-                                    {/* Pet Age */}
+                                    {/* Last Date of Donation */}
                                     <div>
                                         <label
                                             htmlFor="lastDateDon"

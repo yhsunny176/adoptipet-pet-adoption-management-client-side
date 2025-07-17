@@ -46,7 +46,7 @@ const SidebarDashboard = (props) => {
                     },
                     {
                         title: "My Donation Campaigns",
-                        url: "/dashboard/my-donation-campaigns",
+                        url: `/dashboard/my-donation-campaigns/${user?.email}`,
                         icon: <HugeiconsIcon icon={InvoiceIcon} />,
                     },
                     {

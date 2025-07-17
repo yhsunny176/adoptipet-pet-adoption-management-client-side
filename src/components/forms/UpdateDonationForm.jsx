@@ -4,13 +4,11 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
-import EmptyState from "@/components/EmptyState";
-import Select from "react-select";
 import TiptapEditor from "../long-text-editor/TipTapEditor";
 import ImageField from "../photo-upload-field/ImageField";
-import { petCategoryOptions } from "@/utils/pet_categories";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useMutation } from "@tanstack/react-query";
+import DateField from "../datefield/DateField";
 
 const validationSchema = Yup.object({
     photoFile: Yup.mixed()
@@ -45,43 +43,30 @@ const validationSchema = Yup.object({
             return this.createError({ message: "Pet photo is required" });
         }),
     petName: Yup.string().required("Pet name is required"),
-    petAge: Yup.string().required("Pet age is required"),
-    petLocation: Yup.string().required("Pet location is required"),
-    petCategory: Yup.object().required("Pet category is required"),
+    maxAmount: Yup.number().required("Max Amount is required"),
     shortDesc: Yup.string().required("Short Description is required"),
     longDesc: Yup.string().required("Long description is required"),
 });
 
-const UpdatePetForm = ({ petInfo }) => {
+const UpdateDonationForm = ({ donInfo }) => {
     const [showUpload, setShowUpload] = useState(false);
     const axiosSecure = useAxiosSecure();
-    // Always call hooks at the top level
-    const updatePetMutation = useMutation({
-        mutationFn: async (petData) => {
-            const response = await axiosSecure.patch(`/pet-update/${petInfo?._id}`, petData);
+
+    const { pet_name, max_amount, last_don_date, short_desc, long_desc, pet_image, _id } = donInfo || {};
+
+    // Mutation for updating pet info
+    const updateDonationMutation = useMutation({
+        mutationFn: async (donData) => {
+            const response = await axiosSecure.patch(`/update-donation-campaign/${_id}`, donData);
             return response.data;
         },
     });
 
-    // If no petInfo, show EmptyState inside the form
-    if (!petInfo) {
-        return (
-            <div className="bg-background-tertiary w-full">
-                <div className="w-full max-w-full mx-auto bg-background-tertiary backdrop-blur-sm rounded-2xl p-8 border border-gray-border shadow-card-primary">
-                    {/* Empty state shown inside the form container */}
-                    <div className="py-16 flex items-center justify-center">
-                        <div className="w-full flex items-center justify-center">
-                            {/* Only the EmptyState component, no placeholders */}
-                            <EmptyState />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    const { pet_name, pet_age, category, location, short_desc, long_desc, pet_image, _id } = petInfo;
-    // (Already declared above, remove duplicate)
+    const formatDateMDY = (dateStr) => {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    };
 
     return (
         <div className="bg-background-tertiary w-full">
@@ -91,16 +76,15 @@ const UpdatePetForm = ({ petInfo }) => {
                         photoURL: pet_image || "",
                         photoFile: null,
                         petName: pet_name || "",
-                        petAge: pet_age || "",
-                        petLocation: location || "",
-                        petCategory: category ? petCategoryOptions.find((opt) => opt.value === category) : null,
+                        maxAmount: max_amount || "",
+                        lastDateDon: formatDateMDY(last_don_date) || "",
                         shortDesc: short_desc || "",
                         longDesc: long_desc || "",
                     }}
                     validationSchema={validationSchema}
                     onSubmit={async (values, { setSubmitting }) => {
                         try {
-                            let petData;
+                            let donData;
                             let photoURL = values.photoURL;
 
                             if (values.photoFile) {
@@ -113,34 +97,42 @@ const UpdatePetForm = ({ petInfo }) => {
                                     throw new Error(uploadResult.error || "Image upload failed");
                                 }
                             }
-                            petData = {
+                            // Fix timezone issue: set time to noon before converting to ISO
+                            let lastDonDateISO = "";
+                            if (values.lastDateDon) {
+                                const [month, day, year] = values.lastDateDon.split("/");
+                                const dateObj = new Date(year, month - 1, day, 12, 0, 0); // noon local time
+                                lastDonDateISO = dateObj.toISOString();
+                            }
+                            donData = {
                                 pet_name: values.petName,
                                 pet_image: photoURL,
-                                pet_age: values.petAge,
-                                location: values.petLocation,
-                                category: values.petCategory?.value,
+                                max_amount: values.maxAmount,
+                                last_don_date: lastDonDateISO,
                                 short_desc: values.shortDesc,
                                 long_desc: values.longDesc,
                             };
 
-                            await updatePetMutation.mutateAsync(petData);
+                            console.log("Sending donation data:", donData);
+
+                            await updateDonationMutation.mutateAsync(donData);
 
                             await Swal.fire({
                                 icon: "success",
-                                title: "Pet Updated Successfully!",
+                                title: "Donation Campaign Updated Successfully!",
                                 confirmButtonText: "OK",
                                 customClass: {
                                     title: "swal-title-custom-font",
                                 },
                             });
                         } catch (error) {
-                            toast.error(error.message || "Failed Updating Pet. Please Try Again!");
+                            toast.error(error.message || "Failed Updating Donation Campaign. Please Try Again!");
                         } finally {
                             setSubmitting(false);
                         }
                     }}>
                     {({ isSubmitting, errors, touched, values, setFieldValue }) => (
-                        <Form className="pet-add-form space-y-6">
+                        <Form className="space-y-6">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Photo Upload or Preview */}
                                 <div>
@@ -155,7 +147,7 @@ const UpdatePetForm = ({ petInfo }) => {
                                                     setFieldValue("photoFile", null);
                                                     setFieldValue("photoURL", pet_image);
                                                 }}
-                                                className="mt-4 bg-gray-500 px-3 py-6 text-base-white w-full">
+                                                className="mt-4 bg-green-primary px-3 py-6 text-base-white w-full">
                                                 Keep Current Image
                                             </Button>
                                         </div>
@@ -208,85 +200,71 @@ const UpdatePetForm = ({ petInfo }) => {
                                             </div>
                                         )}
                                     </div>
-                                    {/* Pet Age */}
-                                    <div>
+
+                                    {/* Maximum Donation Amount */}
+                                    <div className="relative">
                                         <label
-                                            htmlFor="petAge"
+                                            htmlFor="maxAmount"
                                             className="block text-sm font-medium text-black-base mb-2">
-                                            Pet Age
+                                            Maximum Donation Amount
                                         </label>
-                                        <Field
-                                            type="text"
-                                            name="petAge"
-                                            id="petAge"
-                                            placeholder="Enter the pet age"
-                                            className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-orange rounded-lg transition-all duration-200 ${
-                                                errors.petAge && touched.petAge
-                                                    ? "border-red-base bg-red-light"
-                                                    : "border-gray-border bg-base-white"
-                                            }`}
-                                        />
-                                        {errors.petAge && touched.petAge && (
+                                        <div className="relative flex items-center">
+                                            <Field
+                                                type="number"
+                                                name="maxAmount"
+                                                id="maxAmount"
+                                                min={1}
+                                                placeholder="Enter the maximum donation amount people can donate..."
+                                                className={`w-full pl-5 py-3 pr-24 border border-gray-border focus:outline-0 focus:border-base-orange rounded-lg transition-all duration-200 ${
+                                                    errors.maxAmount && touched.maxAmount
+                                                        ? "border-red-base bg-red-light"
+                                                        : "border-gray-border bg-base-white"
+                                                }`}
+                                            />
+                                            <span className="absolute right-3 mt-0.5 inset-y-0 flex items-center h-full text-lg text-gray-dark pointer-events-none select-none">
+                                                <p>৳(Taka)</p>
+                                            </span>
+                                        </div>
+                                        {errors.maxAmount && touched.maxAmount && (
                                             <div className="text-red-medium font-bold text-sm mt-1">
-                                                {errors.petAge}
+                                                {errors.maxAmount}
                                             </div>
                                         )}
                                     </div>
-                                    {/* Pet Location */}
+
+                                    {/* Last Date of Donation */}
                                     <div>
                                         <label
-                                            htmlFor="petLocation"
+                                            htmlFor="lastDateDon"
                                             className="block text-sm font-medium text-black-base mb-2">
-                                            Pet Location
+                                            Last Date of Donation
                                         </label>
-                                        <Field
-                                            type="text"
-                                            name="petLocation"
-                                            id="petLocation"
-                                            placeholder="Enter location from where the pet can be picked up"
-                                            className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-orange rounded-lg transition-all duration-200 ${
-                                                errors.petLocation && touched.petLocation
-                                                    ? "border-red-base bg-red-light"
-                                                    : "border-gray-border bg-base-white"
-                                            }`}
-                                        />
-                                        {errors.petLocation && touched.petLocation && (
+                                        <Field name="lastDateDon">
+                                            {({ field, form }) => (
+                                                <DateField
+                                                    value={field.value}
+                                                    onChange={(val) => {
+                                                        let formatted =
+                                                            val instanceof Date
+                                                                ? `${
+                                                                      val.getMonth() + 1
+                                                                  }/${val.getDate()}/${val.getFullYear()}`
+                                                                : val;
+                                                        form.setFieldValue("lastDateDon", formatted);
+                                                    }}
+                                                    placeholder={"Select the last date people can donate..."}
+                                                />
+                                            )}
+                                        </Field>
+                                        {errors.lastDateDon && touched.lastDateDon && (
                                             <div className="text-red-medium font-bold text-sm mt-1">
-                                                {errors.petLocation}
-                                            </div>
-                                        )}
-                                    </div>
-                                    {/* Pet Category */}
-                                    <div>
-                                        <label
-                                            htmlFor="petCategory"
-                                            className="block text-sm font-medium text-black-base mb-2">
-                                            Pet Category
-                                        </label>
-                                        <Select
-                                            inputId="petCategory"
-                                            name="petCategory"
-                                            options={petCategoryOptions}
-                                            value={values.petCategory}
-                                            onChange={(option) => setFieldValue("petCategory", option)}
-                                            placeholder="Select pet category"
-                                            className={`w-full${
-                                                errors.petCategory && touched.petCategory
-                                                    ? " react-select__control--is-invalid"
-                                                    : ""
-                                            }`}
-                                            classNamePrefix="react-select"
-                                        />
-                                        {errors.petCategory && touched.petCategory && (
-                                            <div className="text-red-medium font-bold text-sm mt-1">
-                                                {typeof errors.petCategory === "string"
-                                                    ? errors.petCategory
-                                                    : errors.petCategory.label || "Pet category is required"}
+                                                {errors.lastDateDon}
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
+
                             {/* Short Description */}
                             <div>
                                 <label htmlFor="shortDesc" className="block text-sm font-medium text-black-base mb-2">
@@ -308,6 +286,7 @@ const UpdatePetForm = ({ petInfo }) => {
                                     <div className="text-red-medium font-bold text-sm mt-1">{errors.shortDesc}</div>
                                 )}
                             </div>
+
                             {/* Long Description */}
                             <div>
                                 <label htmlFor="longDesc" className="block text-sm font-medium text-black-base mb-2">
@@ -342,7 +321,7 @@ const UpdatePetForm = ({ petInfo }) => {
                                             e.target.style.backgroundColor = "#E86F69";
                                         }
                                     }}>
-                                    {isSubmitting ? "Updating..." : "Update Pet"}
+                                    {isSubmitting ? "Updating Donation Campaign..." : "Update Donation Campaign"}
                                 </Button>
                             </div>
                         </Form>
@@ -353,4 +332,4 @@ const UpdatePetForm = ({ petInfo }) => {
     );
 };
 
-export default UpdatePetForm;
+export default UpdateDonationForm;
