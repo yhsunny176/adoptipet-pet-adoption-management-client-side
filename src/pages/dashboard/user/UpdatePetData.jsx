@@ -1,5 +1,6 @@
 import EmptyState from "@/components/EmptyState";
 import UpdatePetForm from "@/components/forms/UpdatePetForm";
+import UpdatePetSkeleton from "@/components/loader/Skeletons/UpdatePetSkeleton";
 import Navbar from "@/components/navbar/Navbar";
 import { axiosSecure } from "@/hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +10,7 @@ import { useParams } from "react-router";
 const UpdatePetData = () => {
     const { id } = useParams();
 
-    const { data: petInfo, isLoading } = useQuery({
+    const { data: petInfo, isLoading} = useQuery({
         queryKey: ["singlePet", id],
         queryFn: async () => {
             const { data } = await axiosSecure(`${import.meta.env.VITE_API_URL}/pet-detail/${id}`);
@@ -18,16 +19,17 @@ const UpdatePetData = () => {
         },
     });
 
+    // Loading state: show animation if petInfo is not loaded
+    if (!petInfo && isLoading) {
+        return <UpdatePetSkeleton />;
+    }
+
     if (!petInfo || typeof petInfo !== "object") {
         return (
             <div>
                 <EmptyState />
             </div>
         );
-    }
-
-    if (isLoading) {
-        <div>Loading..</div>;
     }
 
     return (

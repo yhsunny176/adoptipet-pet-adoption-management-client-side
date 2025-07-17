@@ -29,7 +29,7 @@ const DeleteModal = ({ closeModal, isOpen, onConfirm }) => {
                     <Button
                         size={"lg"}
                         className="inline-flex justify-center rounded-md bg-blue-regular px-12 py-6 text-md font-medium text-base-white hover:shadow-sm hover:text-base-white focus:outline-none focus-visible:ring-2 focus-visible:ring-base-rose focus-visible:ring-offset-2"
-                        onClick={onConfirm}>
+                        onClick={closeModal}>
                         Cancel
                     </Button>
                 </div>

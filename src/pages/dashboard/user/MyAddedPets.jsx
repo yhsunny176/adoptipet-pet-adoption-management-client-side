@@ -17,12 +17,13 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
 import TablePagination from "@/components/pagination/TablePagination";
+import Swal from "sweetalert2";
 
 const MyAddedPets = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
-    const [deleteId, setDeleteId] = useState(null);
+    const [deleteData, setDeleteData] = useState(null);
     const [adoptLoading, setAdoptLoading] = useState(null);
     const [sort, setSort] = useState([]);
     const { theme } = useTheme();
@@ -56,12 +57,20 @@ const MyAddedPets = () => {
     // Delete pet handler
     const handleDelete = async (petId) => {
         try {
-            await axiosSecure.delete(`/dashboard/my-added-pets/${petId}`);
-            setDeleteId(null);
+            const { data } = await axiosSecure.delete(`/dashboard/my-added-pets/${petId}`);
+            if (data?.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Deleted!",
+                    text: data.message || "Pet deleted successfully",
+                    timer: 1800,
+                    showConfirmButton: false,
+                });
+            }
+            setDeleteData(null);
             refetch();
         } catch (err) {
-            // handle error
-            toast.error(err);
+            toast.error(err?.response?.data?.message || "Failed to delete pet");
         }
     };
 
@@ -113,7 +122,6 @@ const MyAddedPets = () => {
                 const pet = info.row.original;
                 return (
                     <div className="flex gap-2">
-
                         {/* Update Button */}
                         <Button
                             size="sm"
@@ -125,14 +133,13 @@ const MyAddedPets = () => {
                             Update
                         </Button>
 
-
                         {/* Delete Button */}
                         <Button
                             size="sm"
                             className="px-2 py-1 bg-base-white text-base-orange border border-base-rose-dark hover:bg-base-rose-dark hover:text-base-white rounded text-sm hover:shadow-card-primary"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setDeleteId(pet._id);
+                                setDeleteData(pet._id);
                             }}>
                             Delete
                         </Button>
@@ -275,9 +282,9 @@ const MyAddedPets = () => {
             </div>
             {/* Delete Modal */}
             <DeleteModal
-                isOpen={!!deleteId}
-                closeModal={() => setDeleteId(null)}
-                onConfirm={() => handleDelete(deleteId)}
+                isOpen={!!deleteData}
+                closeModal={() => setDeleteData(null)}
+                onConfirm={() => handleDelete(deleteData)}
             />
         </>
     );

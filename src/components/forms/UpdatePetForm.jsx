@@ -9,6 +9,7 @@ import TiptapEditor from "../long-text-editor/TipTapEditor";
 import ImageField from "../photo-upload-field/ImageField";
 import { petCategoryOptions } from "@/utils/pet_categories";
 import axios from "axios";
+import UpdatePetSkeleton from "../loader/Skeletons/UpdatePetSkeleton";
 
 const validationSchema = Yup.object({
     photoFile: Yup.mixed()
