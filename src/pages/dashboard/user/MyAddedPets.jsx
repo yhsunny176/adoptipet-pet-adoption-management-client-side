@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useAuth from "@/hooks/useAuth";
 import {
@@ -41,15 +41,24 @@ const MyAddedPets = () => {
         },
     });
 
+    // Mutation for updating adopt status
+    const updateAdoptStatusMutation = useMutation({
+        mutationFn: async (petId) => {
+            return axiosSecure.patch(`/adopt-status-update/${petId}`);
+        },
+        onSuccess: () => {
+            refetch();
+        },
+        onError: (err) => {
+            toast.error(err?.response?.data?.message || "Failed to update adoption status");
+        },
+    });
+
     // Adopt pet handler
     const handleAdopt = async (pet) => {
         setAdoptLoading(pet._id);
         try {
-            // Call the correct API endpoint to update adopted status
-            await axiosSecure.patch(`/adopt-status-update/${pet._id}`);
-            refetch();
-        } catch (err) {
-            toast.error(err?.response?.data?.message || "Failed to update adoption status");
+            await updateAdoptStatusMutation.mutateAsync(pet._id);
         } finally {
             setAdoptLoading(null);
         }
@@ -278,7 +287,7 @@ const MyAddedPets = () => {
                                 {/* Pagination Controls */}
                                 {myPetsData.length > 10 && (
                                     <div className="flex justify-between items-center px-6 py-6  bg-background-tertiary border-t">
-                                        <div className="min-w-max font-medium">
+                                        <div className="min-w-max font-medium text-pg-base">
                                             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                                         </div>
                                         <div className="w-full flex justify-end">

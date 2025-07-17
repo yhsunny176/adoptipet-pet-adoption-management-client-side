@@ -8,8 +8,8 @@ import Select from "react-select";
 import TiptapEditor from "../long-text-editor/TipTapEditor";
 import ImageField from "../photo-upload-field/ImageField";
 import { petCategoryOptions } from "@/utils/pet_categories";
-import axios from "axios";
-import UpdatePetSkeleton from "../loader/Skeletons/UpdatePetSkeleton";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useMutation } from "@tanstack/react-query";
 
 const validationSchema = Yup.object({
     photoFile: Yup.mixed()
@@ -53,16 +53,17 @@ const validationSchema = Yup.object({
 
 const UpdatePetForm = ({ petInfo }) => {
     const [showUpload, setShowUpload] = useState(false);
+    const axiosSecure = useAxiosSecure();
 
     const { pet_name, pet_age, category, location, short_desc, long_desc, pet_image, _id } = petInfo || {};
 
-    // Function to update pet info
-    const onUpdate = async (petData) => {
-        const response = await axios.patch(`${import.meta.env.VITE_API_URL}/pet-update/${_id}`, petData, {
-            withCredentials: true,
-        });
-        return response.data;
-    };
+    // Mutation for updating pet info
+    const updatePetMutation = useMutation({
+        mutationFn: async (petData) => {
+            const response = await axiosSecure.patch(`/pet-update/${_id}`, petData);
+            return response.data;
+        },
+    });
 
     return (
         <div className="bg-background-tertiary w-full">
@@ -104,10 +105,7 @@ const UpdatePetForm = ({ petInfo }) => {
                                 long_desc: values.longDesc,
                             };
 
-                            //Update Function call
-                            if (onUpdate) {
-                                await onUpdate(petData);
-                            }
+                            await updatePetMutation.mutateAsync(petData);
 
                             await Swal.fire({
                                 icon: "success",

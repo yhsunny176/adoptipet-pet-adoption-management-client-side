@@ -1,5 +1,4 @@
 import useAuth from "@/hooks/useAuth";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
@@ -7,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { Field, Formik, Form } from "formik";
 import { toast } from "react-toastify";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -21,6 +21,7 @@ const AdoptForm = () => {
     const { id } = useParams();
     const [alreadyRequested, setAlreadyRequested] = useState(false);
     const [ownPet, setOwnPet] = useState(false);
+    const axiosSecure = useAxiosSecure();
 
     // Fetch pet data
     const {
@@ -30,7 +31,7 @@ const AdoptForm = () => {
     } = useQuery({
         queryKey: ["pet-detail", id],
         queryFn: async () => {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/pet-detail/${id}`);
+            const res = await axiosSecure.get(`${import.meta.env.VITE_API_URL}/pet-detail/${id}`);
             return res.data;
         },
         enabled: !!id,
@@ -41,9 +42,8 @@ const AdoptForm = () => {
         const checkAlreadyRequested = async () => {
             if (!user?.email || !id) return;
             try {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/adopt-request/check`, {
+                const res = await axiosSecure.get(`/adopt-request/check`, {
                     params: { pet_id: id, user_email: user.email },
-                    withCredentials: true,
                 });
                 setAlreadyRequested(res.data?.alreadyRequested === true);
                 setOwnPet(res.data?.ownPet === true);
@@ -53,7 +53,7 @@ const AdoptForm = () => {
             }
         };
         checkAlreadyRequested();
-    }, [user?.email, id]);
+    }, [user?.email, id, axiosSecure]);
 
     if (isLoading) {
         return <div className="text-center py-10">Loading pet information...</div>;
@@ -89,9 +89,7 @@ const AdoptForm = () => {
                                 },
                             };
 
-                            await axios.post(`${import.meta.env.VITE_API_URL}/adopt-request`, adoptionRequest, {
-                                withCredentials: true,
-                            });
+                            await axiosSecure.post(`/adopt-request`, adoptionRequest);
 
                             setAlreadyRequested(true);
 

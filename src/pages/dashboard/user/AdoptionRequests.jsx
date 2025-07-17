@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useAuth from "@/hooks/useAuth";
 import {
@@ -38,15 +38,25 @@ const AdoptionRequests = () => {
         },
     });
 
+    // Mutation for updating adoption request status
+    const updateAdoptionStatusMutation = useMutation({
+        mutationFn: async ({ petId, status }) => {
+            return axiosSecure.patch(`/adoption-request-update/${petId}`, { adoption_status: status });
+        },
+        onSuccess: () => {
+            refetch();
+        },
+        onError: (err) => {
+            toast.error(err?.response?.data?.message || "Failed to update adoption status");
+        },
+    });
+
     // Acceptance handler
     const acceptAdoptRequest = async (pet) => {
         setAcceptLoading(pet._id);
         setDynamicStatus((prev) => ({ ...prev, [pet._id]: "accepted" }));
         try {
-            await axiosSecure.patch(`/adoption-request-update/${pet._id}`, { adoption_status: "accepted" });
-            refetch();
-        } catch (err) {
-            toast.error(err?.response?.data?.message || "Failed to update adoption status");
+            await updateAdoptionStatusMutation.mutateAsync({ petId: pet._id, status: "accepted" });
         } finally {
             setAcceptLoading(null);
         }
@@ -57,10 +67,7 @@ const AdoptionRequests = () => {
         setRejectLoading(pet._id);
         setDynamicStatus((prev) => ({ ...prev, [pet._id]: "rejected" }));
         try {
-            await axiosSecure.patch(`/adoption-request-update/${pet._id}`, { adoption_status: "rejected" });
-            refetch();
-        } catch (err) {
-            toast.error(err?.response?.data?.message || "Failed to update adoption status");
+            await updateAdoptionStatusMutation.mutateAsync({ petId: pet._id, status: "rejected" });
         } finally {
             setRejectLoading(null);
         }
@@ -90,16 +97,16 @@ const AdoptionRequests = () => {
             accessorKey: "user_name",
         },
         {
-          header: "Email",
-          accessorKey: "user_email",  
+            header: "Email",
+            accessorKey: "user_email",
         },
         {
-          header: "Phone Number",
-          accessorKey: "phone",  
+            header: "Phone Number",
+            accessorKey: "phone",
         },
         {
-          header: "Adopter Address",
-          accessorKey: "address",  
+            header: "Adopter Address",
+            accessorKey: "address",
         },
         {
             header: "Request Status",
@@ -287,7 +294,7 @@ const AdoptionRequests = () => {
                                 {/* Pagination Controls */}
                                 {adoptReqData.length > 10 && (
                                     <div className="flex justify-between items-center px-6 py-6  bg-background-tertiary border-t">
-                                        <div className="min-w-max font-medium">
+                                        <div className="min-w-max font-medium text-pg-base">
                                             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                                         </div>
                                         <div className="w-full flex justify-end">

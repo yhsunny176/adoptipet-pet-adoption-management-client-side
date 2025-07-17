@@ -41,7 +41,7 @@ const SidebarDashboard = (props) => {
                     },
                     {
                         title: "Create Donation Campaigns",
-                        url: "/dashboard/create-donation-campaigns",
+                        url: "/dashboard/create-donation-campaign",
                         icon: <HugeiconsIcon icon={AddMoneyCircleIcon} />,
                     },
                     {
