@@ -18,6 +18,7 @@ import AdoptionRequests from "@/pages/dashboard/user/AdoptionRequests";
 import CreateDonations from "@/pages/dashboard/user/CreateDonations";
 import MyDonationCampaigns from "@/pages/dashboard/user/MyDonationCampaigns";
 import UpdateCampaign from "@/pages/dashboard/user/UpdateCampaign";
+import AllDonationCampaigns from "@/pages/AllDonationCampaigns";
 
 const router = createBrowserRouter([
     {
@@ -122,6 +123,10 @@ const router = createBrowserRouter([
                 <UpdateCampaign />
             </PrivateRoute>
         ),
+    },
+    {
+        path: "/donation-campaigns",
+        element: <AllDonationCampaigns/>
     },
     {
         path: "/*",

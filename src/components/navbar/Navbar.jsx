@@ -72,7 +72,7 @@ const Navbar = () => {
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavLink
-                                        to="/donations"
+                                        to="/donation-campaigns"
                                         className="hidden lg:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                         Donation Campaigns
                                     </NavLink>
