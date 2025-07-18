@@ -9,49 +9,53 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
 import TablePagination from "@/components/pagination/TablePagination";
 import EmptyState from "@/components/EmptyState";
-import DonatorsModal from "@/components/modal/DonatorsModal";
-import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { Button } from "@/components/ui/button";
+import RefundModal from "@/components/modal/RefundModal";
 
 const MyDonations = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const navigate = useNavigate();
     const [sort, setSort] = useState([]);
     const { theme } = useTheme();
-    const [isOpen, setIsOpen] = useState(false);
+    const [deleteData, setDeleteData] = useState(null);
 
     const {
-        data: myDonInfo = [],
+        data: myDons = [],
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: ["myDonInfo", user?.email],
+        queryKey: ["myDons", user?.email],
         queryFn: async () => {
-            const { data } = await axiosSecure(`/dashboard/my-campaign-data/${user?.email}`);
+            const { data } = await axiosSecure(`/dashboard/my-donations/${user?.email}`);
             return data;
         },
     });
 
-    // SweetAlert for Login warning before adoption request
-    const handleUpdateClick = async (open) => {
-        if (!user) {
-            const Swal = (await import("sweetalert2")).default;
-            Swal.fire({
-                icon: "info",
-                title: "Login Required",
-                text: "Please log in to adopt a pet.",
-                confirmButtonText: "OK",
-            });
-            return;
+    // Delete pet handler
+    const handleRefund = async (donId) => {
+        try {
+            const { data } = await axiosSecure.delete(`/dashboard/donation-delete/${donId}`);
+            if (data?.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Deleted!",
+                    text: data.message || "The Donation has been Refunded successfully",
+                    timer: 1800,
+                    showConfirmButton: false,
+                });
+            }
+            setDeleteData(null);
+            refetch();
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Failed to Refund Donation");
         }
-        setIsOpen(open);
     };
 
     const columns = [
@@ -65,7 +69,7 @@ const MyDonations = () => {
             header: "Pet Image",
             accessorKey: "pet_image",
             cell: (info) => (
-                <img src={info.getValue()} alt="pet" className="mx-auto object-cover rounded-lg h-14 w-18" />
+                <img src={info.getValue()} alt="pet image" className="mx-auto object-cover rounded-lg h-14 w-18" />
             ),
             enableSorting: false,
         },
@@ -74,107 +78,26 @@ const MyDonations = () => {
             accessorKey: "pet_name",
         },
         {
-            header: "Maximum Donation Amount",
-            accessorKey: "max_amount",
-        },
-        {
-            header: "Donation Progress",
-            id: "progress",
-            cell: (info) => {
-                const donation = info.row.original;
-                const max = Number(donation.max_amount) || 0;
-                const current = Number(donation.total_donations) || 0;
-                const percent = max > 0 ? Math.min(100, Math.round((current / max) * 100)) : 0;
-                return (
-                    <div className="w-full min-w-[120px] flex items-center justify-center gap-4">
-                        <div className="w-15 h-15 flex items-center justify-center">
-                            <CircularProgressbar
-                                value={percent}
-                                text={`${percent}%`}
-                                styles={buildStyles({
-                                    pathColor: "#22c55e",
-                                    textColor: "#22c55e",
-                                    trailColor: "#e5e7eb",
-                                    textSize: "2rem",
-                                })}
-                            />
-                        </div>
-                        <div className="flex flex-col items-end justify-center text-right min-w-16">
-                            <span className="text-base text-green-primary font-bold">
-                                {current} / {max}
-                            </span>
-                        </div>
-                    </div>
-                );
-            },
-            enableSorting: false,
-        },
-        {
-            header: "Pause/Active Status",
-            accessorKey: "paused",
-            cell: (info) =>
-                info.getValue() ? (
-                    <span className="text-red-rose font-semibold">Paused</span>
-                ) : (
-                    <span className="text-green-primary font-semibold">Active</span>
-                ),
+            header: "Donated Amount",
+            accessorKey: "amount_donated",
         },
         {
             header: "Actions",
             id: "actions",
             cell: (info) => {
                 const donation = info.row.original;
-                const handlePauseToggle = async (e) => {
-                    e.stopPropagation();
-                    try {
-                        await axiosSecure.patch(`/update-donation-campaign/${donation._id}`, {
-                            paused: !donation.paused,
-                        });
-                        // Refetch campaigns
-                        refetch();
-                    } catch {
-                        alert("Failed to update pause status");
-                    }
-                };
                 return (
                     <div className="flex gap-2">
-                        {/* Edit Button */}
+                        {/* Delete Button */}
                         <Button
-                            variant={"lg"}
-                            className="px-4 py-1 bg-blue-regular text-base-white hover:text-base-white rounded text-sm hover:shadow-md transition-shadow duration-400 ease-in-out"
+                            size="sm"
+                            className="px-2 py-1 bg-base-white text-base-orange border border-base-rose-dark hover:bg-base-rose-dark hover:text-base-white rounded text-sm hover:shadow-card-primary"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(`/update-donation-campaign/${donation._id}`);
+                                setDeleteData(donation._id);
                             }}>
-                            Edit
+                            Refund
                         </Button>
-                        {/* Pause/Unpause Button */}
-                        <Button
-                            variant={"lg"}
-                            className={`px-4 py-1 ${
-                                donation.paused ? "bg-gray-medium text-black-base" : "bg-green-primary"
-                            } px-2 py-1 text-base-white hover:text-base-white rounded text-sm hover:shadow-md transition-shadow duration-400 ease-in-out`}
-                            onClick={handlePauseToggle}>
-                            {donation.paused ? "Unpause" : "Pause"}
-                        </Button>
-                        {/* View Donators button */}
-                        <div className="col-span-full flex flex-col items-stretch">
-                            <DonatorsModal
-                                open={isOpen}
-                                onOpenChange={handleUpdateClick}
-                                trigger={
-                                    <Button
-                                        variant="lg"
-                                        className={
-                                            "px-2 py-1 bg-base-orange text-base-white hover:text-base-white rounded text-sm hover:shadow-md transition-shadow duration-400 ease-in-out"
-                                        }>
-                                        View Donators
-                                    </Button>
-                                }
-                                title={`Donators for the ${donation.pet_name}:`}
-                                campaignId={donation._id}
-                            />
-                        </div>
                     </div>
                 );
             },
@@ -183,7 +106,7 @@ const MyDonations = () => {
     ];
 
     const table = useReactTable({
-        data: myDonInfo,
+        data: myDons,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -193,13 +116,13 @@ const MyDonations = () => {
         },
         onSortingChange: setSort,
         manualPagination: false,
-        pageCount: Math.ceil(myDonInfo.length / 10),
+        pageCount: Math.ceil(myDons.length / 10),
         initialState: { pagination: { pageSize: 10 } },
     });
 
     if (isLoading) return <AddedPetsSkeleton />;
 
-    if (!isLoading && myDonInfo.length === 0) {
+    if (!isLoading && myDons.length === 0) {
         // handle empty state in table body
     }
 
@@ -251,7 +174,7 @@ const MyDonations = () => {
                                         {/* Table Body Start */}
                                         <tbody>
                                             {/* Rows */}
-                                            {myDonInfo.length === 0 ? (
+                                            {myDons.length === 0 ? (
                                                 <tr>
                                                     <td colSpan={columns.length} className="py-12">
                                                         <EmptyState />
@@ -279,7 +202,7 @@ const MyDonations = () => {
                                                                     key={cell.id}
                                                                     className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base capitalize font-medium ${
                                                                         cell.column.id === "actions"
-                                                                            ? "text-donation_left"
+                                                                            ? "text-left"
                                                                             : "text-center"
                                                                     }`}>
                                                                     {flexRender(
@@ -295,7 +218,7 @@ const MyDonations = () => {
                                     </table>
                                 </div>
                                 {/* Pagination Controls */}
-                                {myDonInfo.length > 10 && (
+                                {myDons.length > 10 && (
                                     <div className="flex justify-between items-center px-6 py-6  bg-background-tertiary border-t">
                                         <div className="min-w-max font-medium text-pg-base">
                                             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
@@ -312,6 +235,12 @@ const MyDonations = () => {
                     </div>
                 </div>
             </div>
+            {/* Delete Modal */}
+            <RefundModal
+                isOpen={!!deleteData}
+                closeModal={() => setDeleteData(null)}
+                onConfirm={() => handleRefund(deleteData)}
+            />
         </>
     );
 };

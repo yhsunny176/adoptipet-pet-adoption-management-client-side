@@ -22,11 +22,11 @@ const DonorLists = ({ donors = [], isLoading, isError, error }) => {
     }
 
     return (
-        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+        <div className="space-y-4 max-h-[400px] bg-black-base overflow-y-auto pr-2">
             {donors.map((donor, idx) => (
                 <div
                     key={donor._id || idx}
-                    className="flex items-center gap-4 py-3 px-4 border border-card-border-prim rounded-lg shadow">
+                    className="flex items-center gap-4 py-3 px-4 border border-card-border-prim bg-black-base rounded-lg shadow">
                     <img
                         src={donor.profilepic || null}
                         alt={donor.user_name}

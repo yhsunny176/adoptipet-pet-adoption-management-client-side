@@ -17,9 +17,12 @@ const CheckoutForm = ({ campaignDetail, onClose, onSuccess }) => {
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
 
-    const { _id, max_amount, total_donations = 0 } = campaignDetail;
+    const { _id, max_amount, total_donations, pet_image, pet_name } = campaignDetail;
 
-    const numAmount = Number(amount);
+    // Ensure numbers for all calculations
+    const maxAllowed = !isNaN(Number(max_amount)) ? Number(max_amount) : 0;
+    const alreadyDonated = !isNaN(Number(total_donations)) ? Number(total_donations) : 0;
+    const numAmount = !isNaN(Number(amount)) ? Number(amount) : 0;
 
     useEffect(() => {
         const getClientSecret = async () => {
@@ -51,13 +54,11 @@ const CheckoutForm = ({ campaignDetail, onClose, onSuccess }) => {
         event.preventDefault();
 
         if (!stripe || !elements) return;
-        if (!amount || isNaN(amount) || numAmount <= 0) {
+        if (!amount || isNaN(numAmount) || numAmount <= 0) {
             setFieldError("Please enter a valid donation amount.");
             return;
         }
-        // Prevent donation above max_amount
-        const maxAllowed = typeof max_amount === "number" ? max_amount : Number(max_amount);
-        const alreadyDonated = typeof total_donations === "number" ? total_donations : Number(total_donations);
+        // Prevent donation above maxAllowed
         if (maxAllowed > 0 && numAmount + alreadyDonated > maxAllowed) {
             setFieldError(`You cannot donate more than the campaign's maximum allowed amount (Tk.${maxAllowed}).`);
             return;
@@ -111,6 +112,8 @@ const CheckoutForm = ({ campaignDetail, onClose, onSuccess }) => {
                         user_name: user?.displayName || "",
                         email: user?.email || "",
                         profilepic: user?.photoURL || null,
+                        pet_image: pet_image,
+                        pet_name: pet_name,
                     });
                 } catch (err) {
                     toast.error(err?.response?.data?.message || err?.message || "Failed to store donation details.");
@@ -154,21 +157,24 @@ const CheckoutForm = ({ campaignDetail, onClose, onSuccess }) => {
                     id="donation-amount"
                     type="number"
                     min="1"
-                    max={max_amount > 0 ? max_amount - total_donations : undefined}
+                    max={maxAllowed > 0 ? maxAllowed - alreadyDonated : undefined}
                     step="any"
                     value={amount}
                     onChange={(e) => {
                         const val = e.target.value;
-                        if (max_amount > 0 && Number(val) + total_donations > max_amount) {
+                        const valNum = !isNaN(Number(val)) ? Number(val) : 0;
+                        if (maxAllowed > 0 && valNum + alreadyDonated > maxAllowed) {
                             setFieldError(
-                                `You cannot donate more than the campaign's maximum allowed amount (Tk.${max_amount}).`
+                                `You cannot donate more than the campaign's maximum allowed amount (Tk.${maxAllowed}).`
                             );
                         } else {
                             setFieldError("");
                         }
                         setAmount(val);
                     }}
-                    placeholder={`Enter amount (max Tk.${max_amount > 0 ? max_amount - total_donations : ""})`}
+                    placeholder={`Enter amount (max Tk.${
+                        maxAllowed > 0 && !isNaN(maxAllowed - alreadyDonated) ? maxAllowed - alreadyDonated : ""
+                    })`}
                     className="border border-card-border-prim rounded-md px-4 py-2 focus:outline-none transition"
                     required
                 />
@@ -185,11 +191,11 @@ const CheckoutForm = ({ campaignDetail, onClose, onSuccess }) => {
             <div className={`flex flex-row gap-2 items-center ${!loading ? "" : ""}`}>
                 <button
                     type="submit"
-                    disabled={!stripe || loading || timeoutActive || (max_amount > 0 && total_donations >= max_amount)}
+                    disabled={!stripe || loading || timeoutActive || (maxAllowed > 0 && alreadyDonated >= maxAllowed)}
                     className={`bg-green-primary text-base-white font-semibold py-2 px-4 rounded-md shadow-md cursor-pointer hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${
                         !loading ? "w-full" : ""
                     }`}>
-                    {max_amount > 0 && total_donations >= max_amount ? (
+                    {maxAllowed > 0 && alreadyDonated >= maxAllowed ? (
                         "Donation Threshold fulfilled. No more donations needed"
                     ) : loading && !timeoutActive ? (
                         <Loader2 className="animate-spin h-5 w-5 text-base-white" />
@@ -198,7 +204,7 @@ const CheckoutForm = ({ campaignDetail, onClose, onSuccess }) => {
                     ) : loading ? (
                         "Processing..."
                     ) : (
-                        <>Pay {amount ? `Tk.${amount}` : ""}</>
+                        <>Pay {numAmount > 0 ? `Tk.${numAmount}` : ""}</>
                     )}
                 </button>
                 {timeoutActive && (

@@ -2,13 +2,15 @@ import React from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { XIcon } from "lucide-react";
 import DonorLists from "../card/DonorLists";
+import { useTheme } from "@/hooks/useTheme";
 
 const DonatorsModal = ({ open, onOpenChange, trigger, title = "", donors, donorsLoading, donorsError }) => {
+    const theme = useTheme();
     return (
         <Dialog open={open} onOpenChange={onOpenChange} modal={true}>
             {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
             <DialogContent
-                className="max-w-10/12 sm:max-w-xl w-full p-0 bg-background-quaternary px-8"
+                className={theme === "light" ? "max-w-10/12 sm:max-w-xl w-full p-0 bg-black-base px-8" : "max-w-10/12 sm:max-w-xl w-full p-0 bg-base-white px-8"}
                 onInteractOutside={(e) => e.preventDefault()}
                 onEscapeKeyDown={(e) => e.preventDefault()}>
                 <div className="relative flex flex-col h-full min-h-[80vh]">
@@ -17,9 +19,9 @@ const DonatorsModal = ({ open, onOpenChange, trigger, title = "", donors, donors
                         <DialogClose asChild>
                             <button
                                 aria-label="Close"
-                                className="rounded-full p-2 cursor-pointer transition-colors duration-500 ease-in-out hover:bg-gray-medium hover:text-base-rose focus:outline-none"
+                                className="rounded-full p-2 cursor-pointer transition-colors duration-500 ease-in-out text-base-rose hover:bg-gray-medium hover:text-base-rose focus:outline-none"
                                 style={{ lineHeight: 1 }}>
-                                <XIcon className="w-6 h-6 text-pg-base" />
+                                <XIcon className="w-6 h-6" />
                             </button>
                         </DialogClose>
                     </div>

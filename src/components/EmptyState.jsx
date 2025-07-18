@@ -8,7 +8,7 @@ const EmptyState = () => {
                 <div className="w-80 h-full">
                     <Lottie animationData={noDataAnimation}/>
                 </div>
-                <h1 className="text-4xl text-navitem-base">Sorry! No Data Available</h1>
+                <h1 className="text-4xl text-heading-color">Sorry! No Data Available</h1>
             </div>
         </div>
     );
