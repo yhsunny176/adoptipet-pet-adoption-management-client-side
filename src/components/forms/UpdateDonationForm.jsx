@@ -101,7 +101,7 @@ const UpdateDonationForm = ({ donInfo }) => {
                             let lastDonDateISO = "";
                             if (values.lastDateDon) {
                                 const [month, day, year] = values.lastDateDon.split("/");
-                                const dateObj = new Date(year, month - 1, day, 12, 0, 0); // noon local time
+                                const dateObj = new Date(year, month - 1, day, 12, 0, 0);
                                 lastDonDateISO = dateObj.toISOString();
                             }
                             donData = {
@@ -112,8 +112,6 @@ const UpdateDonationForm = ({ donInfo }) => {
                                 short_desc: values.shortDesc,
                                 long_desc: values.longDesc,
                             };
-
-                            console.log("Sending donation data:", donData);
 
                             await updateDonationMutation.mutateAsync(donData);
 

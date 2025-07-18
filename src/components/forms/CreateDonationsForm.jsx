@@ -79,7 +79,7 @@ const CreateDonationsForm = () => {
                                 icon: "success",
                                 title: `You have created a new Donation Campaign for ${petData.pet_name} Successfully!`,
                                 showCancelButton: true,
-                                confirmButtonText: "See My Donations",
+                                confirmButtonText: "See My Donation Campaigns",
                                 cancelButtonText: "Create Another Campaign",
                                 customClass: {
                                     title: "swal-title-custom-font",
@@ -196,7 +196,7 @@ const CreateDonationsForm = () => {
                                     name="shortDesc"
                                     id="shortDesc"
                                     rows={4}
-                                    placeholder="Write a short description (e.g, What pet eats, how to take care etc.) ..."
+                                    placeholder="Write a short description about the donation campaign, purpose etc."
                                     className={`w-full px-4 py-3 border border-gray-border focus:outline-0 focus:border-base-orange rounded-lg transition-all duration-200 resize-none ${
                                         errors.shortDesc && touched.shortDesc
                                             ? "border-red-base bg-red-light"

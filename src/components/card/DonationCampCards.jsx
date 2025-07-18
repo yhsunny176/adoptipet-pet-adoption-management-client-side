@@ -20,7 +20,7 @@ const DonationCampCards = ({ donations }) => {
 
                             <div className="flex flex-col font-medium text-base-rose gap-2">
                                 <p className="font-semibold">Max Donation Limit:</p>
-                                <p className="text-heading-color text-2xl font-bold">Tk. {max_amount}</p>
+                                <p className="text-green-primary text-2xl font-bold">Tk. {max_amount}</p>
                             </div>
 
                             <div className="text-sm">

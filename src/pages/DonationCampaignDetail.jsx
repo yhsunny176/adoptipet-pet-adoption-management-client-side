@@ -1,5 +1,4 @@
 import EmptyState from "@/components/EmptyState";
-import SinglePetSkeleton from "@/components/loader/Skeletons/SinglePetSkeleton";
 import Navbar from "@/components/navbar/Navbar";
 import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
@@ -9,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import DonationPayModal from "@/components/modal/DonationPayModal";
 import { useTheme } from "@/hooks/useTheme";
+import DonDetailsSkeleton from "@/components/loader/Skeletons/DonDetailsSkeleton";
 
 const DonationCampaignDetail = () => {
     const { id } = useParams();
@@ -16,7 +16,22 @@ const DonationCampaignDetail = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { theme } = useTheme();
 
-    const { data: campaignDetail, isLoading } = useQuery({
+    // Fetch 3 more active donation campaigns (excluding current)
+    const { data: recommendedCampaigns, isLoading: isRecommendedLoading } = useQuery({
+        queryKey: ["recommendedDonationCampaigns", id],
+        queryFn: async () => {
+            const { data } = await axios(`${import.meta.env.VITE_API_URL}/donation-campaigns?limit=3&exclude=${id}`);
+            // Filter out paused or current campaign
+            return (data?.donations || []).filter((c) => !c.paused && c._id !== id).slice(0, 3);
+        },
+        enabled: !!id,
+    });
+
+    const {
+        data: campaignDetail,
+        isLoading,
+        refetch: refetchCampaignDetail,
+    } = useQuery({
         queryKey: ["campaignDetail", id],
         queryFn: async () => {
             const { data } = await axios(`${import.meta.env.VITE_API_URL}/donation-detail/${id}`);
@@ -36,7 +51,7 @@ const DonationCampaignDetail = () => {
     }, []);
 
     if (isLoading) {
-        return <SinglePetSkeleton />;
+        return <DonDetailsSkeleton />;
     }
 
     if (!campaignDetail || typeof campaignDetail !== "object") {
@@ -47,7 +62,16 @@ const DonationCampaignDetail = () => {
         );
     }
 
-    const { pet_image, pet_name, max_amount, last_don_date, short_desc, long_desc, added_by } = campaignDetail || {};
+    const {
+        pet_image,
+        pet_name,
+        max_amount,
+        last_don_date,
+        short_desc,
+        long_desc,
+        added_by,
+        total_donations,
+    } = campaignDetail || {};
     // Format last donation date
     let formattedLastDonDate = last_don_date;
     if (last_don_date) {
@@ -73,6 +97,9 @@ const DonationCampaignDetail = () => {
         }
         setIsOpen(open);
     };
+
+    // Check if logged in user is the campaign owner
+    const isOwnCampaign = user && added_by && user.email === added_by.email;
 
     return (
         <div className="flex flex-col min-h-screen bg-background-primary">
@@ -214,19 +241,81 @@ const DonationCampaignDetail = () => {
                     {/* Adopt button */}
                     <div className="col-span-full flex flex-col items-stretch">
                         <DonationPayModal
+                            campaignDetail={campaignDetail}
                             open={isOpen}
-                            onOpenChange={handleDonate}
+                            onOpenChange={(open) => {
+                                if (isOwnCampaign) return;
+                                if (max_amount > 0 && total_donations >= max_amount) {
+                                    import("react-toastify").then(({ toast }) => {
+                                        toast.info(
+                                            "Thank you for your generosity! This campaign has already reached its donation goal, so no further contributions are needed at this time.",
+                                            {
+                                                position: "top-center",
+                                                autoClose: 5000,
+                                                style: { minWidth: "400px", maxWidth: "600px", textAlign: "center" },
+                                            }
+                                        );
+                                    });
+                                    return;
+                                }
+                                handleDonate(open);
+                            }}
                             trigger={
                                 <Button
                                     variant="lg"
                                     className={
                                         "bg-base-rose hover:bg-base-rose-dark text-base-white py-6 px-6 cursor-pointer w-full max-w-full transition-colors duration-600 ease-in-out"
                                     }>
-                                    Donate to Campaign
+                                    {isOwnCampaign ? "You can't donate to your own campaign" : "Donate to Campaign"}
                                 </Button>
                             }
                             title={`Adopt ${pet_name}`}
+                            onSuccess={refetchCampaignDetail}
                         />
+                    </div>
+
+                    {/* Recommended Donation Campaigns Section */}
+                    <div className="col-span-full mt-8 p-6 border border-card-border-prim rounded-xl">
+                        <h2 className="text-2xl font-bold text-heading-color mb-8">Recommended Donation Campaigns</h2>
+                        {isRecommendedLoading ? (
+                            <div className="text-gray-500">Loading recommendations...</div>
+                        ) : recommendedCampaigns && recommendedCampaigns.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                                {recommendedCampaigns.map((campaign) => (
+                                    <div
+                                        key={campaign._id}
+                                        className="border border-card-border-prim rounded-lg p-4 bg-background-quaternary shadow-card-primary flex flex-col items-center transition-transform">
+                                        <img
+                                            src={pet_image}
+                                            alt={`${pet_name} image`}
+                                            className="w-full h-32 object-cover rounded-lg mb-3"
+                                        />
+
+                                        <div className="w-full">
+                                            <h3 className="text-lg font-semibold text-base-rose mb-1">
+                                                {pet_name}
+                                            </h3>
+                                            <p className="text-sm text-pg-base mb-2 line-clamp-2">
+                                                {short_desc}
+                                            </p>
+                                        </div>
+                                        <Button
+                                            variant="sm"
+                                            className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white px-4 py-2 mt-2 cursor-pointer transition-colors duration-600 ease-in-out"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                window.location.href = `/donation-detail/${campaign._id}?donate=1`;
+                                            }}>
+                                            Donate
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div>
+                                <EmptyState />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
