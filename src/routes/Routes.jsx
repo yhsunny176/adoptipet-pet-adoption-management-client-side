@@ -22,6 +22,10 @@ import AllDonationCampaigns from "@/pages/AllDonationCampaigns";
 import DonationCampaignDetail from "@/pages/DonationCampaignDetail";
 import MyDonations from "@/pages/dashboard/user/MyDonations";
 import UserRoute from "./UserRoute";
+import AdminRoute from "./AdminRoute";
+import UserList from "@/pages/dashboard/admin/UserList";
+import AllPets from "@/pages/dashboard/admin/AllPets";
+import AllDonations from "@/pages/dashboard/admin/AllDonations";
 
 const router = createBrowserRouter([
     {
@@ -59,6 +63,10 @@ const router = createBrowserRouter([
             </PrivateRoute>
         ),
         children: [
+            {
+                index: true,
+                element: <DashboardDefault />,
+            },
             {
                 path: "add-pet",
                 element: (
@@ -119,6 +127,36 @@ const router = createBrowserRouter([
                     </PrivateRoute>
                 ),
             },
+            {
+                path: "admin/all-users",
+                element: (
+                    <PrivateRoute>
+                        <AdminRoute>
+                            <UserList />
+                        </AdminRoute>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "admin/all-pets",
+                element: (
+                    <PrivateRoute>
+                        <AdminRoute>
+                            <AllPets />
+                        </AdminRoute>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "admin/all-donations",
+                element: (
+                    <PrivateRoute>
+                        <AdminRoute>
+                            <AllDonations />
+                        </AdminRoute>
+                    </PrivateRoute>
+                ),
+            },
         ],
     },
     {
@@ -166,5 +204,9 @@ const router = createBrowserRouter([
         element: <ErrorPage />,
     },
 ]);
+
+// Default dashboard child route component
+
+import DashboardDefault from "./DashboardDefault";
 
 export default router;

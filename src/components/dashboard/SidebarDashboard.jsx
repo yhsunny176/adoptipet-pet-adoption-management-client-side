@@ -15,49 +15,73 @@ import { DogIcon } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
 import useAuth from "@/hooks/useAuth";
+import useRole from "@/hooks/useRole";
+import Skeleton from "react-loading-skeleton";
 
 const SidebarDashboard = (props) => {
     const { theme } = useTheme();
     const { user } = useAuth();
+    const [role, isRoleLoading] = useRole();
 
-    const data = {
-        navMain: [
-            {
-                items: [
-                    {
-                        title: "Add a Pet",
-                        url: "/dashboard/add-pet",
-                        icon: <HugeiconsIcon icon={HeartAddIcon} />,
-                    },
-                    {
-                        title: "My Added Pets",
-                        url: `/dashboard/my-added-pets/${user?.email}`,
-                        icon: <DogIcon strokeWidth={1.25} />,
-                    },
-                    {
-                        title: "Adoption Request",
-                        url: `/dashboard/adoption-requests/${user?.email}`,
-                        icon: <HugeiconsIcon icon={FileUploadIcon} />,
-                    },
-                    {
-                        title: "Create Donation Campaigns",
-                        url: "/dashboard/create-donation-campaign",
-                        icon: <HugeiconsIcon icon={AddMoneyCircleIcon} />,
-                    },
-                    {
-                        title: "My Donation Campaigns",
-                        url: `/dashboard/my-donation-campaigns/${user?.email}`,
-                        icon: <HugeiconsIcon icon={InvoiceIcon} />,
-                    },
-                    {
-                        title: "My Donations",
-                        url: `/dashboard/my-donations/${user?.email}`,
-                        icon: <HugeiconsIcon icon={Payment02Icon} />,
-                    },
-                ],
-            },
-        ],
-    };
+    if (isRoleLoading) {
+        return <Skeleton />;
+    }
+
+    // Common menu items for both user and admin
+    const commonMenuItems = [
+        {
+            title: "Add a Pet",
+            url: "/dashboard/add-pet",
+            icon: <HugeiconsIcon icon={HeartAddIcon} />,
+        },
+        {
+            title: "My Added Pets",
+            url: `/dashboard/my-added-pets/${user?.email}`,
+            icon: <DogIcon strokeWidth={1.25} />,
+        },
+        {
+            title: "Adoption Request",
+            url: `/dashboard/adoption-requests/${user?.email}`,
+            icon: <HugeiconsIcon icon={FileUploadIcon} />,
+        },
+        {
+            title: "Create Donation Campaigns",
+            url: "/dashboard/create-donation-campaign",
+            icon: <HugeiconsIcon icon={AddMoneyCircleIcon} />,
+        },
+        {
+            title: "My Donation Campaigns",
+            url: `/dashboard/my-donation-campaigns/${user?.email}`,
+            icon: <HugeiconsIcon icon={InvoiceIcon} />,
+        },
+        {
+            title: "My Donations",
+            url: `/dashboard/my-donations/${user?.email}`,
+            icon: <HugeiconsIcon icon={Payment02Icon} />,
+        },
+    ];
+
+    // Extra admin menu items
+    const adminMenuItems = [
+        {
+            title: "Users",
+            url: "/dashboard/admin/all-users",
+            icon: <HugeiconsIcon icon={FileUploadIcon} />,
+        },
+        {
+            title: "All Pets",
+            url: "/dashboard/admin/all-pets",
+            icon: <DogIcon strokeWidth={1.25} />,
+        },
+        {
+            title: "All Donations",
+            url: "/dashboard/admin/all-donations",
+            icon: <HugeiconsIcon icon={Payment02Icon} />,
+        },
+    ];
+
+    // Choose menu items based on role
+    const menuItems = role === "admin" ? [...commonMenuItems, ...adminMenuItems] : commonMenuItems;
 
     return (
         <Sidebar {...props}>
@@ -75,27 +99,24 @@ const SidebarDashboard = (props) => {
                 </div>
             </div>
             <SidebarContent className={"py-8 px-3 bg-sidebar-secondary"}>
-                {/* SidebarGroup for each parent. */}
-                {data.navMain.map((item, idx) => (
-                    <SidebarMenu key={item.items?.[0]?.title || idx}>
-                        {item.items.map((child, cidx) => (
-                            <SidebarMenuItem key={child.url || child.title || cidx}>
-                                <NavLink
-                                    to={child.url}
-                                    className={({ isActive }) =>
-                                        `flex items-center gap-4 rounded-md px-3 py-2 text-md transition-colors duration-500 ease-in-out ${
-                                            isActive
-                                                ? "bg-sidebar-nav-hover text-sidebar-navitem-text-hover font-semibold"
-                                                : "text-sidebar-navitem-text hover:bg-sidebar-nav-hover hover:font-semibold"
-                                        }`
-                                    }>
-                                    <span className="mb-1">{child.icon}</span>
-                                    {child.title}
-                                </NavLink>
-                            </SidebarMenuItem>
-                        ))}
-                    </SidebarMenu>
-                ))}
+                <SidebarMenu>
+                    {menuItems.map((child, cidx) => (
+                        <SidebarMenuItem key={child.url || child.title || cidx}>
+                            <NavLink
+                                to={child.url}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-4 rounded-md px-3 py-2 text-md transition-colors duration-500 ease-in-out ${
+                                        isActive
+                                            ? "bg-sidebar-nav-hover text-sidebar-navitem-text-hover font-semibold"
+                                            : "text-sidebar-navitem-text hover:bg-sidebar-nav-hover hover:font-semibold"
+                                    }`
+                                }>
+                                <span className="mb-1">{child.icon}</span>
+                                {child.title}
+                            </NavLink>
+                        </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
             </SidebarContent>
             <SidebarFooter className="py-6">
                 <LogoutButton />
