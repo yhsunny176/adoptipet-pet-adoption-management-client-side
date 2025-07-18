@@ -20,6 +20,7 @@ import MyDonationCampaigns from "@/pages/dashboard/user/MyDonationCampaigns";
 import UpdateCampaign from "@/pages/dashboard/user/UpdateCampaign";
 import AllDonationCampaigns from "@/pages/AllDonationCampaigns";
 import DonationCampaignDetail from "@/pages/DonationCampaignDetail";
+import MyDonations from "@/pages/dashboard/user/MyDonations";
 
 const router = createBrowserRouter([
     {
@@ -92,6 +93,14 @@ const router = createBrowserRouter([
                 element: (
                     <PrivateRoute>
                         <MyDonationCampaigns />
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "my-donations/:email",
+                element: (
+                    <PrivateRoute>
+                        <MyDonations />
                     </PrivateRoute>
                 ),
             },

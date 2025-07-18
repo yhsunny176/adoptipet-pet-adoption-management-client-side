@@ -19,14 +19,13 @@ import EmptyState from "@/components/EmptyState";
 import DonatorsModal from "@/components/modal/DonatorsModal";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
-const MyDonationCampaigns = () => {
+const MyDonations = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
     const [sort, setSort] = useState([]);
     const { theme } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedCampaignId, setSelectedCampaignId] = useState(null);
 
     const {
         data: myDonInfo = [],
@@ -40,23 +39,8 @@ const MyDonationCampaigns = () => {
         },
     });
 
-    // Fetch donors for selected campaign
-    const {
-        data: donors = [],
-        isLoading: donorsLoading,
-        isError: donorsError,
-    } = useQuery({
-        queryKey: ["donors", selectedCampaignId],
-        queryFn: async () => {
-            if (!selectedCampaignId) return [];
-            const res = await axiosSecure(`/dashboard/donors-list/${selectedCampaignId}`);
-            return Array.isArray(res.data) ? res.data : [];
-        },
-        enabled: !!selectedCampaignId,
-    });
-
     // SweetAlert for Login warning before adoption request
-    const handleViewClick = async (open, campaignId) => {
+    const handleUpdateClick = async (open) => {
         if (!user) {
             const Swal = (await import("sweetalert2")).default;
             Swal.fire({
@@ -67,7 +51,6 @@ const MyDonationCampaigns = () => {
             });
             return;
         }
-        setSelectedCampaignId(campaignId);
         setIsOpen(open);
     };
 
@@ -174,12 +157,11 @@ const MyDonationCampaigns = () => {
                             onClick={handlePauseToggle}>
                             {donation.paused ? "Unpause" : "Pause"}
                         </Button>
-
                         {/* View Donators button */}
                         <div className="col-span-full flex flex-col items-stretch">
                             <DonatorsModal
-                                open={isOpen && selectedCampaignId === donation._id}
-                                onOpenChange={(open) => handleViewClick(open, donation._id)}
+                                open={isOpen}
+                                onOpenChange={handleUpdateClick}
                                 trigger={
                                     <Button
                                         variant="lg"
@@ -189,10 +171,8 @@ const MyDonationCampaigns = () => {
                                         View Donators
                                     </Button>
                                 }
-                                title={`Donors for the ${donation.pet_name}:`}
-                                donors={donors}
-                                donorsLoading={donorsLoading}
-                                donorsError={donorsError}
+                                title={`Donators for the ${donation.pet_name}:`}
+                                campaignId={donation._id}
                             />
                         </div>
                     </div>
@@ -336,4 +316,4 @@ const MyDonationCampaigns = () => {
     );
 };
 
-export default MyDonationCampaigns;
+export default MyDonations;
