@@ -10,11 +10,14 @@ import { useParams } from "react-router";
 const UpdatePetData = () => {
     const { id } = useParams();
 
-    const { data: petInfo, isLoading} = useQuery({
+    const {
+        data: petInfo,
+        isLoading,
+        refetch,
+    } = useQuery({
         queryKey: ["singlePet", id],
         queryFn: async () => {
             const { data } = await axiosSecure(`${import.meta.env.VITE_API_URL}/pet-detail/${id}`);
-
             return data;
         },
     });
@@ -45,7 +48,7 @@ const UpdatePetData = () => {
 
                 {/* Update Pet Form */}
                 <div className="max-w-11/12 xl:max-w-8/12 mx-auto py-16">
-                    <UpdatePetForm petInfo={petInfo} />
+                    <UpdatePetForm petInfo={petInfo} refetch={refetch} />
                 </div>
             </div>
         </div>

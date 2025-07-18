@@ -324,3 +324,13 @@ label {
 .StripeElementFpx {
   padding: 0;
 }
+
+
+/* Progress Bar */
+.CircularProgressbar-text {
+  dominant-baseline: middle;
+  alignment-baseline: middle;
+  text-anchor: middle;
+  font-size: 2rem;
+  transform: translateY(2%);
+}

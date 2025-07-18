@@ -17,6 +17,7 @@ import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
 import TablePagination from "@/components/pagination/TablePagination";
 import EmptyState from "@/components/EmptyState";
 import DonatorsModal from "@/components/modal/DonatorsModal";
+import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 const MyDonationCampaigns = () => {
     const { user } = useAuth();
@@ -75,6 +76,38 @@ const MyDonationCampaigns = () => {
         {
             header: "Maximum Donation Amount",
             accessorKey: "max_amount",
+        },
+        {
+            header: "Donation Progress",
+            id: "progress",
+            cell: (info) => {
+                const donation = info.row.original;
+                const max = Number(donation.max_amount) || 0;
+                const current = Number(donation.total_donations) || 0;
+                const percent = max > 0 ? Math.min(100, Math.round((current / max) * 100)) : 0;
+                return (
+                    <div className="w-full min-w-[120px] flex items-center justify-center gap-4">
+                        <div className="w-15 h-15 flex items-center justify-center">
+                            <CircularProgressbar
+                                value={percent}
+                                text={`${percent}%`}
+                                styles={buildStyles({
+                                    pathColor: "#22c55e",
+                                    textColor: "#22c55e",
+                                    trailColor: "#e5e7eb",
+                                    textSize: "2rem",
+                                })}
+                            />
+                        </div>
+                        <div className="flex flex-col items-end justify-center text-right min-w-16">
+                            <span className="text-base text-green-primary font-bold">
+                                {current} / {max}
+                            </span>
+                        </div>
+                    </div>
+                );
+            },
+            enableSorting: false,
         },
         {
             header: "Pause/Active Status",
@@ -186,7 +219,9 @@ const MyDonationCampaigns = () => {
                                                         <th
                                                             key={header.id}
                                                             className={`px-8 pt-8 pb-6 bg-background-quaternary border-b border-card-border-prim text-heading-color font-bold font-pg text-md uppercase cursor-pointer select-none ${
-                                                                header.id === "actions" ? "text-left" : "text-center"
+                                                                header.id === "actions"
+                                                                    ? "text-donation_left"
+                                                                    : "text-center"
                                                             }`}
                                                             onClick={
                                                                 header.column.getCanSort()
@@ -243,7 +278,7 @@ const MyDonationCampaigns = () => {
                                                                     key={cell.id}
                                                                     className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base capitalize font-medium ${
                                                                         cell.column.id === "actions"
-                                                                            ? "text-left"
+                                                                            ? "text-donation_left"
                                                                             : "text-center"
                                                                     }`}>
                                                                     {flexRender(

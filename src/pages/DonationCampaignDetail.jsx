@@ -16,13 +16,14 @@ const DonationCampaignDetail = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { theme } = useTheme();
 
-    // Fetch 3 more active donation campaigns (excluding current)
+    // Fetch at least 5 active donation campaigns (excluding current)
     const { data: recommendedCampaigns, isLoading: isRecommendedLoading } = useQuery({
         queryKey: ["recommendedDonationCampaigns", id],
         queryFn: async () => {
-            const { data } = await axios(`${import.meta.env.VITE_API_URL}/donation-campaigns?limit=3&exclude=${id}`);
-            // Filter out paused or current campaign
-            return (data?.donations || []).filter((c) => !c.paused && c._id !== id).slice(0, 3);
+            // Request more than 5 to ensure enough after filtering
+            const { data } = await axios(`${import.meta.env.VITE_API_URL}/donation-campaigns?limit=8&exclude=${id}`);
+            // Filter out paused or current campaign, then slice to 5
+            return (data?.donations || []).filter((c) => !c.paused && c._id !== id).slice(0, 5);
         },
         enabled: !!id,
     });
@@ -62,16 +63,8 @@ const DonationCampaignDetail = () => {
         );
     }
 
-    const {
-        pet_image,
-        pet_name,
-        max_amount,
-        last_don_date,
-        short_desc,
-        long_desc,
-        added_by,
-        total_donations,
-    } = campaignDetail || {};
+    const { pet_image, pet_name, max_amount, last_don_date, short_desc, long_desc, added_by, total_donations } =
+        campaignDetail || {};
     // Format last donation date
     let formattedLastDonDate = last_don_date;
     if (last_don_date) {
@@ -244,29 +237,39 @@ const DonationCampaignDetail = () => {
                             campaignDetail={campaignDetail}
                             open={isOpen}
                             onOpenChange={(open) => {
-                                if (isOwnCampaign) return;
-                                if (max_amount > 0 && total_donations >= max_amount) {
-                                    import("react-toastify").then(({ toast }) => {
-                                        toast.info(
-                                            "Thank you for your generosity! This campaign has already reached its donation goal, so no further contributions are needed at this time.",
-                                            {
-                                                position: "top-center",
-                                                autoClose: 5000,
-                                                style: { minWidth: "400px", maxWidth: "600px", textAlign: "center" },
-                                            }
-                                        );
-                                    });
-                                    return;
-                                }
+                                if (isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)) return;
                                 handleDonate(open);
                             }}
                             trigger={
                                 <Button
                                     variant="lg"
-                                    className={
-                                        "bg-base-rose hover:bg-base-rose-dark text-base-white py-6 px-6 cursor-pointer w-full max-w-full transition-colors duration-600 ease-in-out"
-                                    }>
-                                    {isOwnCampaign ? "You can't donate to your own campaign" : "Donate to Campaign"}
+                                    disabled={isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)}
+                                    className={`w-full max-w-full py-6 px-6 font-semibold transition-colors duration-300 ease-in-out
+                                        ${
+                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                                : "bg-base-rose hover:bg-base-rose-dark text-base-white cursor-pointer"
+                                        }
+                                    `}
+                                    style={{
+                                        backgroundColor:
+                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                                ? "#e5e7eb"
+                                                : undefined,
+                                        color:
+                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                                ? "#6b7280"
+                                                : undefined,
+                                        cursor:
+                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                                ? "not-allowed"
+                                                : "pointer",
+                                    }}>
+                                    {isOwnCampaign
+                                        ? "You can't donate to your own campaign"
+                                        : max_amount > 0 && total_donations >= max_amount
+                                        ? "Donation Goal Reached"
+                                        : "Donate to Campaign"}
                                 </Button>
                             }
                             title={`Adopt ${pet_name}`}
@@ -286,17 +289,17 @@ const DonationCampaignDetail = () => {
                                         key={campaign._id}
                                         className="border border-card-border-prim rounded-lg p-4 bg-background-quaternary shadow-card-primary flex flex-col items-center transition-transform">
                                         <img
-                                            src={pet_image}
-                                            alt={`${pet_name} image`}
+                                            src={campaign.pet_image}
+                                            alt={`${campaign.pet_name} image`}
                                             className="w-full h-32 object-cover rounded-lg mb-3"
                                         />
 
                                         <div className="w-full">
                                             <h3 className="text-lg font-semibold text-base-rose mb-1">
-                                                {pet_name}
+                                                {campaign.pet_name}
                                             </h3>
                                             <p className="text-sm text-pg-base mb-2 line-clamp-2">
-                                                {short_desc}
+                                                {campaign.short_desc}
                                             </p>
                                         </div>
                                         <Button
