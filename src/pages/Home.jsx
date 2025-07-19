@@ -1,12 +1,14 @@
 import Banner from "@/components/banner/Banner";
-import PetCategoryButtons from "@/components/PetCategoryButtons";
+import PetCategoryButtons from "@/components/buttons-custom/PetCategoryButtons";
+import CallToAction from "@/components/sections/CallToAction";
+import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-
 
 const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const navigate = useNavigate();
+    const { theme } = useTheme();
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
@@ -15,15 +17,35 @@ const Home = () => {
 
     return (
         <div>
-            <Banner />
-            <div className="py-8 flex justify-center bg-background-tertiary">
-                <div className="max-w-11/12 w-full overflow-x-auto scrollbar-hide">
-                    <PetCategoryButtons
-                        onCategorySelect={handleCategorySelect}
-                        selectedCategory={selectedCategory}
-                    />
+            <section className="py-12 bg-background-primary">
+                <Banner />
+            </section>
+            <section>
+                <div className="py-20 flex flex-col bg-background-tertiary">
+                    <div className="flex-1 max-w-11/12 mx-auto w-full overflow-x-auto">
+                        <div className="space-y-6">
+                            <h2 className="text-4xl font-bold text-center text-heading-color">
+                                Explore Pet Categories
+                            </h2>
+                            <p className="text-center text-base text-pg-base mb-4">
+                                Find your perfect companion by browsing different pet categories available for adoption.
+                            </p>
+                        </div>
+                        <PetCategoryButtons
+                            onCategorySelect={handleCategorySelect}
+                            selectedCategory={selectedCategory}
+                        />
+                    </div>
                 </div>
-            </div>
+            </section>
+            <section
+                className={
+                    theme === "light"
+                        ? "flex flex-col min-h-max bg-blue-bg py-24"
+                        : "flex flex-col min-h-max bg-background-secondary py-24"
+                }>
+                <CallToAction />
+            </section>
         </div>
     );
 };

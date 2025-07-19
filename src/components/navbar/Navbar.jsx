@@ -31,10 +31,10 @@ const Navbar = () => {
     return (
         <div>
             <nav className="w-full py-8 bg-background-secondary">
-                <div className="nav-container w-full max-w-screen-2xl mx-auto px-2 sm:px-4">
+                <div className="nav-container w-full max-w-11/12 md:max-w-10/12 xl:max-w-9/12 mx-auto">
                     <NavigationMenu className="flex items-center w-full" viewport={false}>
                         {/* Left side: Logo and Nav Links */}
-                        <div className="flex items-center lg:gap-12 xl:gap-60 2xl:gap-96">
+                        <div className="flex items-center lg:gap-8 xl:gap-20 2xl:gap-50">
                             {/* Logo */}
                             <NavigationMenuList>
                                 <NavigationMenuItem>
@@ -59,28 +59,28 @@ const Navbar = () => {
                                 <NavigationMenuItem>
                                     <NavLink
                                         to="/"
-                                        className="hidden lg:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
+                                        className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                         Home
                                     </NavLink>
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavLink
                                         to="/pet-listing"
-                                        className="hidden lg:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
+                                        className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                         Pet Listing
                                     </NavLink>
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavLink
                                         to="/donation-campaigns"
-                                        className="hidden lg:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
+                                        className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                         Donation Campaigns
                                     </NavLink>
                                 </NavigationMenuItem>
                                 <NavigationMenuItem>
                                     <NavLink
                                         to="/contact"
-                                        className="hidden lg:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
+                                        className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                         Contact
                                     </NavLink>
                                 </NavigationMenuItem>
@@ -110,7 +110,7 @@ const Navbar = () => {
                                 </NavigationMenuItem>
 
                                 {/* Hamburger Menu */}
-                                <div className="flex items-center lg:hidden">
+                                <div className="flex items-center xl:hidden">
                                     <Sheet open={mobMenuOpen} onOpenChange={setMobMenuOpen}>
                                         <SheetTrigger asChild>
                                             <Button

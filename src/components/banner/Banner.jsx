@@ -14,8 +14,8 @@ import { useTheme } from "@/hooks/useTheme";
 const Banner = () => {
     const { theme } = useTheme();
     return (
-        <div className="min-h-screen bg-background-primary relative">
-            <div className="py-12 lg:py-4 lg:grid lg:grid-cols-12 lg:max-w-11/12 lg:mx-auto lg:gap-4 lg:items-center xl:max-w-11/12 xl:gap-4 xl:mx-auto 2xl:max-w-10/12 2xl:gap-4 relative z-0">
+        <div className="flex flex-1 relative">
+            <div className="py-12 lg:py-4 lg:grid lg:grid-cols-12 lg:max-w-10/12 lg:mx-auto lg:gap-4 lg:items-center xl:max-w-9/12 xl:gap-4 xl:mx-auto 2xl:max-w-9/12 2xl:gap-4 relative z-0">
                 <div className="hidden lg:block absolute lg:-right-32 lg:-z-10 w-auto h-full">
                     {theme === "light" ? (
                         <img src={bgElems} className="w-full h-full" alt="pet elements" />
@@ -31,10 +31,10 @@ const Banner = () => {
                         </p>
                         {/* Title & Subtitle */}
                         <div className="sm:max-w-10/12 sm:mx-auto lg:*:text-left lg:max-w-full lg:mx-0">
-                            <h1 className="text-3xl font-semibold text-center leading-9 text-heading-color mb-6 sm:text-4xl sm:leading-12 md:text-6xl md:leading-20 lg:text-5xl lg:leading-14 xl:text-6xl xl:leading-tight 2xl:text-7xl">
+                            <h1 className="text-3xl font-semibold text-center leading-9 text-heading-color mb-6 sm:text-4xl sm:leading-12 md:text-4xl md:leading-20 lg:text-4xl lg:leading-14 xl:text-5xl xl:leading-tight 2xl:text-6xl">
                                 Every Pet Deserves a Loving Forever Home
                             </h1>
-                            <p className="text-center leading-pg-base text-pg-base max-w-11/12 mx-auto lg:mx-0 lg:max-w-10/12 lg:leading-pg-lg xl:text-lg xl:max-w-3xl 2xl:text-xl">
+                            <p className="text-center leading-pg-base text-pg-base max-w-11/12 mx-auto lg:mx-0 lg:max-w-10/12 lg:leading-pg-lg xl:text-md xl:max-w-2xl 2xl:text-xl">
                                 We meticulously select and manage buyers and sellers to ensure that each pet we deliver
                                 is happy, healthy, and ready to become a cherished member of your family.
                             </p>
