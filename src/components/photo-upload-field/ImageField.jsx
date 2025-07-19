@@ -3,6 +3,7 @@ import { useField, useFormikContext } from "formik";
 import uploadImageCloudinary from "@/utils/cloudinary__upload__";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01FreeIcons, Image02Icon } from "@hugeicons/core-free-icons/index";
+import Loader from "../loader/Loader";
 
 const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]" }) => {
     const [meta] = useField(nameFile);
@@ -16,15 +17,15 @@ const ImageField = ({ nameFile, nameURL, label, containerHeight = "min-h-[300px]
     const [removed, setRemoved] = useState(false);
     const canceledRef = useRef(false);
 
-useEffect(() => {
-    if (!meta.value) {
-        setImagePreview(null);
-        setUploadSuccess(false);
-        setUploadError("");
-        setUploading(false);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-}, [meta.value]);
+    useEffect(() => {
+        if (!meta.value) {
+            setImagePreview(null);
+            setUploadSuccess(false);
+            setUploadError("");
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    }, [meta.value]);
 
     // Handle Image Change in Formik Field
     const handleImageChange = async (event) => {
@@ -119,16 +120,16 @@ useEffect(() => {
                     tabIndex={-1}
                     aria-disabled={!!imagePreview || uploading}
                     style={!imagePreview && !uploading ? {} : { pointerEvents: "none" }}>
-                    {imagePreview ? (
+                    {uploading ? (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/10">
+                            <span className=" text-base font-semibold text-black-base bg-base-white bg-opacity-80 px-4 py-2 rounded-lg">
+                                <Loader/>
+                                Uploading Image...
+                            </span>
+                        </div>
+                    ) : imagePreview ? (
                         <div className="absolute inset-0 flex items-center justify-center">
                             <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-2" />
-                            {uploading && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60">
-                                    <span className="text-base font-semibold text-navitem-base">
-                                        Uploading image...
-                                    </span>
-                                </div>
-                            )}
                         </div>
                     ) : (
                         <div className="text-center h-full flex flex-col items-center justify-center">
@@ -143,7 +144,6 @@ useEffect(() => {
                         </div>
                     )}
                 </label>
-                {/* Cross button absolutely positioned outside the label so it's not affected by label opacity */}
                 {imagePreview && (
                     <button
                         type="button"
@@ -161,12 +161,12 @@ useEffect(() => {
             </div>
             {meta.touched && meta.error && <div className="text-red-medium font-bold text-sm mt-1">{meta.error}</div>}
             {!imagePreview && uploading && (
-                <div className="mt-2 font-pg font-semibold text-sm text-navitem-base">
+                <div className="mt-2 font-pগ font-semibold text-sm text-black-base">
                     <p>Uploading Image</p>
                 </div>
             )}
             {uploadSuccess && !uploading && (
-                <div className="mt-2 font-semibold text-sm text-green-600">Image uploaded successfully!</div>
+                <div className="mt-2 font-semibold text-sm text-green-primary">Image uploaded successfully!</div>
             )}
             {uploadError && !uploading && <div className="mt-2 font-semibold text-sm text-red-base">{uploadError}</div>}
             {canceled && <div className="mt-2 font-semibold text-sm text-red-base">Upload canceled</div>}
