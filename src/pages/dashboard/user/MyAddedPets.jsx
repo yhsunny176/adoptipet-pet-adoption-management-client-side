@@ -302,6 +302,7 @@ const MyAddedPets = () => {
                     </div>
                 </div>
             </div>
+            
             {/* Delete Modal */}
             <DeleteModal
                 isOpen={!!deleteData}

@@ -48,9 +48,8 @@ const AllDonationCampaigns = () => {
     // Flatten all campaigns from all pages
     const allDonations = allDonationData ? allDonationData.pages.flatMap((page) => page.donations) : [];
 
-    // Filter only active (unpaused) campaigns and sort by created_at
-    const activeDonations = allDonations.filter((don) => !don.paused);
-    const sortedCampaigns = activeDonations.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // Show all campaigns
+    const sortedCampaigns = allDonations.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     // Intersection observer effect
     useEffect(() => {

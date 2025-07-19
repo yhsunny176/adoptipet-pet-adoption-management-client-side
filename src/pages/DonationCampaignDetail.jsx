@@ -93,6 +93,8 @@ const DonationCampaignDetail = () => {
 
     // Check if logged in user is the campaign owner
     const isOwnCampaign = user && added_by && user.email === added_by.email;
+    // Check if campaign is paused
+    const isPaused = campaignDetail?.paused;
 
     return (
         <div className="flex flex-col min-h-screen bg-background-primary">
@@ -237,36 +239,47 @@ const DonationCampaignDetail = () => {
                             campaignDetail={campaignDetail}
                             open={isOpen}
                             onOpenChange={(open) => {
-                                if (isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)) return;
+                                if (isOwnCampaign || (max_amount > 0 && total_donations >= max_amount) || isPaused)
+                                    return;
                                 handleDonate(open);
                             }}
                             trigger={
                                 <Button
                                     variant="lg"
-                                    disabled={isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)}
+                                    disabled={
+                                        isOwnCampaign || (max_amount > 0 && total_donations >= max_amount) || isPaused
+                                    }
                                     className={`w-full max-w-full py-6 px-6 font-semibold transition-colors duration-300 ease-in-out
-                                        ${
-                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
-                                                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                                : "bg-base-rose hover:bg-base-rose-dark text-base-white cursor-pointer"
-                                        }
-                                    `}
+                                    ${
+                                        isOwnCampaign || (max_amount > 0 && total_donations >= max_amount) || isPaused
+                                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                            : "bg-base-rose hover:bg-base-rose-dark text-base-white cursor-pointer"
+                                    }
+                                `}
                                     style={{
                                         backgroundColor:
-                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                            isOwnCampaign ||
+                                            (max_amount > 0 && total_donations >= max_amount) ||
+                                            isPaused
                                                 ? "#e5e7eb"
                                                 : undefined,
                                         color:
-                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                            isOwnCampaign ||
+                                            (max_amount > 0 && total_donations >= max_amount) ||
+                                            isPaused
                                                 ? "#6b7280"
                                                 : undefined,
                                         cursor:
-                                            isOwnCampaign || (max_amount > 0 && total_donations >= max_amount)
+                                            isOwnCampaign ||
+                                            (max_amount > 0 && total_donations >= max_amount) ||
+                                            isPaused
                                                 ? "not-allowed"
                                                 : "pointer",
                                     }}>
                                     {isOwnCampaign
                                         ? "You can't donate to your own campaign"
+                                        : isPaused
+                                        ? "Campaign Paused"
                                         : max_amount > 0 && total_donations >= max_amount
                                         ? "Donation Goal Reached"
                                         : "Donate to Campaign"}
@@ -284,35 +297,46 @@ const DonationCampaignDetail = () => {
                             <div className="text-gray-500">Loading recommendations...</div>
                         ) : recommendedCampaigns && recommendedCampaigns.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                                {recommendedCampaigns.map((campaign) => (
-                                    <div
-                                        key={campaign._id}
-                                        className="border border-card-border-prim rounded-lg p-4 bg-background-quaternary shadow-card-primary flex flex-col items-center transition-transform">
-                                        <img
-                                            src={campaign.pet_image}
-                                            alt={`${campaign.pet_name} image`}
-                                            className="w-full h-32 object-cover rounded-lg mb-3"
-                                        />
+                                {recommendedCampaigns.map((campaign) => {
+                                    const isRecPaused = campaign.paused;
+                                    return (
+                                        <div
+                                            key={campaign._id}
+                                            className="border border-card-border-prim rounded-lg p-4 bg-background-quaternary shadow-card-primary flex flex-col items-center transition-transform">
+                                            <img
+                                                src={campaign.pet_image}
+                                                alt={`${campaign.pet_name} image`}
+                                                className="w-full h-32 object-cover rounded-lg mb-3"
+                                            />
 
-                                        <div className="w-full">
-                                            <h3 className="text-lg font-semibold text-base-rose mb-1">
-                                                {campaign.pet_name}
-                                            </h3>
-                                            <p className="text-sm text-pg-base mb-2 line-clamp-2">
-                                                {campaign.short_desc}
-                                            </p>
+                                            <div className="w-full">
+                                                <h3 className="text-lg font-semibold text-base-rose mb-1">
+                                                    {campaign.pet_name}
+                                                </h3>
+                                                <p className="text-sm text-pg-base mb-2 line-clamp-2">
+                                                    {campaign.short_desc}
+                                                </p>
+                                            </div>
+                                            <Button
+                                                variant="sm"
+                                                disabled={isRecPaused}
+                                                className={`w-full px-4 py-2 mt-2 transition-colors duration-600 ease-in-out
+                                                    ${
+                                                        isRecPaused
+                                                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                                            : "bg-base-rose hover:bg-base-rose-dark text-base-white cursor-pointer"
+                                                    }
+                                                `}
+                                                onClick={(e) => {
+                                                    if (isRecPaused) return;
+                                                    e.stopPropagation();
+                                                    window.location.href = `/donation-detail/${campaign._id}?donate=1`;
+                                                }}>
+                                                {isRecPaused ? "Campaign Paused" : "Donate"}
+                                            </Button>
                                         </div>
-                                        <Button
-                                            variant="sm"
-                                            className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white px-4 py-2 mt-2 cursor-pointer transition-colors duration-600 ease-in-out"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                window.location.href = `/donation-detail/${campaign._id}?donate=1`;
-                                            }}>
-                                            Donate
-                                        </Button>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         ) : (
                             <div>

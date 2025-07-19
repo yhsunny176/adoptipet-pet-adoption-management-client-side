@@ -38,7 +38,7 @@ const MyDonations = () => {
         },
     });
 
-    // Delete pet handler
+    //Refund handler
     const handleRefund = async (donId) => {
         try {
             const { data } = await axiosSecure.delete(`/dashboard/donation-delete/${donId}`);

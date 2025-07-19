@@ -34,8 +34,6 @@ const UserList = () => {
         },
     });
 
-    // Remove debug log in production
-
     //Mutation for updating adopt status
     const updateRoleMutation = useMutation({
         mutationFn: async ({ email, role }) => {

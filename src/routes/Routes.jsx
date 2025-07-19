@@ -210,6 +210,16 @@ const router = createBrowserRouter([
         element: <DonationCampaignDetail />,
     },
     {
+        path: "/admin/update-donation-campaign/:id",
+        element: (
+            <PrivateRoute>
+                <AdminRoute>
+                    <UpdateCampaign />
+                </AdminRoute>
+            </PrivateRoute>
+        ),
+    },
+    {
         path: "/*",
         element: <ErrorPage />,
     },

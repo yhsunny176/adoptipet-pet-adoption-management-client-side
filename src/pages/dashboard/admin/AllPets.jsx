@@ -14,7 +14,6 @@ import { toast } from "react-toastify";
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
-import AddedPetsSkeleton from "@/components/loader/Skeletons/AddedPetsSkeleton";
 import TablePagination from "@/components/pagination/TablePagination";
 import Swal from "sweetalert2";
 import EmptyState from "@/components/EmptyState";

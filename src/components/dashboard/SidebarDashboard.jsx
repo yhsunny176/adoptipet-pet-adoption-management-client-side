@@ -9,9 +9,11 @@ import {
     FileUploadIcon,
     HeartAddIcon,
     InvoiceIcon,
+    MoneySavingJarIcon,
     Payment02Icon,
+    UserMultiple02Icon,
 } from "@hugeicons/core-free-icons/index";
-import { DogIcon } from "lucide-react";
+import { DogIcon, Rabbit } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
 import useAuth from "@/hooks/useAuth";
@@ -66,17 +68,17 @@ const SidebarDashboard = (props) => {
         {
             title: "Users",
             url: "/dashboard/admin/all-users",
-            icon: <HugeiconsIcon icon={FileUploadIcon} />,
+            icon: <HugeiconsIcon icon={UserMultiple02Icon} />,
         },
         {
             title: "All Pets",
             url: "/dashboard/admin/all-pets",
-            icon: <DogIcon strokeWidth={1.25} />,
+            icon: <Rabbit strokeWidth={1.25}/>,
         },
         {
             title: "All Donations",
             url: "/dashboard/admin/all-donations",
-            icon: <HugeiconsIcon icon={Payment02Icon} />,
+            icon: <HugeiconsIcon icon={MoneySavingJarIcon} />,
         },
     ];
 
