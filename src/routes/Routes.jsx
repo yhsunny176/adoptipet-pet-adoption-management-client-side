@@ -182,6 +182,16 @@ const router = createBrowserRouter([
         ),
     },
     {
+        path: "/admin/pet-update/:id",
+        element: (
+            <PrivateRoute>
+                <AdminRoute>
+                    <UpdatePetData />
+                </AdminRoute>
+            </PrivateRoute>
+        ),
+    },
+    {
         path: "/update-donation-campaign/:id",
         element: (
             <PrivateRoute>

@@ -231,7 +231,7 @@ const UserList = () => {
                                                             .map((cell) => (
                                                                 <td
                                                                     key={cell.id}
-                                                                    className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base capitalize font-medium ${
+                                                                    className={`px-5 py-5 border-b border-card-border-prim text-md text-pg-base font-medium ${
                                                                         cell.column.id === "actions"
                                                                             ? "text-left"
                                                                             : "text-center"

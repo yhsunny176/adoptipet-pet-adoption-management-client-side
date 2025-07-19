@@ -44,7 +44,7 @@ const MyAddedPets = () => {
     // Mutation for updating adopt status
     const updateAdoptStatusMutation = useMutation({
         mutationFn: async (petId) => {
-            return axiosSecure.patch(`/adopt-status-update/${petId}`);
+            return axiosSecure.patch(`/adopt-status-update/${petId}`, { adopted: true });
         },
         onSuccess: () => {
             refetch();
