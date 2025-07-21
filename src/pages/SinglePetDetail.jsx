@@ -65,8 +65,6 @@ const SinglePetDetail = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-background-primary">
-            <Navbar />
-
             <div className="space-y-4 w-full max-w-11/12 mx-auto pt-8 pb-2 px-2 flex flex-col items-center text-center xl:text-left xl:flex-col xl:items-start sm:px-4 md:px-8">
                 <h1 className="text-2xl sm:text-3xl font-medium text-heading-color">Pet Details</h1>
                 <p className="text-pg-base">Learn more about the pet you want to adopt below. Happy Petting to you!</p>

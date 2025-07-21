@@ -26,6 +26,8 @@ import AdminRoute from "./AdminRoute";
 import UserList from "@/pages/dashboard/admin/UserList";
 import AllPets from "@/pages/dashboard/admin/AllPets";
 import AllDonations from "@/pages/dashboard/admin/AllDonations";
+import DashboardDefault from "./DashboardDefault";
+import ForgetPassword from "@/pages/ForgetPassword";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +38,26 @@ const router = createBrowserRouter([
                 index: true,
                 path: "/",
                 element: <Home />,
+            },
+            {
+                path: "/donation-campaigns",
+                element: <AllDonationCampaigns />,
+            },
+            {
+                path: "/category-pets/:category",
+                element: <CategoryPetsPage />,
+            },
+            {
+                path: "/pet-listing",
+                element: <PetListing />,
+            },
+            {
+                path: "/pet-detail/:id",
+                element: <SinglePetDetail />,
+            },
+            {
+                path: "/donation-detail/:id",
+                element: <DonationCampaignDetail />,
             },
         ],
     },
@@ -160,18 +182,6 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: "/category-pets/:category",
-        element: <CategoryPetsPage />,
-    },
-    {
-        path: "/pet-listing",
-        element: <PetListing />,
-    },
-    {
-        path: "/pet-detail/:id",
-        element: <SinglePetDetail />,
-    },
-    {
         path: "/pet-update/:id",
         element: (
             <PrivateRoute>
@@ -202,14 +212,6 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: "/donation-campaigns",
-        element: <AllDonationCampaigns />,
-    },
-    {
-        path: "/donation-detail/:id",
-        element: <DonationCampaignDetail />,
-    },
-    {
         path: "/admin/update-donation-campaign/:id",
         element: (
             <PrivateRoute>
@@ -220,13 +222,13 @@ const router = createBrowserRouter([
         ),
     },
     {
+        path: "/forget-password",
+        element: <ForgetPassword />,
+    },
+    {
         path: "/*",
         element: <ErrorPage />,
     },
 ]);
-
-// Default dashboard child route component
-
-import DashboardDefault from "./DashboardDefault";
 
 export default router;

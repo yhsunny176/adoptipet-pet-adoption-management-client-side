@@ -9,6 +9,7 @@ import {
     signInWithPopup,
     signOut,
     updateProfile,
+    sendPasswordResetEmail,
 } from "firebase/auth";
 import { AuthContext } from "@/contexts/AuthContext";
 import app from "@/firebase/firebase.config";
@@ -22,6 +23,31 @@ const facebookProvider = new FacebookAuthProvider();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            setUser(currentUser);
+            if (currentUser?.email) {
+                setUser(currentUser);
+
+                // Get JWT token
+                await axios.post(
+                    `${import.meta.env.VITE_API_URL}/jwt`,
+                    {
+                        email: currentUser?.email,
+                    },
+                    { withCredentials: true }
+                );
+            } else {
+                setUser(currentUser);
+                await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
+                    withCredentials: true,
+                });
+            }
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const createUser = async (email, password) => {
         setLoading(true);
@@ -53,30 +79,9 @@ const AuthProvider = ({ children }) => {
         return signOut(auth);
     };
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            setUser(currentUser);
-            if (currentUser?.email) {
-                setUser(currentUser);
-
-                // Get JWT token
-                await axios.post(
-                    `${import.meta.env.VITE_API_URL}/jwt`,
-                    {
-                        email: currentUser?.email,
-                    },
-                    { withCredentials: true }
-                );
-            } else {
-                setUser(currentUser);
-                await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
-                    withCredentials: true,
-                });
-            }
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
+    const passwordReset = (email) => {
+        return sendPasswordResetEmail(auth, email);
+    };
 
     const authData = {
         user,
@@ -89,6 +94,7 @@ const AuthProvider = ({ children }) => {
         signInWithGoogle,
         signInWithFacebook,
         logOut,
+        passwordReset,
     };
 
     return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;

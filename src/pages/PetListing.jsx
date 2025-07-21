@@ -95,7 +95,6 @@ const PetListing = () => {
 
     return (
         <div className="bg-background-primary flex flex-col min-h-screen">
-            <Navbar />
             <div>
                 <div className="text-center space-y-6 max-w-11/12 px-4 2xl:max-w-9/12 bg-background-head-text mx-auto rounded-3xl py-6 mt-12 md:py-8">
                     <h1 className="text-4xl text-heading-color">Adopt a Pet from our Pet Listing</h1>

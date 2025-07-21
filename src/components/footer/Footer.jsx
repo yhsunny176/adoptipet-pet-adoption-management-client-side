@@ -114,9 +114,9 @@ const Footer = () => {
                     </div>
                 </div>
                 {/* Divider and copyright */}
-                <hr className="my-8 border-t border-gray-300 dark:border-gray-700" />
+                <hr className="my-8 border-t border-pg-base/50" />
                 <div className="flex justify-center">
-                    <span className="text-sm md:text-base font-medium text-gray-500 text-center">
+                    <span className="text-sm md:text-base font-medium text-gray-medium text-center font-pg">
                         &copy; {new Date().getFullYear()} AdoptiPet. All rights reserved.
                     </span>
                 </div>
