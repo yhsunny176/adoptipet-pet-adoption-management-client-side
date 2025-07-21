@@ -26,6 +26,7 @@ const AllDonationCampaigns = () => {
     const [sort, setSort] = useState([]);
     const { theme } = useTheme();
     const [deleteData, setDeleteData] = useState(null);
+    const [pausingId, setPausingId] = useState(null);
 
     const {
         data: donationInfo = [],
@@ -131,14 +132,16 @@ const AllDonationCampaigns = () => {
                 const donation = info.row.original;
                 const handlePauseToggle = async (e) => {
                     e.stopPropagation();
+                    setPausingId(donation._id);
                     try {
                         await axiosSecure.patch(`/admin/update-donation-campaign/${donation._id}`, {
                             paused: !donation.paused,
                         });
-                        // Refetch campaigns
                         refetch();
                     } catch {
                         alert("Failed to update pause status");
+                    } finally {
+                        setPausingId(null);
                     }
                 };
                 return (
@@ -159,8 +162,15 @@ const AllDonationCampaigns = () => {
                             className={`px-4 py-1 ${
                                 donation.paused ? "bg-gray-medium text-black-base" : "bg-green-primary"
                             } px-2 py-1 text-base-white hover:text-base-white rounded text-sm hover:shadow-md transition-shadow duration-400 ease-in-out`}
-                            onClick={handlePauseToggle}>
-                            {donation.paused ? "Unpause" : "Pause"}
+                            onClick={handlePauseToggle}
+                            disabled={pausingId === donation._id}>
+                            {pausingId === donation._id
+                                ? donation.paused
+                                    ? "Unpausing..."
+                                    : "Pausing..."
+                                : donation.paused
+                                ? "Unpause"
+                                : "Pause"}
                         </Button>
 
                         {/* Delete Button */}
