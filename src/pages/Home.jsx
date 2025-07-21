@@ -1,9 +1,12 @@
 import Banner from "@/components/banner/Banner";
 import PetCategoryButtons from "@/components/buttons-custom/PetCategoryButtons";
+import AboutUs from "@/components/sections/AboutUs";
 import CallToAction from "@/components/sections/CallToAction";
 import { useTheme } from "@/hooks/useTheme";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import boneImg from "@/assets/Section Image/bone.png";
+import boneImg2 from "@/assets/Section Image/bone2.png";
 
 const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -17,9 +20,12 @@ const Home = () => {
 
     return (
         <div>
+            {/* Banner */}
             <section className="py-12 bg-background-primary">
                 <Banner />
             </section>
+
+            {/* Pet Category Buttons */}
             <section>
                 <div className="py-20 flex flex-col bg-background-tertiary">
                     <div className="flex-1 max-w-11/12 mx-auto w-full overflow-x-auto">
@@ -38,6 +44,8 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Call to Action */}
             <section
                 className={
                     theme === "light"
@@ -45,6 +53,18 @@ const Home = () => {
                         : "flex flex-col min-h-max bg-background-secondary py-24"
                 }>
                 <CallToAction />
+            </section>
+
+            {/* About Us Section */}
+            <section
+                className={"flex flex-col min-h-max bg-background-secondary py-24"}
+                style={{
+                    backgroundImage: `url(${boneImg}), url(${boneImg2}), url(${boneImg2})`,
+                    backgroundPosition: "30px 40px, 110px 120px,calc(100% + 40px) calc(100% - 60px)",
+                    backgroundSize: "120px auto, 80px auto, 120px auto",
+                    backgroundRepeat: "no-repeat, no-repeat, no-repeat",
+                }}>
+                <AboutUs />
             </section>
         </div>
     );

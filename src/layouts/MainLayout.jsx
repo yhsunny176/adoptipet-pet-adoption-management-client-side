@@ -1,4 +1,4 @@
-import Footer from "@/components/navbar/Footer";
+import Footer from "@/components/footer/Footer";
 import Navbar from "@/components/navbar/Navbar";
 import React from "react";
 import { Outlet } from "react-router";
@@ -14,7 +14,7 @@ const MainLayout = () => {
                 <Outlet />
             </main>
 
-            <footer>
+            <footer className="flex flex-col min-h-max py-12 bg-footer">
                 <Footer />
             </footer>
         </div>

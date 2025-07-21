@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <div>
+    <div className='flex flex-1'>
       This is Footer
     </div>
   );

@@ -78,6 +78,8 @@ label {
   --color-toggle-icon: var(--toggle-icon);
   --color-menu-mobile: var(--menu-mob);
 
+  --color-footer: var(--footer-col);
+
   --color-label-form: var(--label-form);
 
   /* Sidebar */
@@ -113,7 +115,7 @@ label {
   --background-dark: oklch(0.9702 0.03 83.63);
   --background-ter: oklch(0.994 0 0);
   --background-quaternary: oklch(0.9712 0.0253 78.92);
-  --text-heading: oklch(0.2801 0.0519 232.1);
+  --text-heading: oklch(0.4373 0.0765 230.68);
   --bg-head-text: oklch(0.9569 0.044 83.91);
 
   --rose-prim: oklch(0.645 0.1859 26.69);
@@ -146,6 +148,8 @@ label {
   --border-card: oklch(0.8901 0.0081 73.74);
   --card-border-hov: oklch(0.8895 0.0557 250.93);
 
+  --footer-col: oklch(0.95 0.0156 86.43);
+
   --label-form: oklch(0.2801 0.0519 232.1);
 
   --green-main: oklch(0.6745 0.1665 153.67);
@@ -168,6 +172,7 @@ label {
   /* Shadow */
   --card-shadow: 0px 10px 37px -7px rgba(0, 0, 0, 0.1);
 
+
 }
 
 .dark {
@@ -187,6 +192,8 @@ label {
   --menu-mob: oklch(0.9851 0 0);
   --border-card: oklch(0.3848 0.0027 17.27);
   --card-border-hov: oklch(0.8698 0.0868 62.34);
+
+  --footer-col: oklch(0.2174 0.0019 106.56);
 
   --label-form: oklch(0.7995 0.1538 71.7);
 
