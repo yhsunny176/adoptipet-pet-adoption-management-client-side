@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import boneImg from "@/assets/Section Image/bone.png";
 import boneImg2 from "@/assets/Section Image/bone2.png";
 import Testimonials from "@/components/sections/Testimonials";
+import Subscribe from "@/components/sections/Subscribe";
 
 const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -79,6 +80,11 @@ const Home = () => {
                 }}>
                 <Testimonials />
             </section>
+
+            {/* Subscribe for Notifications */}
+            <div className="flex flex-col min-h-max py-12 bg-background-secondary">
+                <Subscribe/>
+            </div>
         </div>
     );
 };
