@@ -34,7 +34,7 @@ const Navbar = () => {
                 <div className="nav-container w-full max-w-11/12 md:max-w-10/12 xl:max-w-9/12 mx-auto">
                     <NavigationMenu className="flex items-center w-full" viewport={false}>
                         {/* Left side: Logo and Nav Links */}
-                        <div className="flex items-center lg:gap-8 xl:gap-20 2xl:gap-50">
+                        <div className="flex items-center lg:gap-8 xl:gap-30 2xl:gap-80">
                             {/* Logo */}
                             <NavigationMenuList>
                                 <NavigationMenuItem>
@@ -75,13 +75,6 @@ const Navbar = () => {
                                         to="/donation-campaigns"
                                         className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                         Donation Campaigns
-                                    </NavLink>
-                                </NavigationMenuItem>
-                                <NavigationMenuItem>
-                                    <NavLink
-                                        to="/contact"
-                                        className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
-                                        Contact
                                     </NavLink>
                                 </NavigationMenuItem>
                             </NavigationMenuList>

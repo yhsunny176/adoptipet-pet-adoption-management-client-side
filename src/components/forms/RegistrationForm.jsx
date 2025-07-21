@@ -11,6 +11,7 @@ import ImageField from "../photo-upload-field/ImageField";
 import { saveUserDatabase } from "@/utils/save__user__data";
 import PageLoader from "../loader/PageLoader";
 import useAuth from "@/hooks/useAuth";
+import { ChevronLeft } from "lucide-react";
 
 const validationSchema = Yup.object({
     name: Yup.string()
@@ -302,6 +303,19 @@ const RegistrationForm = () => {
                                 </Link>
                             </p>
                         </div>
+                    </div>
+
+
+                    {/* Go Back Home Link */}
+                    <div className="flex justify-center mt-6 items-center">
+                        <span>
+                            <ChevronLeft className="text-base-rose hover:text-base-rose-dark" />
+                        </span>
+                        <Link
+                            to="/"
+                            className="text-base font-semibold text-base-rose hover:text-base-rose-dark hover:underline ml-1 mt-1">
+                            Go Back Home
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons/index";
 import useAuth from "@/hooks/useAuth";
+import { ChevronLeft } from "lucide-react";
 
 // Validation schema for login
 const validationSchema = Yup.object({
@@ -263,6 +264,18 @@ const LoginForm = () => {
                                 </Link>
                             </p>
                         </div>
+                    </div>
+
+                    {/* Go Back Home Link */}
+                    <div className="flex justify-center mt-6 items-center">
+                        <span>
+                            <ChevronLeft className="text-base-rose hover:text-base-rose-dark" />
+                        </span>
+                        <Link
+                            to="/"
+                            className="text-base font-semibold text-base-rose hover:text-base-rose-dark hover:underline ml-1 mt-1">
+                            Go Back Home
+                        </Link>
                     </div>
                 </div>
             </div>
