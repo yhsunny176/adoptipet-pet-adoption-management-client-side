@@ -1,10 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { petCategoryOptions } from "@/utils/pet_categories";
-import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import "react-horizontal-scrolling-menu/dist/styles.css";
-import "../buttons-custom/PetCategoryButtons.css"
-
 import dogIcon from "@/assets/Icons/dog.png";
 import catIcon from "@/assets/Icons/cat.png";
 import rabbitIcon from "@/assets/Icons/rabbit.png";
@@ -41,59 +36,30 @@ const iconMap = {
     other: otherIcon,
 };
 
-const LeftArrow = () => {
-    const { isFirstItemVisible, scrollPrev } = useContext(VisibilityContext);
-    return (
-        <div className="flex items-center h-full">
-            <button
-                disabled={isFirstItemVisible}
-                onClick={() => scrollPrev()}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 mr-2 cursor-pointer"
-                aria-label="Scroll Left">
-                <ChevronLeft className="w-7 h-7" />
-            </button>
-        </div>
-    );
-};
-
-const RightArrow = () => {
-    const { isLastItemVisible, scrollNext } = useContext(VisibilityContext);
-    return (
-        <div className="flex items-center h-full">
-            <button
-                disabled={isLastItemVisible}
-                onClick={() => scrollNext()}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-background-tertiary hover:bg-base-rose ml-2 cursor-pointer transition-colors duration-600 ease-in-out"
-                aria-label="Scroll Right">
-                <ChevronRight className="w-7 h-7 text-pg-base" />
-            </button>
-        </div>
-    );
-};
-
 const PetCategoryButtons = ({ onCategorySelect }) => {
     return (
-        <div className="py-8">
-            <div>
-                <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow} className="py-4 cursor-pointer">
-                    {petCategoryOptions.map((category) => {
-                        const iconSrc = iconMap[category.value];
-                        return (
-                            <button
-                                key={category.value}
-                                type="button"
-                                onClick={() => onCategorySelect && onCategorySelect(category.value)}
-                                className="flex flex-col items-center justify-center px-4 py-4 min-w-32 rounded-lg border transition-colors duration-600 ease-in-out whitespace-nowrap cursor-pointer border-gray-border bg-background-quaternary hover:bg-base-rose mx-2 focus:outline-none">
-                                {iconSrc && (
-                                    <img src={iconSrc} alt={category.label + " icon"} className="w-10 h-10 mb-2" />
-                                )}
-                                <span className="text-center text-md mt-2 text-pg-base font-bold">
-                                    {category.label}
-                                </span>
-                            </button>
-                        );
-                    })}
-                </ScrollMenu>
+        <div className="py-8 w-full max-w-full overflow-hidden">
+            <div className="w-full max-w-full px-2 sm:px-4 lg:px-6 xl:px-8">
+                <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-8 gap-2 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-3 2xl:gap-4 w-full">
+                    {petCategoryOptions.map((category) => (
+                        <button
+                            key={category.value}
+                            type="button"
+                            onClick={() => onCategorySelect && onCategorySelect(category.value)}
+                            className="flex flex-col items-center justify-center p-3 sm:p-4 md:p-4 lg:p-4 xl:p-3 2xl:p-4 rounded-lg border transition-all duration-300 ease-in-out cursor-pointer border-gray-border bg-background-quaternary hover:bg-base-rose hover:scale-105 focus:outline-none focus:ring-2 focus:ring-base-rose focus:ring-opacity-50 w-full min-h-[80px] sm:min-h-[90px] md:min-h-[100px] lg:min-h-[85px] xl:min-h-[70px] 2xl:min-h-[90px]">
+                            {iconMap[category.value] && (
+                                <img
+                                    src={iconMap[category.value]}
+                                    alt={category.label + " icon"}
+                                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 xl:w-8 xl:h-8 2xl:w-10 2xl:h-10 mb-2 flex-shrink-0 object-contain"
+                                />
+                            )}
+                            <span className="text-center text-sm sm:text-sm md:text-base lg:text-sm xl:text-xs 2xl:text-sm text-pg-base font-bold leading-tight break-words hyphens-auto">
+                                {category.label}
+                            </span>
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );

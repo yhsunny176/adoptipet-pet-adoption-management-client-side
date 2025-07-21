@@ -30,7 +30,7 @@ const Home = () => {
             {/* Pet Category Buttons */}
             <section>
                 <div className="py-20 flex flex-col bg-background-tertiary">
-                    <div className="flex-1 max-w-11/12 mx-auto w-full overflow-x-auto">
+                    <div className="flex-1 w-full max-w-11/12 md:max-w-10/12 xl:max-w-9/12 mx-auto">
                         <div className="space-y-6">
                             <h2 className="text-4xl font-bold text-center text-heading-color">
                                 Explore Pet Categories
@@ -83,7 +83,7 @@ const Home = () => {
 
             {/* Subscribe for Notifications */}
             <div className="flex flex-col min-h-max py-12 bg-background-secondary">
-                <Subscribe/>
+                <Subscribe />
             </div>
         </div>
     );
