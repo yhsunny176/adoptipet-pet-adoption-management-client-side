@@ -8,7 +8,6 @@ import secImg6 from "@/assets/Section Image/sec-img-6.webp";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Keyboard, EffectFade, Pagination } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import "./css/swiper.css";
 import { useTheme } from "@/hooks/useTheme";

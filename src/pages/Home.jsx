@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import boneImg from "@/assets/Section Image/bone.png";
 import boneImg2 from "@/assets/Section Image/bone2.png";
+import Testimonials from "@/components/sections/Testimonials";
 
 const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -60,11 +61,23 @@ const Home = () => {
                 className={"flex flex-col min-h-max bg-background-secondary py-24"}
                 style={{
                     backgroundImage: `url(${boneImg}), url(${boneImg2}), url(${boneImg2})`,
-                    backgroundPosition: "30px 40px, 110px 120px,calc(100% + 40px) calc(100% - 60px)",
+                    backgroundPosition: "30px 40px, 110px 120px,calc(100% + 50px) calc(100% - 60px)",
                     backgroundSize: "120px auto, 80px auto, 120px auto",
                     backgroundRepeat: "no-repeat, no-repeat, no-repeat",
                 }}>
                 <AboutUs />
+            </section>
+
+            {/* Testimonials */}
+            <section
+                className={theme === "light" ? "bg-blue-bg" : "bg-background-quaternary"}
+                style={{
+                    backgroundImage: `url(${boneImg2}), url(${boneImg})`,
+                    backgroundPosition: "-40px 80px, calc(100% + 25px) calc(100% - 30px)",
+                    backgroundSize: "80px auto, 80px auto",
+                    backgroundRepeat: "no-repeat, no-repeat",
+                }}>
+                <Testimonials />
             </section>
         </div>
     );

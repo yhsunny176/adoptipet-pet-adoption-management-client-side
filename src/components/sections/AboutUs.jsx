@@ -49,7 +49,7 @@ const AboutUs = () => {
                 </h3>
                 <div className="flex flex-col items-center gap-6 sm:grid sm:grid-cols-2 xl:grid-cols-4 sm:gap-6 auto-rows-fr max-w-11/12 mx-auto">
                     {/* Card 1 */}
-                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer hover:bg-base-rose-light w-full h-full">
+                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer w-full h-full">
                         <div className="w-20 h-20 sm:w-24 sm:h-24">
                             <img
                                 src={hamsterImg}
@@ -61,7 +61,7 @@ const AboutUs = () => {
                             <h3 className="font-bold text-xl sm:text-2xl text-base-rose text-center">
                                 Browse Pet Listings
                             </h3>
-                            <p className="text-center leading-pg-base line-clamp-3 text-sm sm:text-base">
+                            <p className="text-center leading-pg-base line-clamp-3 text-pg-base text-sm sm:text-base">
                                 Discover a wide variety of pets available for adoption. Each listing provides detailed
                                 information of pets.
                             </p>
@@ -69,13 +69,13 @@ const AboutUs = () => {
                     </div>
 
                     {/* Card 2 */}
-                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer hover:bg-base-rose-light w-full h-full">
+                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer w-full h-full">
                         <div className="w-20 h-20 sm:w-24 sm:h-24">
                             <img src={formImg} alt="This is a form icon" className="w-full h-full object-cover" />
                         </div>
                         <div className="space-y-3">
                             <h3 className="font-bold text-xl sm:text-2xl text-base-rose text-center">Adopt a Pet</h3>
-                            <p className="text-center leading-pg-base text-sm sm:text-base">
+                            <p className="text-center leading-pg-base text-sm sm:text-base text-pg-base">
                                 Submit adoption requests directly through the website. Our process ensures responsible
                                 adoption and a smooth experience for both adopters and pets.
                             </p>
@@ -83,7 +83,7 @@ const AboutUs = () => {
                     </div>
 
                     {/* Card 3 */}
-                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer hover:bg-base-rose-light w-full h-full">
+                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer w-full h-full">
                         <div className="w-20 h-20 sm:w-24 sm:h-24">
                             <img
                                 src={donationImg}
@@ -95,7 +95,7 @@ const AboutUs = () => {
                             <h3 className="font-bold text-xl sm:text-2xl text-base-rose text-center">
                                 Donation Campaigns
                             </h3>
-                            <p className="text-center leading-pg-base text-sm sm:text-base">
+                            <p className="text-center leading-pg-base text-sm sm:text-base text-pg-base">
                                 Support animal welfare by participating in donation campaigns. Your contributions help
                                 provide food, shelter, and medical care for pets in need.
                             </p>
@@ -103,7 +103,7 @@ const AboutUs = () => {
                     </div>
 
                     {/* Card 4 */}
-                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer hover:bg-base-rose-light w-full h-full">
+                    <div className="bg-background-secondary border border-base-rose px-5 py-8 rounded-xl flex flex-col items-center gap-4 cursor-pointer w-full h-full">
                         <div className="w-20 h-20 sm:w-24 sm:h-24">
                             <img
                                 src={dashboardImg}
@@ -115,7 +115,7 @@ const AboutUs = () => {
                             <h3 className="font-bold text-xl sm:text-2xl text-base-rose text-center">
                                 Dashboard Features
                             </h3>
-                            <p className="text-center leading-pg-base text-sm sm:text-base">
+                            <p className="text-center leading-pg-base text-sm sm:text-base text-pg-base">
                                 Registered users can manage their adoption requests, track donations, add new pets for
                                 adoption, and view campaign progress—all from a personalized dashboard.
                             </p>
