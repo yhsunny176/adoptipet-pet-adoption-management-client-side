@@ -36,7 +36,7 @@ const LogoutButton = () => {
                     Logout
                 </Button>
             ) : (
-                <Button size={"lg"} className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white">
+                <Button asChild size={"lg"} className="w-full bg-base-rose hover:bg-base-rose-dark text-base-white">
                     <Link to="/auth/login">Login</Link>
                 </Button>
             )}
