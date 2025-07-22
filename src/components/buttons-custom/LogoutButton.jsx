@@ -27,7 +27,7 @@ const LogoutButton = () => {
             {loading ? (
                 <Skeleton width={100} height={40} borderRadius={6} className="animate-pulse" />
             ) : user ? (
-                <Button
+                <Button asChild
                     onClick={() => {
                         handleLogOut();
                     }}

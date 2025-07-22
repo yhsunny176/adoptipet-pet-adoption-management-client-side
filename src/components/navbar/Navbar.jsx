@@ -127,14 +127,9 @@ const Navbar = () => {
                                                     Pet Listing
                                                 </NavLink>
                                                 <NavLink
-                                                    to="/donations"
+                                                    to="/donation-campaigns"
                                                     className="text-lg text-navitem-base-mb hover:text-navitem-hover transition-colors py-2">
                                                     Donation Campaigns
-                                                </NavLink>
-                                                <NavLink
-                                                    to="/contact"
-                                                    className="text-lg text-navitem-base-mb hover:text-navitem-hover transition-colors py-2">
-                                                    Contact
                                                 </NavLink>
                                                 <div className="pt-4">
                                                     <LogoutButton />
