@@ -17,8 +17,7 @@ import { Link } from "react-router";
 const CallToAction = () => {
     const { theme } = useTheme();
     return (
-        <div
-            className="flex flex-1 max-w-11/12 lg:max-w-10/12 xl:max-w-9/12 mx-auto bg-no-repeat">
+        <div className="flex flex-1 max-w-11/12 lg:max-w-10/12 xl:max-w-9/12 mx-auto bg-no-repeat">
             <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16 lg:gap-x-24">
                     {/* Left Side content */}
@@ -204,13 +203,13 @@ const CallToAction = () => {
 
                             {/* Button */}
                             <Button
+                                asChild
                                 className={
                                     theme === "light"
                                         ? "bg-base-rose text-base-white py-8 px-6 text-lg mt-4 hover:bg-base-rose-dark transition-colors duration-500 ease-in-out"
                                         : "bg-base-rose text-base-white py-8 px-6 text-lg mt-4 hover:bg-base-rose-dark transition-colors duration-500 ease-in-out"
                                 }>
-                                <Link to="/pet-listing"></Link>
-                                Check Pet Listings
+                                <Link to="/pet-listing">Check Pet Listings</Link>
                             </Button>
                         </div>
                     </div>
