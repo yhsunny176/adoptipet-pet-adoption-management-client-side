@@ -9,10 +9,11 @@ import AuthProvider from "./layouts/Authentication/AuthProvider";
 import SkeletonProvider from "./components/ui/skeleton-provider";
 import { ThemeProvider } from "./components/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import GSAPScrollSmoother from "./components/GSAPScrollSmoother";
 const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
     <StrictMode>
+        <GSAPScrollSmoother />
         <SkeletonProvider>
             <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
                 <QueryClientProvider client={queryClient}>

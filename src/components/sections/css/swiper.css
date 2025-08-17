@@ -3,6 +3,8 @@
   height: 100%;
   max-width: 100%;
   overflow: hidden;
+  will-change: auto !important;
+  transform: none !important;
 }
 
 .swiper-slide {

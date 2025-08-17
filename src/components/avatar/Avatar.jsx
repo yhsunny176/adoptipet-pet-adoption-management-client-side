@@ -10,6 +10,7 @@ const Avatar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const { user, logOut, loading } = useAuth();
     const navigate = useNavigate();
+    
 
     const handleLogOut = () => {
         logOut()
