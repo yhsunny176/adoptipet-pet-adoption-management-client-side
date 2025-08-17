@@ -3,6 +3,7 @@ import AuthenticationLayout from "@/layouts/Authentication/AuthenticationLayout"
 import DashboardLayout from "@/layouts/DashboardLayout";
 import MainLayout from "@/layouts/MainLayout";
 import AddPets from "@/pages/dashboard/user/AddPets";
+import UserStatistics from "@/pages/dashboard/user/UserStatistics";
 import ErrorPage from "@/pages/ErrorPage";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -106,6 +107,16 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <DashboardDefault />,
+            },
+            {
+                path: "statistics",
+                element: (
+                    <PrivateRoute>
+                        <UserRoute>
+                            <UserStatistics />
+                        </UserRoute>
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "add-pet",

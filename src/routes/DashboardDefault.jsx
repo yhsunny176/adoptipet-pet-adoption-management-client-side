@@ -15,7 +15,7 @@ const DashboardDefault = () => {
             } else if (role === "admin") {
                 navigate("/dashboard/admin/all-users", { replace: true });
             } else {
-                navigate("/dashboard/add-pet", { replace: true });
+                navigate("/dashboard/statistics", { replace: true });
             }
         }
     }, [role, isRoleLoading, navigate]);

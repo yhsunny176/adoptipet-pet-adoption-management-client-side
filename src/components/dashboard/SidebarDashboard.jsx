@@ -13,7 +13,7 @@ import {
     Payment02Icon,
     UserMultiple02Icon,
 } from "@hugeicons/core-free-icons/index";
-import { DogIcon, Rabbit } from "lucide-react";
+import { DogIcon, Rabbit, BarChart3Icon } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
 import useAuth from "@/hooks/useAuth";
@@ -31,6 +31,11 @@ const SidebarDashboard = (props) => {
 
     // Common menu items for both user and admin
     const commonMenuItems = [
+        {
+            title: "Dashboard",
+            url: "/dashboard/statistics",
+            icon: <BarChart3Icon strokeWidth={1.25} />,
+        },
         {
             title: "Add a Pet",
             url: "/dashboard/add-pet",
@@ -86,8 +91,8 @@ const SidebarDashboard = (props) => {
     const menuItems = role === "admin" ? [...commonMenuItems, ...adminMenuItems] : commonMenuItems;
 
     return (
-        <Sidebar {...props}>
-            <div className="bg-sidebar-secondary max-w-full px-3 pb-4 h-max flex items-center justify-between mt-5 border-b border-b-black-base">
+        <Sidebar {...props} className="h-full">
+            <div className="bg-sidebar-secondary max-w-full px-3 pb-4 h-16 flex items-center justify-between mt-5 border-b border-b-black-base flex-shrink-0">
                 <div className="max-w-24 h-full">
                     {theme === "light" ? (
                         <Link to={"/"}>
@@ -100,7 +105,7 @@ const SidebarDashboard = (props) => {
                     )}
                 </div>
             </div>
-            <SidebarContent className={"py-8 px-3 bg-sidebar-secondary"}>
+            <SidebarContent className={"py-8 px-3 bg-sidebar-secondary flex-1"}>
                 <SidebarMenu>
                     {menuItems.map((child, cidx) => (
                         <SidebarMenuItem key={child.url || child.title || cidx}>
@@ -120,7 +125,7 @@ const SidebarDashboard = (props) => {
                     ))}
                 </SidebarMenu>
             </SidebarContent>
-            <SidebarFooter className="py-6">
+            <SidebarFooter className="py-6 mt-auto bg-sidebar-secondary flex-shrink-0">
                 <LogoutButton />
             </SidebarFooter>
             <SidebarRail />
