@@ -2,8 +2,7 @@ import React from "react";
 import logo from "../../assets/logo.png";
 import logoDark from "../../assets/logo-secondary.png";
 import { useTheme } from "@/hooks/useTheme";
-import { NavLink } from "react-router";
-import { Facebook, Instagram } from "lucide-react";
+import { Link, NavLink } from "react-router";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Facebook01Icon, InstagramIcon, ThreadsIcon, TwitterIcon } from "@hugeicons/core-free-icons/index";
 
@@ -11,16 +10,20 @@ const Footer = () => {
     const { theme } = useTheme();
     return (
         <footer className="w-full bg-transparent">
-            <div className="max-w-11/12 md:max-w-10/12 xl:max-w-9/12 mx-auto py-10">
+            <div className="main-container">
                 {/* Grid for 6 columns on xl+ screens */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8 xl:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-8 sm:gap-12 xl:gap-6">
                     {/* Logo & Text */}
-                    <div className="space-y-5 xl:max-w-2xs flex-shrink-0 col-span-1">
-                        <div>
+                    <div className="space-y-5 xl:max-w-2xs flex-shrink-0 flex flex-col items-center sm:items-start text-center sm:text-left sm:col-span-2 md:col-span-3 xl:col-span-3">
+                        <div className="w-full flex justify-center sm:justify-start">
                             {theme === "light" ? (
-                                <img src={logo} alt="This is the logo of adoptipet" />
+                                <img src={logo} alt="This is the logo of adoptipet" className="mx-auto sm:mx-0" />
                             ) : (
-                                <img src={logoDark} alt="This is the logo of adoptipet in dark mode" />
+                                <img
+                                    src={logoDark}
+                                    alt="This is the logo of adoptipet in dark mode"
+                                    className="mx-auto sm:mx-0"
+                                />
                             )}
                         </div>
                         <div className="space-y-3">
@@ -32,9 +35,9 @@ const Footer = () => {
                     </div>
 
                     {/* Basic Links */}
-                    <div className="flex flex-col gap-4 min-w-[180px] col-span-1">
+                    <div className="flex flex-col gap-4 min-w-[180px] items-center sm:items-start sm:col-span-1 md:col-span-2 xl:col-span-2">
                         <h1 className="text-lg text-heading-color font-bold">Explore</h1>
-                        <ul className="flex flex-col gap-4 items-start">
+                        <ul className="flex flex-col gap-4 items-center sm:items-start">
                             <li>
                                 <NavLink
                                     to="/"
@@ -60,9 +63,9 @@ const Footer = () => {
                     </div>
 
                     {/* Useful Links */}
-                    <div className="flex flex-col gap-4 min-w-[180px] col-span-1">
+                    <div className="flex flex-col gap-4 min-w-[180px] col-span-1 items-center sm:items-start xl:col-span-1 ">
                         <h1 className="text-lg text-heading-color font-bold">Useful Links</h1>
-                        <ul className="flex flex-col gap-4 items-start">
+                        <ul className="flex flex-col gap-4 items-center sm:items-start">
                             <li>
                                 <NavLink
                                     to="/dashboard"
@@ -87,8 +90,10 @@ const Footer = () => {
                         </ul>
                     </div>
 
+                    <hr className="border-t border-pg-base/50 col-span-1 sm:col-span-2 md:col-span-3 xl:col-span-6 opacity-40" />
+
                     {/* Social links */}
-                    <div className="flex flex-col items-start md:gap-6 col-span-1">
+                    <div className="flex flex-col md:gap-6 sm:col-span-1 md:col-span-2 xl:col-span-4 items-center sm:items-start">
                         <h1 className="text-center text-xl font-bold text-base-rose">Follow Us:</h1>
                         <div className="flex gap-4 md:gap-6 mt-4 md:mt-0">
                             <a href="https://www.facebook.com/yeasinulhaqsani" className="w-max h-max">
@@ -106,12 +111,18 @@ const Footer = () => {
                         </div>
                     </div>
 
+
+                    <div className="flex flex-col gap-5 items-center py-8 sm:py-0 sm:items-start xl:col-span-2 xl:flex-row xl:items-center">
+                        <Link className="text-pg-base">Terms & Conditions</Link>
+                        <Link className="text-pg-base">Privacy Policy</Link>
+                    </div>
+
                     {/* Empty columns for 6 total on xl+ screens */}
-                    <div className="hidden xl:block col-span-1"></div>
-                    <div className="hidden xl:block col-span-1"></div>
+                    <div className="hidden xl:block xl:col-span-1"></div>
+                    <div className="hidden xl:block xl:col-span-1"></div>
                 </div>
                 {/* Divider and copyright */}
-                <hr className="my-8 border-t border-pg-base/50" />
+                <hr className="my-8 border-t border-pg-base/50 opacity-40" />
                 <div className="flex justify-center">
                     <span className="text-sm md:text-base font-medium text-gray-medium text-center font-pg">
                         &copy; {new Date().getFullYear()} AdoptiPet. All rights reserved.

@@ -5,7 +5,7 @@ const Subscribe = () => {
     const { theme } = useTheme();
 
     return (
-        <div className="flex-1 w-full max-w-11/12 lg:max-w-10/12 xl:max-w-9/12 mx-auto px-4">
+        <div className="flex-1 w-full main-container">
             <div className="flex flex-col md:flex-row items-center md:justify-between gap-8 w-full">
                 <div className="space-y-6 w-full md:w-1/2 text-center md:text-left">
                     <h1

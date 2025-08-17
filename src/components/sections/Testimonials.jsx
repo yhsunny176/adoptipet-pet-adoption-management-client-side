@@ -41,7 +41,7 @@ const Testimonials = () => {
     const theme = useTheme();
 
     return (
-        <section className="w-full lg:max-w-10/12 xl:max-w-9/12 mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <section className="w-full main-container py-16">
             <div className="text-center mb-4 text-lg font-semibold text-pg-base uppercase">
                 See What Adopters Say About Our Platform
             </div>
@@ -70,7 +70,7 @@ const Testimonials = () => {
                     },
                 }}
                 modules={[Navigation, Autoplay]}
-                className="mySwiper w-full md:max-w-11/12 lg:max-w-10/12 xl:max-w-9/12">
+                className="mySwiper w-full">
                 {testimonials.map((testimonial, idx) => (
                     <SwiperSlide key={idx} className="flex items-center justify-center">
                         <div

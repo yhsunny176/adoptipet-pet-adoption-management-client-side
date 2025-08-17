@@ -17,7 +17,7 @@ import { Link } from "react-router";
 const CallToAction = () => {
     const { theme } = useTheme();
     return (
-        <div className="flex flex-1 max-w-11/12 lg:max-w-10/12 xl:max-w-9/12 mx-auto bg-no-repeat">
+        <div className="flex flex-1 main-container bg-no-repeat">
             <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 md:gap-x-16 lg:gap-x-24">
                     {/* Left Side content */}
@@ -62,15 +62,15 @@ const CallToAction = () => {
                         {/* Text contents */}
                         <div className="space-y-4">
                             {/* Heading Subtitle */}
-                            <div className="space-y-6 *:text-center">
+                            <div className="space-y-6">
                                 <h1 className="text-3xl leading-12 md:text-5xl text-center md:text-left font-bold text-heading-color md:leading-heading-xl">
                                     Transform Lives Today Adopt, Love, Save Together
                                 </h1>
                                 <p
                                     className={
                                         theme === "light"
-                                            ? "text-md md:text-xl text-pg-base leading-pg-lg font-bold"
-                                            : "text-md md:text-xl text-pg-base leading-pg-lg font-bold"
+                                            ? "text-xl text-pg-base leading-pg-lg font-bold text-center md:text-left"
+                                            : "text-xl text-pg-base leading-pg-lg font-bold text-center md:text-left"
                                     }>
                                     Every rescued pet becomes a loyal companion who will fill your home with
                                     unconditional love and endless joy.
@@ -171,17 +171,17 @@ const CallToAction = () => {
                         {/* Text contents */}
                         <div className="space-y-4 flex flex-col items-center">
                             {/* Heading Subtitle */}
-                            <div className="space-y-6 *:text-center">
+                            <div className="space-y-6">
                                 <h1 className="text-3xl leading-12 md:text-5xl text-center md:text-left font-bold text-heading-color md:leading-heading-xl">
                                     Be the Miracle They’ve Been Waiting For
                                 </h1>
                                 <p
                                     className={
                                         theme === "light"
-                                            ? "text-md md:text-xl text-pg-base leading-pg-lg font-bold"
-                                            : "text-md md:text-xl text-pg-base leading-pg-lg font-bold"
+                                            ? "text-xl md:text-xl text-pg-base leading-pg-lg font-bold text-center md:text-left"
+                                            : "text-xl md:text-xl text-pg-base leading-pg-lg font-bold text-center md:text-left"
                                     }>
-                                    Here's a story on Lucky, From Abandoned to Adored -
+                                    Here's a story on Lucky, From Abandoned to Adored:
                                 </p>
                             </div>
 

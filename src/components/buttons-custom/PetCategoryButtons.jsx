@@ -39,7 +39,7 @@ const iconMap = {
 const PetCategoryButtons = ({ onCategorySelect }) => {
     return (
         <div className="py-8 w-full max-w-full overflow-hidden">
-            <div className="w-full max-w-full px-2 sm:px-4 lg:px-6 xl:px-8">
+            <div className="w-full max-w-full">
                 <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-8 gap-2 sm:gap-3 md:gap-4 lg:gap-4 xl:gap-3 2xl:gap-4 w-full">
                     {petCategoryOptions.map((category) => (
                         <button
