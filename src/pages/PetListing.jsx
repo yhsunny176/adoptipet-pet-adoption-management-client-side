@@ -106,17 +106,17 @@ const PetListing = () => {
             </div>
 
             {/* Search and Category Filter */}
-            <div className="w-full max-w-11/12 xl:max-w-9/12 mx-auto mt-10 mb-6 px-2">
-                <div className="flex items-center gap-4 w-full">
-                    <div className="w-3/6">
+            <div className="w-full main-container mt-10 mb-6 px-2">
+                <div className="flex flex-col items-center gap-4 w-full md:flex-row">
+                    <div className="w-full md:w-3/6">
                         <SearchBar
-                            className="w-full"
+                            className="w-full md:w-3/6 h-7"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search pets by name.."
                         />
                     </div>
-                    <div className="w-3/6">
+                    <div className="w-full md:w-3/6">
                         <CategorySelect
                             value={selectedCategory}
                             onChange={(option) => setSelectedCategory(option)}

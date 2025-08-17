@@ -16,12 +16,12 @@ const ThemeToggle = () => {
             onClick={handleThemeChange}>
             {theme === "dark" && (
                 <h1>
-                    <Moon className="text-toggle-icon"></Moon>
+                    <Sun className="text-toggle-icon"></Sun>
                 </h1>
             )}
             {theme === "light" && (
                 <h1>
-                    <Sun className="text-toggle-icon"></Sun>
+                    <Moon className="text-toggle-icon"></Moon>
                 </h1>
             )}
         </button>

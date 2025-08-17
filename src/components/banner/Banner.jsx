@@ -15,7 +15,7 @@ const Banner = () => {
     const { theme } = useTheme();
     return (
         <div className="flex flex-1 relative">
-            <div className="py-12 lg:py-4 lg:grid lg:grid-cols-12 lg:max-w-10/12 lg:mx-auto lg:gap-4 lg:items-center xl:max-w-9/12 xl:gap-4 xl:mx-auto 2xl:max-w-9/12 2xl:gap-4 relative z-0">
+            <div className="py-12 lg:py-4 lg:grid lg:grid-cols-12 lg:max-w-10/12 lg:mx-auto lg:gap-4 lg:items-center xl:gap-4 2xl:max-w-9/12 2xl:gap-4 relative z-0">
                 <div className="hidden lg:block absolute lg:-right-32 lg:-z-10 w-auto h-full">
                     {theme === "light" ? (
                         <img src={bgElems} className="w-full h-full" alt="pet elements" />

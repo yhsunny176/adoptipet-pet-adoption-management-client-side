@@ -12,10 +12,12 @@ import ThemeToggle from "../ThemeToggle";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
 import Avatar from "../avatar/Avatar";
+import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
     const [mobMenuOpen, setMobMenuOpen] = useState(false);
     const { theme } = useTheme();
+    const { user } = useAuth();
 
     // Automatically close mobile menu (Sheet) on resize to lg+
     useEffect(() => {
@@ -31,10 +33,10 @@ const Navbar = () => {
     return (
         <div>
             <nav className="w-full py-8 bg-background-secondary">
-                <div className="nav-container w-full max-w-11/12 md:max-w-10/12 xl:max-w-9/12 mx-auto">
+                <div className="nav-container w-full main-container">
                     <NavigationMenu className="flex items-center w-full" viewport={false}>
                         {/* Left side: Logo and Nav Links */}
-                        <div className="flex items-center lg:gap-8 xl:gap-30 2xl:gap-80">
+                        <div className="flex items-center lg:gap-8 xl:gap-20 2xl:gap-40">
                             {/* Logo */}
                             <NavigationMenuList>
                                 <NavigationMenuItem>
@@ -77,6 +79,15 @@ const Navbar = () => {
                                         Donation Campaigns
                                     </NavLink>
                                 </NavigationMenuItem>
+                                {user && (
+                                    <NavigationMenuItem>
+                                        <NavLink
+                                            to="/pet-recommendations"
+                                            className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
+                                            Pet Recommendations
+                                        </NavLink>
+                                    </NavigationMenuItem>
+                                )}
                             </NavigationMenuList>
                         </div>
 
@@ -131,6 +142,13 @@ const Navbar = () => {
                                                     className="text-lg text-navitem-base-mb hover:text-navitem-hover transition-colors py-2">
                                                     Donation Campaigns
                                                 </NavLink>
+                                                {user && (
+                                                    <NavLink
+                                                        to="/pet-recommendations"
+                                                        className="text-lg text-navitem-base-mb hover:text-navitem-hover transition-colors py-2">
+                                                        Pet Recommendations
+                                                    </NavLink>
+                                                )}
                                                 <div className="pt-4">
                                                     <LogoutButton />
                                                 </div>

@@ -6,7 +6,7 @@ import { Link } from "react-router";
 
 const PetCard = ({ petData }) => {
     const { pet_image, pet_name, pet_age, location, pet_category, short_desc, _id } = petData || {};
-    const { name, profilepic } = petData.added_by;
+    const { name, profilepic } = petData?.added_by || {};
 
     return (
         <div>
@@ -24,26 +24,28 @@ const PetCard = ({ petData }) => {
                         </div>
                     </div>
 
-                    <div className="text-sm flex items-center gap-2 p-2 rounded-md bg-gray-extra-light text-gray-dark min-h-[48px]">
+                    <div className="text-sm flex items-center gap-2 p-2 rounded-md bg-gray-extra-light text-pg-base dark:text-black-base min-h-[48px]">
                         <MapPin className="w-4 h-4" />
                         <span className="break-words line-clamp-2">{location}</span>
                     </div>
 
                     <div className="text-sm font-medium text-base-rose">{pet_category}</div>
 
-                    <div className="flex gap-2 items-center w-full">
-                        <p className="text-sm text-base-rose">Added by:</p>
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8">
-                                <img
-                                    src={profilepic}
-                                    alt="image of the person who added the pet"
-                                    className="w-full h-full object-cover rounded-full"
-                                />
+                    {name && profilepic && (
+                        <div className="flex gap-2 items-center w-full">
+                            <p className="text-sm text-base-rose">Added by:</p>
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8">
+                                    <img
+                                        src={profilepic}
+                                        alt="image of the person who added the pet"
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
+                                </div>
+                                <span className="font-medium text-pg-base">{name}</span>
                             </div>
-                            <span className="font-medium text-pg-base">{name}</span>
                         </div>
-                    </div>
+                    )}
 
                     <div className="text-sm">
                         <p className="leading-pg-base text-gray-dark line-clamp-2">{short_desc}</p>

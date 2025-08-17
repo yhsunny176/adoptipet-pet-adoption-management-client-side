@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <PageLoader />
+                <PageLoader/>
             </div>
         );
     }

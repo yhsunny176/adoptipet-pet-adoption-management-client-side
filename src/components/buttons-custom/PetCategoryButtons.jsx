@@ -46,7 +46,7 @@ const PetCategoryButtons = ({ onCategorySelect }) => {
                             key={category.value}
                             type="button"
                             onClick={() => onCategorySelect && onCategorySelect(category.value)}
-                            className="flex flex-col items-center justify-center p-3 sm:p-4 md:p-4 lg:p-4 xl:p-3 2xl:p-4 rounded-lg border transition-all duration-300 ease-in-out cursor-pointer border-gray-border bg-background-quaternary hover:bg-base-rose hover:scale-105 focus:outline-none focus:ring-2 focus:ring-base-rose focus:ring-opacity-50 w-full min-h-[80px] sm:min-h-[90px] md:min-h-[100px] lg:min-h-[85px] xl:min-h-[70px] 2xl:min-h-[90px]">
+                            className="flex flex-col items-center justify-center p-3 sm:p-4 md:p-4 lg:p-4 xl:p-3 2xl:p-4 rounded-lg border transition-all duration-600 ease-in-out cursor-pointer border-gray-border bg-background-quaternary hover:bg-base-rose hover:scale-105 focus:outline-none focus:ring-2 focus:ring-base-rose focus:ring-opacity-50 w-full min-h-[80px] sm:min-h-[90px] md:min-h-[100px] lg:min-h-[85px] xl:min-h-[70px] 2xl:min-h-[90px] hover:*:text-base-white">
                             {iconMap[category.value] && (
                                 <img
                                     src={iconMap[category.value]}
@@ -54,7 +54,7 @@ const PetCategoryButtons = ({ onCategorySelect }) => {
                                     className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 xl:w-8 xl:h-8 2xl:w-10 2xl:h-10 mb-2 flex-shrink-0 object-contain"
                                 />
                             )}
-                            <span className="text-center text-sm sm:text-sm md:text-base lg:text-sm xl:text-xs 2xl:text-sm text-pg-base font-bold leading-tight break-words hyphens-auto">
+                            <span className="text-center text-sm sm:text-sm md:text-base lg:text-sm xl:text-xs 2xl:text-sm text-pg-base font-bold leading-tight break-words hyphens-auto ">
                                 {category.label}
                             </span>
                         </button>

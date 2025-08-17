@@ -184,6 +184,7 @@ label {
   --bg-head-text: oklch(0.2123 0.0058 106.88);
   --text-heading: oklch(0.6964 0.1594 25.2);
   --white-prim: oklch(0.9851 0 0);
+  --gray-dr: oklch(0.9851 0 0);
   --paragraph-prim: oklch(0.9851 0 0);
   --navlink-prim: oklch(0.9851 0 0);
   --toggle-prim: oklch(0.645 0.1859 26.69);
@@ -218,7 +219,7 @@ label {
 }
 
 .main-container {
-  @apply max-w-11/12 md:max-w-10/12 xl:max-w-9/12 mx-auto;
+  @apply max-w-11/12 md:max-w-10/12 xl:max-w-10/12 2xl:max-w-9/12 mx-auto;
 }
 
 .react-select__control {
@@ -248,7 +249,7 @@ label {
 }
 
 .react-select__placeholder {
-  @apply !text-gray-medium !my-0;
+  @apply !text-black-base !my-0;
   font-family: inherit;
   font-size: 1rem;
 }

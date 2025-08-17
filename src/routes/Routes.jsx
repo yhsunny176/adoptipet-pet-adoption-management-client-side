@@ -28,6 +28,7 @@ import AllPets from "@/pages/dashboard/admin/AllPets";
 import AllDonations from "@/pages/dashboard/admin/AllDonations";
 import DashboardDefault from "./DashboardDefault";
 import ForgetPassword from "@/pages/ForgetPassword";
+import PetRecommendations from "@/pages/PetRecommendations";
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,14 @@ const router = createBrowserRouter([
             {
                 path: "/pet-listing",
                 element: <PetListing />,
+            },
+            {
+                path: "/pet-recommendations",
+                element: (
+                    <PrivateRoute>
+                        <PetRecommendations />
+                    </PrivateRoute>
+                ),
             },
             {
                 path: "/pet-detail/:id",
