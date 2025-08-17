@@ -4,6 +4,7 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import MainLayout from "@/layouts/MainLayout";
 import AddPets from "@/pages/dashboard/user/AddPets";
 import UserStatistics from "@/pages/dashboard/user/UserStatistics";
+import AdminStatistics from "@/pages/dashboard/admin/AdminStatistics";
 import ErrorPage from "@/pages/ErrorPage";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -204,6 +205,16 @@ const router = createBrowserRouter([
                     <PrivateRoute>
                         <AdminRoute>
                             <AllDonations />
+                        </AdminRoute>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "admin/statistics",
+                element: (
+                    <PrivateRoute>
+                        <AdminRoute>
+                            <AdminStatistics />
                         </AdminRoute>
                     </PrivateRoute>
                 ),

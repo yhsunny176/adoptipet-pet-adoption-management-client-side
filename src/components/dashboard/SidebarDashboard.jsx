@@ -29,8 +29,8 @@ const SidebarDashboard = (props) => {
         return <Skeleton />;
     }
 
-    // Common menu items for both user and admin
-    const commonMenuItems = [
+    // Common menu items for regular users
+    const userMenuItems = [
         {
             title: "Dashboard",
             url: "/dashboard/statistics",
@@ -68,8 +68,13 @@ const SidebarDashboard = (props) => {
         },
     ];
 
-    // Extra admin menu items
+    // Admin menu items (including admin dashboard)
     const adminMenuItems = [
+        {
+            title: "Admin Dashboard",
+            url: "/dashboard/admin/statistics",
+            icon: <BarChart3Icon strokeWidth={1.25} />,
+        },
         {
             title: "Users",
             url: "/dashboard/admin/all-users",
@@ -88,7 +93,7 @@ const SidebarDashboard = (props) => {
     ];
 
     // Choose menu items based on role
-    const menuItems = role === "admin" ? [...commonMenuItems, ...adminMenuItems] : commonMenuItems;
+    const menuItems = role === "admin" ? [adminMenuItems[0], ...userMenuItems.filter(item => item.title !== "Dashboard"), ...adminMenuItems.slice(1)] : userMenuItems;
 
     return (
         <Sidebar {...props} className="h-screen">
