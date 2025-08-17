@@ -310,7 +310,7 @@ const UserStatistics = () => {
                         <Card className={" py-4 rounded-xl"}>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <TrendingUpIcon className="h-5 w-5 text-green-500" />
+                                    <TrendingUpIcon className="h-5 w-5 text-green-500 dark:text-base-white" />
                                     Success Rate
                                 </CardTitle>
                             </CardHeader>
@@ -325,7 +325,7 @@ const UserStatistics = () => {
                         <Card className={" py-4 rounded-xl"}>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <ActivityIcon className="h-5 w-5 text-blue-500" />
+                                    <ActivityIcon className="h-5 w-5 text-blue-500 dark:text-base-white" />
                                     Active Campaigns
                                 </CardTitle>
                             </CardHeader>
@@ -338,7 +338,7 @@ const UserStatistics = () => {
                         <Card className={" py-4 rounded-xl"}>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <UsersIcon className="h-5 w-5 text-purple-500" />
+                                    <UsersIcon className="h-5 w-5 text-purple-500 dark:text-base-white" />
                                     Community Impact
                                 </CardTitle>
                             </CardHeader>
