@@ -118,16 +118,19 @@ const PetRecommendations = () => {
             {/* Header Section */}
             <div className="bg-gradient-to-r from-rose-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 py-12">
                 <div className="main-container">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-heading-color mb-3 flex items-center gap-3">
+                            <h1 className="text-3xl md:text-4xl text-center lg:text-left font-bold text-heading-color mb-3 flex items-center gap-3">
                                 Your Pet Match Recommendations
                             </h1>
-                            <p className="text-lg text-pg-base">
+                            <p className="text-lg text-pg-base text-center lg:text-left">
                                 Personalized pet suggestions based on your preferences
                             </p>
                         </div>
-                        <Button onClick={handleUpdatePreferences} variant="default" className="flex items-center gap-2 bg-base-rose text-base-white border-0">
+                        <Button
+                            onClick={handleUpdatePreferences}
+                            variant="default"
+                            className="flex items-center gap-2 bg-base-rose text-base-white border-0">
                             <Settings className="w-5 h-5" />
                             Update Preferences
                         </Button>
@@ -136,11 +139,11 @@ const PetRecommendations = () => {
                     {/* Display Current Preferences */}
                     {preferences && (
                         <div className="mt-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-                            <h3 className="font-semibold mb-3 flex items-center gap-2 text-pg-base">
+                            <h3 className="font-semibold text-xl mb-3 flex items-center justify-center lg:justify-start gap-2 text-pg-base">
                                 <Heart className="w-5 h-5 text-base-rose" />
                                 Your Current Preferences
                             </h3>
-                            <div className="flex flex-wrap gap-4 text-sm">
+                            <div className="flex flex-wrap gap-4 text-sm  items-center justify-center lg:justify-start mt-4">
                                 <div>
                                     <span className="text-base-rose text-lg">Categories: </span>
                                     <span className="font-medium text-pg-base text-lg">

@@ -36,7 +36,7 @@ const Navbar = () => {
                 <div className="nav-container w-full main-container">
                     <NavigationMenu className="flex items-center w-full" viewport={false}>
                         {/* Left side: Logo and Nav Links */}
-                        <div className="flex items-center lg:gap-8 xl:gap-20 2xl:gap-40">
+                        <div className="flex items-center lg:gap-8 xl:gap-12 2xl:gap-20">
                             {/* Logo */}
                             <NavigationMenuList>
                                 <NavigationMenuItem>
@@ -85,6 +85,15 @@ const Navbar = () => {
                                             to="/pet-recommendations"
                                             className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
                                             Pet Recommendations
+                                        </NavLink>
+                                    </NavigationMenuItem>
+                                )}
+                                {user && (
+                                    <NavigationMenuItem>
+                                        <NavLink
+                                            to="/leave-review"
+                                            className="hidden xl:block text-navitem-base hover:text-base-rose-dark transition-colors duration-500 ease-in-out">
+                                            Leave Review
                                         </NavLink>
                                     </NavigationMenuItem>
                                 )}
@@ -147,6 +156,13 @@ const Navbar = () => {
                                                         to="/pet-recommendations"
                                                         className="text-lg text-navitem-base-mb hover:text-navitem-hover transition-colors py-2">
                                                         Pet Recommendations
+                                                    </NavLink>
+                                                )}
+                                                {user && (
+                                                    <NavLink
+                                                        to="/leave-review"
+                                                        className="text-lg text-navitem-base-mb hover:text-navitem-hover transition-colors py-2">
+                                                        Leave Review
                                                     </NavLink>
                                                 )}
                                                 <div className="pt-4">

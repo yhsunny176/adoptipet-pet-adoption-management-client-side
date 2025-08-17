@@ -37,7 +37,7 @@ const Footer = () => {
                     {/* Basic Links */}
                     <div className="flex flex-col gap-4 min-w-[180px] items-center sm:items-start sm:col-span-1 md:col-span-2 xl:col-span-2">
                         <h1 className="text-lg text-heading-color font-bold">Explore</h1>
-                        <ul className="flex flex-col gap-4 items-center sm:items-start">
+                        <ul className="flex flex-col gap-4 items-center sm:items-start ">
                             <li>
                                 <NavLink
                                     to="/"

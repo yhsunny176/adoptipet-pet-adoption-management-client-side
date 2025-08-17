@@ -34,7 +34,7 @@ function NavigationMenuList({
   return (
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
-      className={cn("group flex list-none items-center gap-12 2xl:gap-16", className)}
+      className={cn("group flex list-none items-center gap-8 xl:gap-14 text-sm 2xl:text-base", className)}
       {...props} />
   );
 }

@@ -29,6 +29,7 @@ import AllDonations from "@/pages/dashboard/admin/AllDonations";
 import DashboardDefault from "./DashboardDefault";
 import ForgetPassword from "@/pages/ForgetPassword";
 import PetRecommendations from "@/pages/PetRecommendations";
+import LeaveReview from "@/pages/LeaveReview";
 
 const router = createBrowserRouter([
     {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
                 element: (
                     <PrivateRoute>
                         <PetRecommendations />
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "/leave-review",
+                element: (
+                    <PrivateRoute>
+                        <LeaveReview />
                     </PrivateRoute>
                 ),
             },
