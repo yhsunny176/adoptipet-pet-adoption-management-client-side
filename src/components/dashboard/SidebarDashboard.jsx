@@ -91,7 +91,7 @@ const SidebarDashboard = (props) => {
     const menuItems = role === "admin" ? [...commonMenuItems, ...adminMenuItems] : commonMenuItems;
 
     return (
-        <Sidebar {...props} className="h-full">
+        <Sidebar {...props} className="h-screen">
             <div className="bg-sidebar-secondary max-w-full px-3 pb-4 h-16 flex items-center justify-between mt-5 border-b border-b-black-base flex-shrink-0">
                 <div className="max-w-24 h-full">
                     {theme === "light" ? (
