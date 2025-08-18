@@ -189,7 +189,11 @@ const UserProfile = () => {
                                         Edit Profile
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-10/12 sm:max-w-md bg-background-quaternary rounded-2xl border-card-border-prim">
+                                <DialogContent className="max-w-10/12 sm:max-w-md bg-base-white dark:bg-background-quaternary rounded-2xl border-card-border-prim">
+                                    <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+                                        <XIcon className="h-6 w-6 text-black dark:text-white cursor-pointer border-none" />
+                                        <span className="sr-only">Close</span>
+                                    </DialogClose>
                                     <DialogHeader>
                                         <DialogTitle className="text-heading-color">Edit Profile</DialogTitle>
                                         <DialogDescription className="text-pg-base">
