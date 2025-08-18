@@ -4,6 +4,7 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import MainLayout from "@/layouts/MainLayout";
 import AddPets from "@/pages/dashboard/user/AddPets";
 import UserStatistics from "@/pages/dashboard/user/UserStatistics";
+import UserProfile from "@/pages/dashboard/user/UserProfile";
 import AdminStatistics from "@/pages/dashboard/admin/AdminStatistics";
 import ErrorPage from "@/pages/ErrorPage";
 import Home from "@/pages/Home";
@@ -175,6 +176,16 @@ const router = createBrowserRouter([
                     <PrivateRoute>
                         <UserRoute>
                             <MyDonations />
+                        </UserRoute>
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: "profile",
+                element: (
+                    <PrivateRoute>
+                        <UserRoute>
+                            <UserProfile />
                         </UserRoute>
                     </PrivateRoute>
                 ),

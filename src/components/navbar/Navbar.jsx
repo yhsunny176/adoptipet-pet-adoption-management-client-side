@@ -32,8 +32,8 @@ const Navbar = () => {
 
     return (
         <div>
-            <nav className="w-full py-8 bg-background-secondary">
-                <div className="nav-container w-full main-container">
+            <nav className="main-container py-8 bg-background-secondary">
+                <div className="nav-container w-full">
                     <NavigationMenu className="flex items-center w-full" viewport={false}>
                         {/* Left side: Logo and Nav Links */}
                         <div className="flex items-center lg:gap-8 xl:gap-12 2xl:gap-20">

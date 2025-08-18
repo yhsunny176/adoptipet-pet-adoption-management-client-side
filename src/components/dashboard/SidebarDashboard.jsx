@@ -13,7 +13,7 @@ import {
     Payment02Icon,
     UserMultiple02Icon,
 } from "@hugeicons/core-free-icons/index";
-import { DogIcon, Rabbit, BarChart3Icon } from "lucide-react";
+import { DogIcon, Rabbit, BarChart3Icon, UserIcon } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import LogoutButton from "../buttons-custom/LogoutButton";
 import useAuth from "@/hooks/useAuth";
@@ -65,6 +65,11 @@ const SidebarDashboard = (props) => {
             title: "My Donations",
             url: `/dashboard/my-donations/${user?.email}`,
             icon: <HugeiconsIcon icon={Payment02Icon} />,
+        },
+        {
+            title: "My Profile",
+            url: "/dashboard/profile",
+            icon: <UserIcon strokeWidth={1.25} />,
         },
     ];
 
