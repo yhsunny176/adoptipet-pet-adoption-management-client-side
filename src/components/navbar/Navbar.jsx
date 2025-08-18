@@ -16,8 +16,20 @@ import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
     const [mobMenuOpen, setMobMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const { theme } = useTheme();
     const { user } = useAuth();
+
+    // Handle scroll effect for sticky navbar
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            setIsScrolled(scrollTop > 10);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     // Automatically close mobile menu (Sheet) on resize to lg+
     useEffect(() => {
@@ -31,8 +43,14 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div>
-            <nav className="main-container py-8 bg-background-secondary">
+        <div className={`bg-background-secondary transition-all duration-300 ${
+            isScrolled
+                ? 'shadow-md backdrop-blur-md bg-background-secondary/95'
+                : ''
+        }`}>
+            <nav className={`main-container transition-all duration-300 ${
+                isScrolled ? 'py-4' : 'py-8'
+            }`}>
                 <div className="nav-container w-full">
                     <NavigationMenu className="flex items-center w-full" viewport={false}>
                         {/* Left side: Logo and Nav Links */}

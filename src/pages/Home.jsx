@@ -9,6 +9,8 @@ import boneImg from "@/assets/Section Image/bone.png";
 import boneImg2 from "@/assets/Section Image/bone2.png";
 import Testimonials from "@/components/sections/Testimonials";
 import Subscribe from "@/components/sections/Subscribe";
+import PetCareTips from "@/components/sections/PetCareTips";
+import SuccessStories from "@/components/sections/SuccessStories";
 
 const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -23,7 +25,7 @@ const Home = () => {
     return (
         <div>
             {/* Banner */}
-            <section className="py-12 bg-background-primary">
+            <section className="pt-24 pb-12 bg-background-primary">
                 <Banner />
             </section>
 
@@ -67,6 +69,24 @@ const Home = () => {
                     backgroundRepeat: "no-repeat, no-repeat, no-repeat",
                 }}>
                 <AboutUs />
+            </section>
+
+            {/* Pet Care Tips */}
+            <section className="flex flex-col min-h-max bg-background-tertiary py-24">
+                <PetCareTips />
+            </section>
+
+            {/* Success Stories */}
+            <section
+                className="bg-background-secondary py-24"
+                style={{
+                    backgroundImage: `url(${boneImg}), url(${boneImg2})`,
+                    backgroundPosition: "50px 60px, calc(100% - 40px) calc(100% - 80px)",
+                    backgroundSize: "100px auto, 120px auto",
+                    backgroundRepeat: "no-repeat, no-repeat",
+                }}
+            >
+                <SuccessStories />
             </section>
 
             {/* Testimonials */}
